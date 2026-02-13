@@ -79,6 +79,23 @@ shape = SubResource("RectangleShape2D_d17em")
 position = Vector2(45.75, 0)
 shape = SubResource("RectangleShape2D_d17em")
 
+[node name="Sprite2D6" type="Sprite2D" parent="."]
+position = Vector2(296, 154)
+scale = Vector2(0.91015667, 0.375)
+texture = SubResource("GradientTexture2D_80c3a")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D6"]
+position = Vector2(-6.5158367, 0)
+scale = Vector2(0.14479637, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D6/StaticBody2D"]
+position = Vector2(45.75, 0)
+shape = SubResource("RectangleShape2D_d17em")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Sprite2D6/StaticBody2D"]
+position = Vector2(45.75, 0)
+shape = SubResource("RectangleShape2D_d17em")
+
 [node name="Sprite2D2" type="Sprite2D" parent="."]
 position = Vector2(7.9999847, 123)
 scale = Vector2(0.17968737, 3.6874998)

@@ -8,6 +8,7 @@ func init() -> void:
 
 #what happens when entering the state 
 func enter() -> void: 
+	player.add_debug_indicator( Color.BLUE )
 #play animation
 	pass 
 
@@ -25,14 +26,15 @@ func handle_input( _event : InputEvent ) -> PlayerState:
 
 #what happens each process tick in this state 
 func process( _delta: float) -> PlayerState: 
-	if player.direction.y == 0:
-		return idle
 	return next_state 
 
 
 #what happens each process tick in this state 
 func physics_process( _delta: float) -> PlayerState: 
-	player.velocity.y = player.direction.y * player.move_speed
+	if player.is_on_floor():
+		player.add_debug_indicator( Color.RED )
+		return idle
+	player.velocity.x = player.direction.x * player.air_velocity
 	return next_state 
 
  
