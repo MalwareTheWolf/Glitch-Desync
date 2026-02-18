@@ -13,7 +13,7 @@ func init() -> void:
 func enter() -> void: 
 	#play animation
 	player.add_debug_indicator( Color.WEB_GREEN )
-	player.velocity.y -= jump_velocity
+	player.velocity.y = -jump_velocity
 	pass 
 
 
