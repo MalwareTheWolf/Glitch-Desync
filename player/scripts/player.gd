@@ -6,6 +6,7 @@ const DEBUG_JUMP_INDICATOR = preload("uid://b37qe6ik3s8if")
 #region /// export variables
 @export var move_speed : float = 150
 @export var air_velocity : float = 250.0
+@export var respawn_position: Vector2
 #endregion
 
 
@@ -27,6 +28,8 @@ var gravity_multiplier : float = 1.0
 
 func _ready() -> void:
 	initialize_states()
+	if respawn_position == Vector2.ZERO:
+		respawn_position = global_position
 	pass
 
 
@@ -106,3 +109,21 @@ func add_debug_indicator( color : Color = Color.RED ) -> void:
 	await get_tree().create_timer( 3.0 ).timeout
 	d.queue_free()
 	pass
+
+
+func die(reason: String = "unknown") -> void:
+	print("Player died by %s" % reason)
+	
+	# Reset position
+	global_position = respawn_position
+	
+	# Reset velocity
+	velocity = Vector2.ZERO
+	
+	# Optional: reset direction
+	direction = Vector2.ZERO
+	
+	# Optional: reset state machine
+	if current_state:
+		current_state.exit()
+		current_state.enter()

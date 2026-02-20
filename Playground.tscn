@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://c17y6ssgxsqjh"]
+[gd_scene load_steps=15 format=3 uid="uid://c17y6ssgxsqjh"]
 
 [ext_resource type="PackedScene" uid="uid://cea1jp1i8qfma" path="res://player.tscn" id="1_80c3a"]
 [ext_resource type="Script" uid="uid://2tdu30ykhe11" path="res://Scripts/Other Scripts/PathFollow.gd" id="2_d17em"]
 [ext_resource type="PackedScene" uid="uid://c3angcchc0u2h" path="res://Water Scenes/Water_Body.tscn" id="3_1cwr0"]
 [ext_resource type="Texture2D" uid="uid://cqvy0hisiyyl2" path="res://small_metal_spike_03.png" id="3_46faf"]
+[ext_resource type="Script" uid="uid://c1gegim0r3fwd" path="res://Spikes.gd" id="4_threo"]
+[ext_resource type="Script" uid="uid://dnricaoq7ttvp" path="res://water_death.gd" id="6_s2wwn"]
 
 [sub_resource type="Gradient" id="Gradient_3invt"]
 
@@ -22,11 +24,17 @@ _data = {
 }
 point_count = 3
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s2wwn"]
+size = Vector2(249.98236, 50.942017)
+
 [sub_resource type="Gradient" id="Gradient_46faf"]
 offsets = PackedFloat32Array(0, 0.006666667)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_threo"]
 gradient = SubResource("Gradient_46faf")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_threo"]
+size = Vector2(452, 34)
 
 [node name="Playground" type="Node2D"]
 
@@ -259,6 +267,15 @@ position = Vector2(-96.66218, -39.929703)
 scale = Vector2(1.435406, 0.2619634)
 texture = ExtResource("3_46faf")
 
+[node name="Area2D" type="Area2D" parent="Path2D/PathFollow2D/Sprite2D6/StaticBody2D/Sprite2D2"]
+script = ExtResource("4_threo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/Sprite2D6/StaticBody2D/Sprite2D2/Area2D"]
+z_index = -1
+position = Vector2(103.32373, -5.0233154)
+scale = Vector2(1, 0.9999998)
+shape = SubResource("RectangleShape2D_s2wwn")
+
 [node name="Sprite2D3" type="Sprite2D" parent="Path2D/PathFollow2D/Sprite2D6/StaticBody2D"]
 position = Vector2(43.908348, -40.034508)
 scale = Vector2(1.435406, 0.2619634)
@@ -266,24 +283,6 @@ texture = ExtResource("3_46faf")
 
 [node name="Sprite2D4" type="Sprite2D" parent="Path2D/PathFollow2D/Sprite2D6/StaticBody2D"]
 position = Vector2(200.09782, -40.15096)
-scale = Vector2(1.435406, 0.2619634)
-texture = ExtResource("3_46faf")
-
-[node name="Sprite2D6" type="Sprite2D" parent="Path2D/PathFollow2D/Sprite2D6/StaticBody2D"]
-position = Vector2(-78.99715, 40.057896)
-rotation = 3.1419415
-scale = Vector2(1.435406, 0.2619634)
-texture = ExtResource("3_46faf")
-
-[node name="Sprite2D7" type="Sprite2D" parent="Path2D/PathFollow2D/Sprite2D6/StaticBody2D"]
-position = Vector2(45.954487, 39.964745)
-rotation = 3.1419415
-scale = Vector2(1.435406, 0.2619634)
-texture = ExtResource("3_46faf")
-
-[node name="Sprite2D8" type="Sprite2D" parent="Path2D/PathFollow2D/Sprite2D6/StaticBody2D"]
-position = Vector2(170.90614, 39.871593)
-rotation = 3.1419415
 scale = Vector2(1.435406, 0.2619634)
 texture = ExtResource("3_46faf")
 
@@ -323,3 +322,11 @@ texture = SubResource("GradientTexture2D_threo")
 z_index = -2
 position = Vector2(12, 225)
 spring_number = 24
+
+[node name="Water_Death" type="Area2D" parent="."]
+position = Vector2(23, 237)
+script = ExtResource("6_s2wwn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Water_Death"]
+position = Vector2(216, 7)
+shape = SubResource("RectangleShape2D_threo")
