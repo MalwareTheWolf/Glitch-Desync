@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqvy0hisiyyl2"
-path="res://.godot/imported/small_metal_spike_03.png-4d72f4ba8dbbcfde6d15b8eb9af3c59b.ctex"
+uid="uid://b5uo2hldqqqp"
+path="res://.godot/imported/chest.png-70e23e00f77a746d37ba8f53d9afb247.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://small_metal_spike_03.png"
-dest_files=["res://.godot/imported/small_metal_spike_03.png-4d72f4ba8dbbcfde6d15b8eb9af3c59b.ctex"]
+source_file="res://Water Stuff/Sprites/chest.png"
+dest_files=["res://.godot/imported/chest.png-70e23e00f77a746d37ba8f53d9afb247.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djl5ad0n1l1hi"
-path="res://.godot/imported/joint.png-82383fc427cddcaf232e2c245cb52641.ctex"
+uid="uid://cqvy0hisiyyl2"
+path="res://.godot/imported/small_metal_spike_03.png-49bdaf4104e8e0482bbe8e33d3bc4b37.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Water Scenes/joint.png"
-dest_files=["res://.godot/imported/joint.png-82383fc427cddcaf232e2c245cb52641.ctex"]
+source_file="res://Other/Sprites/small_metal_spike_03.png"
+dest_files=["res://.godot/imported/small_metal_spike_03.png-49bdaf4104e8e0482bbe8e33d3bc4b37.ctex"]
 
 [params]
 
