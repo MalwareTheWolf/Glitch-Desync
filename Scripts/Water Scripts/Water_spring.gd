@@ -1,4 +1,4 @@
-#Water Effects by making "spings" to get the effects
+#Water Effects by making "springs" to get the effects
 
 extends Node2D
 
@@ -38,7 +38,8 @@ func water_update(spring_constant, dampening):
 	position.y += velocity
 	pass
 
-func initialize():
+func initialize(x_position):
 	height = position.y
 	target_height = position.y
 	velocity = 0
+	position.x = x_position

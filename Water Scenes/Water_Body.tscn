@@ -1,22 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3angcchc0u2h"]
+[gd_scene load_steps=4 format=3 uid="uid://c3angcchc0u2h"]
 
 [ext_resource type="Script" uid="uid://dbjsses50i0o0" path="res://Scripts/Water Scripts/Water_body.gd" id="1_dx68x"]
-[ext_resource type="PackedScene" uid="uid://dhtcll7xnnopx" path="res://Water Scenes/Water_Spring.tscn" id="2_76vso"]
+[ext_resource type="Shader" uid="uid://vriu0g62jtn7" path="res://Water.gdshader" id="2_76vso"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vanps"]
+shader = ExtResource("2_76vso")
+shader_parameter/tint = Color(0, 0.40784314, 0.8901961, 0.93333334)
 
 [node name="Water_Body" type="Node2D"]
+position = Vector2(0, 1)
 script = ExtResource("1_dx68x")
+distance_between_springs = 20
+spring_number = 17
 
-[node name="Water_Spring" parent="." instance=ExtResource("2_76vso")]
-position = Vector2(40, 51)
-
-[node name="Water_Spring2" parent="." instance=ExtResource("2_76vso")]
-position = Vector2(80, 51)
-
-[node name="Water_Spring3" parent="." instance=ExtResource("2_76vso")]
-position = Vector2(120, 51)
-
-[node name="Water_Spring4" parent="." instance=ExtResource("2_76vso")]
-position = Vector2(160, 51)
-
-[node name="Water_Spring5" parent="." instance=ExtResource("2_76vso")]
-position = Vector2(200, 51)
+[node name="Water_Polygon" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_vanps")
+color = Color(0, 73654.77, 64346.1, 0.30980393)

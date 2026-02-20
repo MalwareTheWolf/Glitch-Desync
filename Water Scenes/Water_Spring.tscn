@@ -7,5 +7,5 @@
 script = ExtResource("1_fn1tf")
 
 [node name="Joint" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_trkbi")
