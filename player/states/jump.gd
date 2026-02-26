@@ -11,7 +11,7 @@ func init() -> void:
 
 #what happens when entering the state 
 func enter() -> void: 
-	#play animation
+	player.animation_player.play("Jump")
 	player.add_debug_indicator( Color.WEB_GREEN )
 	player.velocity.y = -jump_velocity
 	pass 

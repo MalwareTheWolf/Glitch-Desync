@@ -13,9 +13,7 @@ var motion_factor: float = 0.005
 
 
 
-# ================================
 #        SPRING STATE
-# ================================
 
 # Current vertical velocity of the spring.
 var velocity = 0
@@ -38,9 +36,7 @@ signal splash
 
 
 
-# ================================
 #          LIFECYCLE
-# ================================
 
 func _ready() -> void:
 	# Connect collision detection for splash interaction.
@@ -48,9 +44,7 @@ func _ready() -> void:
 
 
 
-# ================================
 #        PHYSICS UPDATE
-# ================================
 
 # Applies Hooke's Law to simulate spring motion.
 # Hooke's Law: F = -k * x
@@ -78,9 +72,7 @@ func water_update(spring_constant, dampening):
 
 
 
-# ================================
 #        INITIALIZATION
-# ================================
 
 func initialize(x_position, id):
 
@@ -97,9 +89,7 @@ func initialize(x_position, id):
 
 
 
-# ================================
 #        SPLASH DETECTION
-# ================================
 
 func _on_area_2d_body_entered(body: Object) -> void:
 

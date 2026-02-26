@@ -7,8 +7,8 @@ func init() -> void:
 
 
 #what happens when entering the state 
-func enter() -> void: 
-#play animation
+func enter() -> void:
+	player.animation_player.play( "Run" )
 	pass 
 
 

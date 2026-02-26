@@ -1,6 +1,6 @@
 class_name PlayerStateCrouch extends PlayerState 
 
-  
+@export var deceleration_rate : float = 10
 
 #initialize
 func init() -> void: 
@@ -9,11 +9,17 @@ func init() -> void:
 
 #what happens when entering the state 
 func enter() -> void: 
+	player.animation_player.play("Crouch")
+	player.collision_stand.disabled = true
+	player.collision_crouch.disabled = false
 	pass 
 
   
 #what happens when exiting the state 
 func exit() -> void: 
+	
+	player.collision_stand.disabled = false
+	player.collision_crouch.disabled = true
 	pass 
 
 
@@ -21,6 +27,10 @@ func exit() -> void:
 func handle_input( _event : InputEvent ) -> PlayerState:
 	#Handle input
 	if _event.is_action_pressed("jump"):
+		player.one_way_shape_cast.force_shapecast_update()
+		if player.one_way_shape_cast.is_colliding():
+			player.position.y += 4
+			return fall
 		return jump
 	return next_state
   
@@ -34,7 +44,7 @@ func process( _delta: float) -> PlayerState:
 
 #what happens each process tick in this state 
 func physics_process( _delta: float) -> PlayerState: 
-	player.velocity.x = 0
+	player.velocity.x -= player.velocity.x * deceleration_rate * _delta
 	if player.is_on_floor() == false:
 		return fall
 	return next_state 

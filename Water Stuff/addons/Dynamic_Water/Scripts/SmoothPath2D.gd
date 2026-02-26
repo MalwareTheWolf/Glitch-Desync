@@ -5,9 +5,7 @@ extends Path2D
 # by adjusting control handles based on neighboring points.
 
 
-# ================================
 #            EXPORTS
-# ================================
 
 @export var spline_length = 8
 # Controls how long the bezier handles are when smoothing.
@@ -28,9 +26,7 @@ var st = straighten
 
 
 
-# ================================
 #          CURVE CONTROL
-# ================================
 
 func straighten() -> void:
 	# Removes all bezier handles from every point.
@@ -58,9 +54,7 @@ func smooth() -> void:
 
 
 
-# ================================
 #       SPLINE CALCULATION
-# ================================
 
 # Calculates a bezier handle direction for point i
 # based on its neighboring points.
@@ -88,9 +82,7 @@ func _get_point(i: int) -> Vector2:
 
 
 
-# ================================
 #            DRAWING
-# ================================
 
 # Draws the smoothed curve using baked points.
 # Baked points are the interpolated final curve positions.

@@ -4,9 +4,7 @@ extends Node2D
 # This lets the water update visually while editing the scene.
 
 
-# ================================
 #            PHYSICS
-# ================================
 
 @export_category("Physics")
 
@@ -25,9 +23,7 @@ extends Node2D
 
 
 
-# ================================
 #            VISUALS
-# ================================
 
 @export_category("Visuals")
 
@@ -53,9 +49,7 @@ extends Node2D
 
 
 
-# ================================
 #        NODE REFERENCES
-# ================================
 
 # Spring scene that gets instanced across the surface.
 @onready var water_spring = preload("res://Water Stuff/addons/Dynamic_Water/Scenes/water_spring.tscn")
@@ -68,9 +62,7 @@ extends Node2D
 
 
 
-# ================================
 #          VARIABLES
-# ================================
 
 # Array holding all active springs.
 var springs: Array[WaterSpring] = []
@@ -92,9 +84,7 @@ var _script_ready: bool
 
 
 
-# ================================
 #           LIFECYCLE
-# ================================
 
 func _ready() -> void:
 	target_height = 0
@@ -117,9 +107,7 @@ func _physics_process(_delta: float) -> void:
 
 
 
-# ================================
 #      SPRING INITIALIZATION
-# ================================
 
 func initialize_springs() -> void:
 	clear_springs()
@@ -151,9 +139,7 @@ func clear_springs() -> void:
 
 
 
-# ================================
 #        PHYSICS UPDATE
-# ================================
 
 func calculate_springs() -> void:
 
@@ -181,9 +167,7 @@ func calculate_springs() -> void:
 
 
 
-# ================================
 #        EDITOR UPDATES
-# ================================
 
 func update_editor() -> void:
 	if !_script_ready:
@@ -195,9 +179,7 @@ func update_editor() -> void:
 
 
 
-# ================================
 #        VISUAL GENERATION
-# ================================
 
 func update_visuals() -> void:
 	new_border()
@@ -242,9 +224,7 @@ func draw_water_body() -> void:
 
 
 
-# ================================
 #          INTERACTION
-# ================================
 
 func splash(index: int, speed: float) -> void:
 	# Adds velocity to a specific spring to create a splash
