@@ -1,50 +1,41 @@
-class_name PlayerStateJump extends PlayerState 
+extends PlayerState
+class_name PlayerStateJump
 
-@export var jump_velocity : float = 450.0
+@export var jump_velocity: float = 450.0
 
+func init() -> void:
+	pass
 
-
-func init() -> void: 
-
-	pass 
-
-
-#what happens when entering the state 
-func enter() -> void: 
+func enter() -> void:
 	player.animation_player.play("Jump")
-	player.add_debug_indicator( Color.WEB_GREEN )
+	player.animation_player.pause()
+	#player.add_debug_indicator(Color.WEB_GREEN)
 	player.velocity.y = -jump_velocity
-	pass 
 
+func exit() -> void:
+	#player.add_debug_indicator(Color.YELLOW)
+	pass
 
-#what happens when exiting the state 
-func exit() -> void: 
-	player.add_debug_indicator( Color.YELLOW )
-	pass 
-
-
-#what happens when an input is pressed 
-func handle_input( event : InputEvent ) -> PlayerState: 
-	if event.is_action_released( "jump" ):
+func handle_input(event: InputEvent) -> PlayerState:
+	if event.is_action_released("jump"):
 		player.velocity.y *= 0.5
 		return fall
-	return next_state 
+	return next_state
 
+func process(_delta: float) -> PlayerState:
+	set_jump_frame()
+	return next_state
 
-#what happens each process tick in this state 
-func process( _delta: float) -> PlayerState: 
-	if player.direction.y != 0:
-		return idle
-	return next_state 
-
-
-#what happens each process tick in this state 
-func physics_process( _delta: float) -> PlayerState: 
+func physics_process(_delta: float) -> PlayerState:
 	if player.is_on_floor():
 		return idle
 	elif player.velocity.y >= 0:
 		return fall
-	player.velocity.x = player.direction.x * player.air_velocity
-	return next_state 
 
- 
+	player.velocity.x = player.direction.x * player.air_velocity
+	return next_state
+
+func set_jump_frame() -> void:
+	var frame: float = remap( player.velocity.y, -jump_velocity, 0.0, 0.0, 0.5 )
+	player.animation_player.seek(frame, true)
+	pass
