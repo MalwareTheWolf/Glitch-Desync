@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bq3va4ue3u5t8"]
 
 [ext_resource type="Script" uid="uid://b8x3cgk5ooy1c" path="res://Other/Stuff/MovingPlatform.gd" id="1_w0xxx"]
-[ext_resource type="Texture2D" uid="uid://43218ag583sr" path="res://Assets/Assets/[FREE] Industrial Tileset/FREE/5. Industrial Tileset - Starter Pack 32p/Block1.png" id="2_hbolb"]
+[ext_resource type="Texture2D" uid="uid://43218ag583sr" path="res://World/Tilesets/[FREE] Industrial Tileset/FREE/5. Industrial Tileset - Starter Pack 32p/Block1.png" id="2_hbolb"]
 
 [sub_resource type="Curve2D" id="Curve2D_r4eua"]
 _data = {

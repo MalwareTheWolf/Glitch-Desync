@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Glitch: Desync"
-run/main_scene="uid://c17y6ssgxsqjh"
+run/main_scene="uid://bplp8sfsj72s1"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="uid://bo8puqbp7sg4v"
 
