@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://cea1jp1i8qfma"]
+
+[ext_resource type="Script" uid="uid://bdvcm051rhx07" path="res://player/scripts/player.gd" id="1_oul6g"]
+[ext_resource type="Script" uid="uid://qwdar35yeqan" path="res://player/states/idle.gd" id="2_rkbax"]
+[ext_resource type="Script" uid="uid://btv8l6u8l3kym" path="res://player/states/run.gd" id="3_g1dw6"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kqu6x"]
+size = Vector2(18, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oul6g"]
+size = Vector2(18, 48)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_oul6g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -24)
+texture = SubResource("PlaceholderTexture2D_kqu6x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -24)
+shape = SubResource("RectangleShape2D_oul6g")
+
+[node name="States" type="Node" parent="."]
+
+[node name="Idle" type="Node" parent="States"]
+script = ExtResource("2_rkbax")
+
+[node name="Run" type="Node" parent="States"]
+script = ExtResource("3_g1dw6")
