@@ -1,150 +1,266 @@
-class_name Player extends CharacterBody2D
+class_name Player
+extends CharacterBody2D
+# Main player controller.
+# Handles movement, gravity, state machine logic, and respawning.
 
 const DEBUG_JUMP_INDICATOR = preload("uid://b37qe6ik3s8if")
+# Small visual marker used for debugging jump positions.
 
-#region /// on ready variables
+
+
+#        NODE REFERENCES
+
 @onready var sprite: Sprite2D = $Sprite2D
+# Main player sprite used for flipping direction.
+
 @onready var collision_stand: CollisionShape2D = $CollisionStand
+# Collision used when the player is standing.
+
 @onready var collision_crouch: CollisionShape2D = $CollisionCrouch
+# Collision used when the player is crouching.
+
 @onready var one_way_shape_cast: ShapeCast2D = $OneWayShapeCast
+# Used to detect one-way platforms.
+
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-
-
-#endregion
-
+# Handles playing character animations.
 
 
 
-#region /// export variables
+#        EXPORT SETTINGS
+
 @export var move_speed : float = 150
+# Ground movement speed.
+
 @export var air_velocity : float = 250.0
+# Horizontal velocity allowed while airborne.
+
 @export var respawn_position: Vector2
+# Position the player returns to when dying.
+
 @export var max_fall_speed: float = 600
-#endregion
+# Maximum downward velocity allowed.
 
 
-#region /// State Machine Variables
+
+#        STATE MACHINE VARIABLES
+
 var states : Array[ PlayerState ]
+# List of all player states (Idle, Run, Jump, etc).
+
 var current_state : PlayerState :
 	get : return states.front()
+# Current active state.
+
 var previous_state : PlayerState :
 	get : return states[ 1 ]
-#endregion
+# Previous state (used for transitions).
 
-#region /// Standard Variables
+
+
+#        STANDARD VARIABLES
+
 var direction : Vector2 = Vector2.ZERO
+# Input direction from player controls.
+
 var gravity : float = 980
+# Base gravity applied every physics frame.
+
 var gravity_multiplier : float = 1.0
-#endregion
+# Allows states to modify gravity strength.
 
 
+
+#        INITIALIZATION
 
 func _ready() -> void:
+
+	#
+	if get_tree().get_first_node_in_group("Player") != self :
+		self.queue_free()
+
+	# Add player to global group so transitions can find it.
+	add_to_group("Player")
+
+	# Initialize state machine and states.
 	initialize_states()
+
+	# Move player to the root so it persists between scenes.
+	self.call_deferred("reparent", get_tree().root)
+
+	# Store spawn position if one hasn't been set.
 	if respawn_position == Vector2.ZERO:
 		respawn_position = global_position
+
 	pass
 
 
+
+#        INPUT HANDLING
 
 func _unhandled_input(event: InputEvent) -> void:
-	change_state( current_state.handle_input( event ) )
+
+	# Allow current state to process input.
+	change_state(current_state.handle_input(event))
+
 	pass
 
 
 
+#        FRAME UPDATE
 
-func _process( _delta: float) -> void:
+func _process(_delta: float) -> void:
+
+	# Update movement direction from player input.
 	update_direction()
-	change_state( current_state.process( _delta ) )
+
+	# Allow current state to run frame logic.
+	change_state(current_state.process(_delta))
+
 	pass
 
 
-func _physics_process( _delta: float) -> void:
+
+#        PHYSICS UPDATE
+
+func _physics_process(_delta: float) -> void:
+
+	# Apply gravity.
 	velocity.y += gravity * _delta * gravity_multiplier
-	velocity.y = clampf( velocity.y, -1000.0, max_fall_speed )
+
+	# Clamp falling speed to prevent extreme velocity.
+	velocity.y = clampf(velocity.y, -1000.0, max_fall_speed)
+
+	# Apply movement using built-in character motion.
 	move_and_slide()
-	change_state( current_state.physics_process( _delta ) )
+
+	# Allow current state to process physics logic.
+	change_state(current_state.physics_process(_delta))
+
 	pass
 
 
+
+#        STATE MACHINE SETUP
 
 func initialize_states() -> void:
+
 	states = []
-	#gather states
+
+	# Gather all PlayerState nodes from the States container.
 	for c in $States.get_children():
 		if c is PlayerState:
-			states.append( c)
+			states.append(c)
 			c.player = self
 		pass
-	
+
+	# Stop if no states exist.
 	if states.size() == 0:
 		return
-	
-	#initialize states
+
+	# Initialize each state.
 	for state in states:
 		state.init()
-	
-	change_state( current_state )
+
+	# Start with the first state.
+	change_state(current_state)
+
 	current_state.enter()
+
 	pass
 
 
 
-func change_state( new_state : PlayerState ) -> void:
+#        STATE TRANSITIONS
+
+func change_state(new_state : PlayerState) -> void:
+
+	# Ignore invalid transitions.
 	if new_state == null:
 		return
-	elif  new_state == current_state:
+	elif new_state == current_state:
 		return
-	
+
+	# Exit the current state.
 	if current_state:
 		current_state.exit()
-	
-	states.push_front( new_state )
+
+	# Move new state to the front of the list.
+	states.push_front(new_state)
+
+	# Enter the new state.
 	current_state.enter()
-	states.resize( 3 )
+
+	# Limit history to 3 states.
+	states.resize(3)
+
+	# Debug label showing current state.
 	$Label.text = current_state.name
+
 	pass
 
 
+
+#        INPUT DIRECTION
+
 func update_direction() -> void:
+
 	var prev_direction : Vector2 = direction
-	
-	var x_axis = Input.get_axis( "left", "right" )
-	var y_axis = Input.get_axis( "up", "down" )
+
+	# Get input axes from input map.
+	var x_axis = Input.get_axis("left", "right")
+	var y_axis = Input.get_axis("up", "down")
+
 	direction = Vector2(x_axis, y_axis)
-	
+
+	# Flip sprite based on horizontal movement.
 	if prev_direction.x != direction.x:
 		if direction.x < 0:
 			sprite.flip_h = true
 		if direction.x > 0:
 			sprite.flip_h = false
+
 	pass
 
 
-func add_debug_indicator( color : Color = Color.RED ) -> void:
+
+#        DEBUG TOOLS
+
+func add_debug_indicator(color : Color = Color.RED) -> void:
+
+	# Spawn a temporary visual marker.
 	var d : Node2D = DEBUG_JUMP_INDICATOR.instantiate()
-	get_tree().root.add_child( d )
+
+	get_tree().root.add_child(d)
+
 	d.global_position = global_position
 	d.modulate = color
-	await get_tree().create_timer( 3.0 ).timeout
+
+	# Remove marker after 3 seconds.
+	await get_tree().create_timer(3.0).timeout
+
 	d.queue_free()
+
 	pass
 
 
+
+#        DEATH / RESPAWN
+
 func die(reason: String = "unknown") -> void:
+
 	print("Player died by %s" % reason)
-	
-	# Reset position
+
+	# Reset player position.
 	global_position = respawn_position
-	
-	# Reset velocity
+
+	# Reset velocity.
 	velocity = Vector2.ZERO
-	
-	# Optional: reset direction
+
+	# Reset movement direction.
 	direction = Vector2.ZERO
-	
-	# Optional: reset state machine
+
+	# Reset current state.
 	if current_state:
 		current_state.exit()
 		current_state.enter()

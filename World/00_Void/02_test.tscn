@@ -24,4 +24,4 @@ _depth = 20
 [node name="LevelTransition" parent="." instance=ExtResource("4_en5rc")]
 position = Vector2(-1, 209)
 size = 7
-target_level = "uid://bplp8sfsj72s1"
+target_level = "uid://cnlg81cbb56ha"

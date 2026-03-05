@@ -17,7 +17,7 @@ extends Node2D
 @export var _depth: int = 5
 
 
-# ---------------- NODE REFERENCES ----------------
+# NODE REFERENCES
 @onready var water_spring: PackedScene = preload("res://World/Water/Dynamic_Water/Scenes/water_spring.tscn")
 @onready var water_polygon: Polygon2D = null
 @onready var water_border: SmoothPath = null

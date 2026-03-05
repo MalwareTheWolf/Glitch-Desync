@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=4 uid="uid://cnlg81cbb56ha"]
 
 [ext_resource type="TileSet" uid="uid://c168e1m37miya" path="res://World/Tilesets/Void.tres" id="1_pcrhc"]
-[ext_resource type="PackedScene" path="res://player/Scene/player.tscn" id="2_6gqjl"]
+[ext_resource type="PackedScene" uid="uid://cea1jp1i8qfma" path="res://player/Scene/player.tscn" id="2_6gqjl"]
 [ext_resource type="Script" uid="uid://c66y0kemubeet" path="res://General/Scripts/level_bounds.gd" id="3_4tv7a"]
 [ext_resource type="PackedScene" uid="uid://bwbk2dppx5kup" path="res://General/Level_Transition/level_transition.tscn" id="4_61kuw"]
 
@@ -27,9 +27,10 @@ tile_set = ExtResource("1_pcrhc")
 [node name="Player" parent="." instance=ExtResource("2_6gqjl")]
 z_index = 1
 position = Vector2(239, 171)
-collision_layer = 1
+collision_layer = 16
 
 [node name="LevelTransition" parent="." instance=ExtResource("4_61kuw")]
-position = Vector2(1438, 194)
+position = Vector2(1442, 194)
 size = 8
 location = 1
+target_level = "uid://c8nen6n2gbt20"
