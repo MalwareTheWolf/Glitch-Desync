@@ -1,0 +1,119 @@
+[gd_scene format=3 uid="uid://b5shhu35gorq7"]
+
+[ext_resource type="Texture2D" uid="uid://byarv75vmqnef" path="res://General/Sprites/GandalfHardcore Portal sheet.png" id="1_8uow3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2eb76"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m3svl"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sf812"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x7nsh"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbhgk"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_axxoe"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v61oi"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yhtgu"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sebmm"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(512, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rj00s"]
+atlas = ExtResource("1_8uow3")
+region = Rect2(576, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ejlhg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2eb76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m3svl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sf812")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x7nsh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbhgk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_axxoe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v61oi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yhtgu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sebmm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rj00s")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_8uow3"]
+offsets = PackedFloat32Array(0, 0.5192308)
+colors = PackedColorArray(0.8039216, 0, 0.18039216, 0.40392157, 0, 0, 0, 0.8784314)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2eb76"]
+gradient = SubResource("Gradient_8uow3")
+width = 156
+height = 156
+fill = 1
+fill_from = Vector2(0.48181817, 0.5318182)
+fill_to = Vector2(0, 0.013636364)
+
+[node name="SavePoint" type="Node2D" unique_id=1223870188]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=720334194]
+sprite_frames = SubResource("SpriteFrames_ejlhg")
+autoplay = "default"
+frame_progress = 0.17749767
+
+[node name="Area2D" type="Area2D" parent="." unique_id=429101948]
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1150142252]
+position = Vector2(2, 8)
+color = Color(0.81029004, 0, 0.15672281, 1)
+energy = 8.0
+texture = SubResource("GradientTexture2D_2eb76")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1327258891]
+
+[node name="Label" type="Label" parent="Node2D" unique_id=1660802031]
+offset_left = -47.0
+offset_top = -47.0
+offset_right = 49.0
+offset_bottom = -24.0
+text = "Game Saved"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Node2D" unique_id=1423338069]

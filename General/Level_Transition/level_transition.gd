@@ -6,10 +6,12 @@ extends Node2D
 # When the player enters, SceneManager loads the next scene.
 
 
+
 #        ENUMS
 
 enum SIDE { LEFT, RIGHT, TOP, BOTTOM }
 # Determines which direction the transition faces.
+
 
 
 #        EXPORT SETTINGS
@@ -37,9 +39,11 @@ var target_level: String = ""
 # Name of the spawn transition in the next level.
 
 
+
 #        NODE REFERENCES
 @onready var area_2d: Area2D = $Area2D
 # Collision area used to detect player entry.
+
 
 
 #        INITIALIZATION
@@ -62,8 +66,11 @@ func _ready() -> void:
 #        PLAYER ENTRY
 func _on_player_entered(_n: Node2D) -> void:
 
+	print("Entered transition")
+	print("target_level = ", target_level)
+
 	# Start scene transition.
-	SceneManager.transition_scene( target_level, target_area_name, get_offset( _n ), "left")
+	SceneManager.transition_scene(target_level, target_area_name, get_offset(_n), "left")
 
 	# Debug confirmation.
 	print("In")

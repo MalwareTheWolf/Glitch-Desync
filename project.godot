@@ -24,6 +24,7 @@ config/icon="uid://bo8puqbp7sg4v"
 [autoload]
 
 SceneManager="*res://00_Global/Scene_Manager/scene_manager.tscn"
+SaveManager="*uid://d7xxxqmiw70k"
 
 [display]
 
