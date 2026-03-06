@@ -29,6 +29,13 @@ var spell7 : bool = false
 var spell8 : bool = false
 #endregion
 
+#        MOVEMENT CONTROL
+
+var can_move := true
+# Determines if the player is allowed to move or receive input.
+
+
+
 #        NODE REFERENCES
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -95,41 +102,31 @@ var gravity_multiplier: float = 1.0
 #        INITIALIZATION
 
 func _ready() -> void:
-
 	# Add player to global group so transitions can find it.
 	add_to_group("Player")
-
 	# If a persistent player already exists, delete this one.
 	# The persistent player is the one parented under the tree root.
 	var players := get_tree().get_nodes_in_group("Player")
-
 	if players.size() > 1:
-
 		var keep: Node2D = null
-
 		for p in players:
 			if p is Node2D and p.get_parent() == get_tree().root:
 				keep = p
 				break
-
 		if keep == null:
 			keep = players[0]
-
 		if self != keep:
 			queue_free()
 			return
-
 	# Make sure the kept player persists between scenes.
 	if get_parent() != get_tree().root:
 		call_deferred("reparent", get_tree().root)
-
 	# Initialize state machine and states.
 	initialize_states()
-
 	# Store spawn position if one hasn't been set.
 	if respawn_position == Vector2.ZERO:
 		respawn_position = global_position
-
+	Messages.player_healed.connect( _on_player_healed )
 	pass
 
 
@@ -138,6 +135,13 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 
+	# Ignore input if movement is locked.
+	if !can_move:
+		return
+
+	if event.is_action_pressed("action"):
+		Messages.player_interacted.emit( self )
+	
 	# Allow current state to process input.
 	change_state(current_state.handle_input(event))
 
@@ -148,6 +152,10 @@ func _unhandled_input(event: InputEvent) -> void:
 #        FRAME UPDATE
 
 func _process(_delta: float) -> void:
+
+	# Stop updating movement if locked.
+	if !can_move:
+		return
 
 	# Update movement direction from player input.
 	update_direction()
@@ -162,6 +170,12 @@ func _process(_delta: float) -> void:
 #        PHYSICS UPDATE
 
 func _physics_process(_delta: float) -> void:
+
+	# If movement is locked, stop velocity but still process physics.
+	if !can_move:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 
 	# Apply gravity.
 	velocity.y += gravity * _delta * gravity_multiplier
@@ -303,4 +317,36 @@ func die(reason: String = "unknown") -> void:
 		current_state.exit()
 		current_state.enter()
 
+	pass
+
+
+
+#        MOVEMENT LOCK CONTROL
+
+@export var movement_lock_time : float = 1.5
+# Default time the player stays locked when using the timed lock.
+
+func lock_movement():
+	# Prevent player from moving or giving input.
+	can_move = false
+	velocity = Vector2.ZERO
+
+
+func unlock_movement():
+	# Restore player movement.
+	can_move = true
+
+
+func lock_movement_with_timer(time : float = movement_lock_time) -> void:
+	# Lock player movement
+	lock_movement()
+
+	# Wait for the specified time
+	await get_tree().create_timer(time).timeout
+
+	# Unlock movement
+	unlock_movement()
+
+func _on_player_healed( amount : float) -> void:
+	hp += amount
 	pass

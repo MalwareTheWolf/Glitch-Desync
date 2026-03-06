@@ -1,10 +1,16 @@
 extends Node
 # SaveManager script.
 # Handles creating save files, writing save data, loading save data,
-# and restoring the player after scene transitions.
+# restoring the player after scene transitions, and managing discovered areas and config.
 
+const CONFIG_FILE_PATH = "user://settings.cfg"
+# Path to config file for audio and other settings.
 
+# Default starting scene
+const DEFAULT_SCENE_PATH : String = "res://World/00_Void/01.tscn"
+# First scene when starting a new game.
 
+# Save slots
 const SLOTS: Array[String] = [
 	"save_01",
 	"save_02",
@@ -12,37 +18,50 @@ const SLOTS: Array[String] = [
 ]
 # Save slot file names.
 
-
 var current_slot: int = 0
 var save_data: Dictionary
 var discovered_areas: Array = []
 var persistent_data: Dictionary = {}
 
 
-
 func _ready() -> void:
+	# Load audio configuration
+	load_configuration()
+	# Listen for scene transitions to track discovered areas
+	SceneManager.scene_entered.connect(_on_scene_entered)
+	# Enable input processing for debug keys
+	set_process_input(true)
 	pass
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
+	# Debug shortcuts for saving/loading and selecting slots
+	if OS.is_debug_build() and event is InputEventKey and event.pressed:
 		if event.keycode == KEY_F5:
-			print("F5 pressed")
-			save_game()
+			save_game() # Save game
 		elif event.keycode == KEY_F7:
-			print("F7 pressed")
-			load_game()
+			load_game() # Load game
+		elif event.keycode == KEY_1:
+			current_slot = 0 # Switch to slot 1
+		elif event.keycode == KEY_2:
+			current_slot = 1 # Switch to slot 2
+		elif event.keycode == KEY_3:
+			current_slot = 2 # Switch to slot 3
 	pass
 
 
-func create_new_game_save() -> void:
-	var new_game_scene: String = "res://World/00_Void/01.tscn"
+# -----------------------
+# New Game / Save Creation
+# -----------------------
 
-	discovered_areas = [ new_game_scene ]
-	persistent_data = {}
-
+func create_new_game_save(slot: int = 0) -> void:
+	current_slot = slot
+	discovered_areas.clear() # Clear previous discovered areas
+	persistent_data.clear() # Clear persistent data
+	discovered_areas.append(DEFAULT_SCENE_PATH) # Add starting scene
+	
 	save_data = {
-		"scene_path": new_game_scene,
+		"scene_path": DEFAULT_SCENE_PATH,
 		"x": 100.0,
 		"y": -80.0,
 		"hp": 20.0,
@@ -67,24 +86,23 @@ func create_new_game_save() -> void:
 		"persistent_data": persistent_data,
 	}
 
-	var save_file = FileAccess.open(get_file_name(), FileAccess.WRITE)
-	save_file.store_line(JSON.stringify(save_data))
-	print("Created new save at: ", get_file_name())
+	write_to_save_file() # Write initial save
+	load_game() # Load the new game
+	print("Created new game save at: ", get_file_name())
 	pass
 
 
+# -----------------------
+# Save / Load Game
+# -----------------------
+
 func save_game() -> void:
-	print("save_game()")
-
 	var player: Player = get_tree().get_first_node_in_group("Player")
-
 	if player == null:
-		print("No player found")
+		print("No player found") # Debug if player missing
 		return
 
-	print("We have a player")
-	print("Saving to: ", get_file_name())
-
+	# Collect all player stats into save_data
 	save_data = {
 		"scene_path": SceneManager.current_scene_uid,
 		"x": player.global_position.x,
@@ -111,50 +129,40 @@ func save_game() -> void:
 		"persistent_data": persistent_data,
 	}
 
-	var save_file = FileAccess.open(get_file_name(), FileAccess.WRITE)
-
-	if save_file == null:
-		print("Failed to open save file")
-		return
-
-	save_file.store_line(JSON.stringify(save_data))
-	print("Saved successfully")
+	write_to_save_file() # Save to disk
+	print("Game saved to: ", get_file_name())
 	pass
 
 
 func load_game() -> void:
-	print("load_game()")
-
 	if not FileAccess.file_exists(get_file_name()):
 		print("No save file found at: ", get_file_name())
 		return
 
 	var save_file = FileAccess.open(get_file_name(), FileAccess.READ)
-	save_data = JSON.parse_string(save_file.get_line())
+	save_data = JSON.parse_string(save_file.get_line()) # Load JSON
 
+	# Restore persistent info
 	persistent_data = save_data.get("persistent_data", {})
 	discovered_areas = save_data.get("discovered_areas", [])
 
-	var scene_path: String = save_data.get("scene_path", "res://World/00_Void/01.tscn")
-	print("Loading scene path: ", scene_path)
-
+	# Load scene
+	var scene_path: String = save_data.get("scene_path", DEFAULT_SCENE_PATH)
 	SceneManager.transition_scene(scene_path, "", Vector2.ZERO, "up")
 	await SceneManager.new_scene_ready
-	setup_player()
-
+	setup_player() # Restore player stats
 	pass
 
 
 func setup_player() -> void:
 	var player: Player = null
-
 	while not player:
 		player = get_tree().get_first_node_in_group("Player")
 		await get_tree().process_frame
 
+	# Restore player stats
 	player.max_hp = save_data.get("max_hp", 20)
 	player.hp = save_data.get("hp", 20)
-
 	player.dash = save_data.get("dash", false)
 	player.double_jump = save_data.get("double_jump", false)
 	player.lightning = save_data.get("lightning", false)
@@ -176,10 +184,69 @@ func setup_player() -> void:
 		save_data.get("x", 0),
 		save_data.get("y", 0)
 	)
-
 	print("Player restored at: ", player.global_position)
 	pass
 
 
+# -----------------------
+# File Handling
+# -----------------------
+
 func get_file_name() -> String:
-	return "user://" + SLOTS[current_slot] + ".sav"
+	return "user://" + SLOTS[current_slot] + ".sav" # Build file path
+
+
+func write_to_save_file() -> void:
+	var save_file = FileAccess.open(get_file_name(), FileAccess.WRITE)
+	save_file.store_line(JSON.stringify(save_data))
+	save_file.close()
+	pass
+
+
+func save_file_exists(slot: int) -> bool:
+	return FileAccess.file_exists("user://" + SLOTS[slot] + ".sav")
+
+
+# -----------------------
+# Discovered Areas Tracking
+# -----------------------
+
+func _on_scene_entered(scene_uid: String) -> void:
+	if not discovered_areas.has(scene_uid):
+		discovered_areas.append(scene_uid) # Add new area to discovered list
+	pass
+
+
+func is_area_discovered(scene_uid: String) -> bool:
+	return discovered_areas.has(scene_uid) # Check if area has been discovered
+
+
+# -----------------------
+# Configuration
+# -----------------------
+
+func save_configuration() -> void:
+	var config := ConfigFile.new()
+	config.set_value("audio", "music", AudioServer.get_bus_volume_linear(2))
+	config.set_value("audio", "sfx", AudioServer.get_bus_volume_linear(3))
+	config.set_value("audio", "ui", AudioServer.get_bus_volume_linear(4))
+	config.save(CONFIG_FILE_PATH) # Write config
+	pass
+
+
+func load_configuration() -> void:
+	var config := ConfigFile.new()
+	var err = config.load(CONFIG_FILE_PATH)
+
+	if err != OK:
+		# Set default audio levels
+		AudioServer.set_bus_volume_linear(2, 0.8)
+		AudioServer.set_bus_volume_linear(3, 1.0)
+		AudioServer.set_bus_volume_linear(4, 1.0)
+		save_configuration()
+		return
+
+	AudioServer.set_bus_volume_linear(2, config.get_value("audio", "music", 0.8))
+	AudioServer.set_bus_volume_linear(3, config.get_value("audio", "sfx", 1.0))
+	AudioServer.set_bus_volume_linear(4, config.get_value("audio", "ui", 1.0))
+	pass

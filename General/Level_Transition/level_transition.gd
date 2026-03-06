@@ -1,5 +1,6 @@
+@icon("res://General/Icon/level_transition.svg")
 @tool
-@icon("res://general/icons/level_transition.svg")
+
 class_name LevelTransition
 extends Node2D
 # Trigger zone used to transition between levels.

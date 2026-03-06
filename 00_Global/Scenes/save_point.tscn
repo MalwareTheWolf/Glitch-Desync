@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://b5shhu35gorq7"]
 
+[ext_resource type="Script" uid="uid://bw3rv0bpvnnnt" path="res://00_Global/Scripts/save_point.gd" id="1_2eb76"]
 [ext_resource type="Texture2D" uid="uid://byarv75vmqnef" path="res://General/Sprites/GandalfHardcore Portal sheet.png" id="1_8uow3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2eb76"]
@@ -80,6 +81,9 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2eb76"]
+size = Vector2(64, 53)
+
 [sub_resource type="Gradient" id="Gradient_8uow3"]
 offsets = PackedFloat32Array(0, 0.5192308)
 colors = PackedColorArray(0.8039216, 0, 0.18039216, 0.40392157, 0, 0, 0, 0.8784314)
@@ -93,6 +97,7 @@ fill_from = Vector2(0.48181817, 0.5318182)
 fill_to = Vector2(0, 0.013636364)
 
 [node name="SavePoint" type="Node2D" unique_id=1223870188]
+script = ExtResource("1_2eb76")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=720334194]
 sprite_frames = SubResource("SpriteFrames_ejlhg")
@@ -100,6 +105,14 @@ autoplay = "default"
 frame_progress = 0.17749767
 
 [node name="Area2D" type="Area2D" parent="." unique_id=429101948]
+collision_layer = 0
+collision_mask = 16
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=626411966]
+position = Vector2(1, 5.5)
+shape = SubResource("RectangleShape2D_2eb76")
+debug_color = Color(0, 0.6, 0.69803923, 0)
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1150142252]
 position = Vector2(2, 8)

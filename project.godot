@@ -17,7 +17,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Wraith"
-run/main_scene="uid://cnlg81cbb56ha"
+run/main_scene="uid://rkyvut4ndhjv"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="uid://bo8puqbp7sg4v"
 
@@ -25,6 +25,7 @@ config/icon="uid://bo8puqbp7sg4v"
 
 SceneManager="*res://00_Global/Scene_Manager/scene_manager.tscn"
 SaveManager="*uid://d7xxxqmiw70k"
+Messages="*uid://bg7faxx0f8yw2"
 
 [display]
 

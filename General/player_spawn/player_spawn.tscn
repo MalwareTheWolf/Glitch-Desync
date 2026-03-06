@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b76a6s6kwra2i" path="res://player/sprites/EnemySheet.png" id="2_ux0wo"]
 
 [node name="PlayerSpawn" type="Node2D" unique_id=1914222064]
+z_index = 1
 script = ExtResource("1_4x37l")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=467207856]

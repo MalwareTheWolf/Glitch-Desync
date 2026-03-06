@@ -1,0 +1,176 @@
+[gd_scene format=3 uid="uid://rkyvut4ndhjv"]
+
+[ext_resource type="Texture2D" uid="uid://cuh2qjpoayfmt" path="res://General/Assets/Assets/Paid/SSWorlds_SET2_v1.0/Background_night1.png" id="1_05l2w"]
+[ext_resource type="Script" uid="uid://d0wos60571u8y" path="res://00_Global/Scripts/title_screen.gd" id="1_462q2"]
+[ext_resource type="Texture2D" uid="uid://ck5b3xu4cwenm" path="res://General/Assets/Assets/Paid/SSWorlds_SET2_v1.0/Background_night2.png" id="2_hafda"]
+[ext_resource type="Texture2D" uid="uid://dkg42e40whe44" path="res://General/Assets/Assets/Paid/SSWorlds_SET2_v1.0/Background_night3.png" id="3_tpml5"]
+[ext_resource type="Texture2D" uid="uid://b4c5e73x12u56" path="res://General/Assets/Assets/Paid/SSWorlds_SET2_v1.0/Background_night4.png" id="4_jqemp"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1543294767]
+script = ExtResource("1_462q2")
+
+[node name="Control" type="Control" parent="." unique_id=599849103]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=2049703063]
+z_index = 1
+layout_mode = 0
+offset_left = -68.0
+offset_top = -116.0
+offset_right = 570.0
+offset_bottom = 354.0
+color = Color(0, 0, 0, 0.3372549)
+
+[node name="Background" type="Control" parent="Control" unique_id=21570576]
+self_modulate = Color(0.94252336, 0.85960245, 0.8317276, 1)
+anchors_preset = 0
+offset_left = 250.0
+offset_top = 124.0
+offset_right = 290.0
+offset_bottom = 164.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Control/Background" unique_id=1281002775]
+modulate = Color(0.9999984, 0.30404317, 0.3121076, 1)
+texture = ExtResource("1_05l2w")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Control/Background" unique_id=893732339]
+modulate = Color(1, 0.72570586, 0.6990367, 1)
+texture = ExtResource("2_hafda")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Control/Background" unique_id=1808181268]
+modulate = Color(1, 0.5419525, 0.47091085, 1)
+texture = ExtResource("3_tpml5")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Control/Background" unique_id=333173466]
+modulate = Color(1, 0.36304784, 0.3388905, 1)
+texture = ExtResource("4_jqemp")
+
+[node name="MainMenu" type="VBoxContainer" parent="Control" unique_id=90824282]
+unique_name_in_owner = true
+z_index = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 101.0
+offset_top = -20.0
+offset_right = 348.0
+offset_bottom = 249.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Logo" type="Control" parent="Control/MainMenu" unique_id=1553341892]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="NewGameButton" type="Button" parent="Control/MainMenu" unique_id=1027457976]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New Game"
+
+[node name="LoadGameButton" type="Button" parent="Control/MainMenu" unique_id=1975044234]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Game"
+
+[node name="NewGameMenu" type="VBoxContainer" parent="Control" unique_id=916641300]
+unique_name_in_owner = true
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 78.0
+offset_top = -39.0
+offset_right = 325.0
+offset_bottom = 230.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/NewGameMenu" unique_id=434727714]
+layout_mode = 2
+text = "A new                             begins..."
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Control/NewGameMenu/Label" unique_id=1797998072]
+layout_mode = 0
+offset_left = 66.0
+offset_top = -7.0
+offset_right = 167.0
+offset_bottom = 24.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9764706)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+text = "massacre"
+
+[node name="NewSlot01" type="Button" parent="Control/NewGameMenu" unique_id=1302004279]
+layout_mode = 2
+text = "Begin Slot 01"
+
+[node name="NewSlot02" type="Button" parent="Control/NewGameMenu" unique_id=1009354031]
+layout_mode = 2
+text = "Begin Slot 02"
+
+[node name="NewSlot03" type="Button" parent="Control/NewGameMenu" unique_id=1890273094]
+layout_mode = 2
+text = "Begin Slot 03"
+
+[node name="LoadGameMenu" type="VBoxContainer" parent="Control" unique_id=12847581]
+unique_name_in_owner = true
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 78.0
+offset_top = -39.0
+offset_right = 325.0
+offset_bottom = 230.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/LoadGameMenu" unique_id=765685266]
+layout_mode = 2
+text = "The                             continues..."
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Control/LoadGameMenu/Label" unique_id=510241394]
+layout_mode = 0
+offset_left = 44.0
+offset_top = -6.0
+offset_right = 145.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9764706)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+text = "massacre"
+
+[node name="LoadSlot01" type="Button" parent="Control/LoadGameMenu" unique_id=999562540]
+layout_mode = 2
+text = "Load Slot 01"
+
+[node name="LoadSlot02" type="Button" parent="Control/LoadGameMenu" unique_id=521767646]
+layout_mode = 2
+text = "Load Slot 02"
+
+[node name="LoadSlot03" type="Button" parent="Control/LoadGameMenu" unique_id=1836331171]
+layout_mode = 2
+text = "Load Slot 03"
