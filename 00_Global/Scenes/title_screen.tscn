@@ -100,7 +100,7 @@ alignment = 1
 
 [node name="Label" type="Label" parent="Control/NewGameMenu" unique_id=434727714]
 layout_mode = 2
-text = "A new                             begins..."
+text = "A new                  begins..."
 horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="Control/NewGameMenu/Label" unique_id=1797998072]

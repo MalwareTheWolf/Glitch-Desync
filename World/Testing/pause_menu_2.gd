@@ -20,6 +20,14 @@ extends CanvasLayer
 @onready var system_page: Control = $MainNode/Pages/System
 @onready var spells_page: Control = $MainNode/Pages/Spells
 @onready var inventory_page: Control = $MainNode/Pages/Inventory
+
+# --- SYSTEM SETTINGS ---
+@onready var system_tabs: TabContainer = $MainNode/Pages/System/TabContainer
+
+@onready var audio_button: BaseButton = $MainNode/Pages/System/VBoxContainer/Audio_Button
+@onready var graphics_button: BaseButton = $MainNode/Pages/System/VBoxContainer/Graphics_Button
+@onready var video_button: BaseButton = $MainNode/Pages/System/VBoxContainer/Video_Button
+@onready var controls_button: BaseButton = $MainNode/Pages/System/VBoxContainer/Controls_Button
 #endregion
 
 #region /// STANDARD VARIABLES
@@ -40,12 +48,18 @@ func _ready() -> void:
 	hide_all_pages()
 	set_tab_buttons_enabled(false)
 
-	# Connect button signals
+	# Connect main tab signals
 	map_button.pressed.connect(_on_map_pressed)
 	player_button.pressed.connect(_on_player_pressed)
 	system_button.pressed.connect(_on_system_pressed)
 	spells_button.pressed.connect(_on_spells_pressed)
 	inventory_button.pressed.connect(_on_inventory_pressed)
+
+	# Connect system sub-tab signals
+	audio_button.pressed.connect(_on_audio_pressed)
+	graphics_button.pressed.connect(_on_graphics_pressed)
+	video_button.pressed.connect(_on_video_pressed)
+	controls_button.pressed.connect(_on_controls_pressed)
 
 	# Play opening animations
 	if book.sprite_frames and book.sprite_frames.has_animation("open"):
@@ -69,11 +83,8 @@ func _input(event: InputEvent) -> void:
 
 # --- PAGE CONTROL ---
 func hide_all_pages() -> void:
-	map_page.visible = false
-	player_page.visible = false
-	system_page.visible = false
-	spells_page.visible = false
-	inventory_page.visible = false
+	for page in pages.get_children():
+		page.visible = false
 
 func show_page(page_name: String) -> void:
 	hide_all_pages()
@@ -84,6 +95,7 @@ func show_page(page_name: String) -> void:
 			player_page.visible = true
 		"System":
 			system_page.visible = true
+			system_tabs.current_tab = 0  # Default to Audio sub-tab
 		"Spells":
 			spells_page.visible = true
 		"Inventory":
@@ -146,7 +158,7 @@ func close_pause_menu() -> void:
 	get_tree().paused = false
 	queue_free()
 
-# --- BUTTON CALLBACKS ---
+# --- MAIN TAB CALLBACKS ---
 func _on_map_pressed():
 	turn_page("Map")
 func _on_player_pressed():
@@ -157,3 +169,13 @@ func _on_spells_pressed():
 	turn_page("Spells")
 func _on_inventory_pressed():
 	turn_page("Inventory")
+
+# --- SYSTEM SETTINGS PAGES ---
+func _on_audio_pressed():
+	system_tabs.current_tab = 0
+func _on_graphics_pressed():
+	system_tabs.current_tab = 1
+func _on_video_pressed():
+	system_tabs.current_tab = 2
+func _on_controls_pressed():
+	system_tabs.current_tab = 3
