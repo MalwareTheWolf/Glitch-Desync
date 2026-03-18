@@ -5,20 +5,34 @@ func init() -> void:
 	pass
 
 func enter() -> void:
+	if not player:
+		return
+
+	# Play Idle animation
 	if player.animation_player:
 		player.animation_player.play("Idle")
+
+	# Reset jump and dash counts
 	player.jump_count = 0
 	player.dash_count = 0
 
-	player.collision_stand.disabled = false
-	player.collision_crouch.disabled = true
-	player.da_stand.disabled = false
-	player.da_crouch.disabled = true
+	# Enable/disable collisions correctly
+	if player.collision_stand:
+		player.collision_stand.disabled = false
+	if player.collision_crouch:
+		player.collision_crouch.disabled = true
+	if player.da_stand:
+		player.da_stand.disabled = false
+	if player.da_crouch:
+		player.da_crouch.disabled = true
 
 func exit() -> void:
 	pass
 
 func handle_input(_event: InputEvent) -> PlayerState:
+	if not player:
+		return null
+
 	if _event.is_action_pressed("dash") and player.can_dash():
 		return dash
 	if _event.is_action_pressed("attack"):
@@ -30,6 +44,9 @@ func handle_input(_event: InputEvent) -> PlayerState:
 	return null
 
 func process(_delta: float) -> PlayerState:
+	if not player:
+		return null
+
 	if player.direction.x != 0:
 		return run
 	elif player.direction.y > 0.5:
@@ -37,9 +54,13 @@ func process(_delta: float) -> PlayerState:
 	return null
 
 func physics_process(_delta: float) -> PlayerState:
+	if not player:
+		return null
+
 	if player.is_on_floor():
 		player.velocity.x = 0
 	else:
+		# Air movement
 		player.velocity.x = player.direction.x * player.air_velocity
 
 	if not player.is_on_floor():

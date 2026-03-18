@@ -1,11 +1,21 @@
-class_name PlayerStateCrouch extends PlayerState
+class_name PlayerStateCrouch
+extends PlayerState
+
+# Deceleration rate when crouching on ground
+@export var deceleration_rate: float = 10
 
 func init() -> void:
 	pass
 
 func enter() -> void:
-	player.animation_player.play("Crouch") 
+	if not player:
+		return
 
+	# Play crouch animation
+	if player.animation_player:
+		player.animation_player.play("Crouch")
+
+	# Adjust collisions for crouch
 	if player.collision_stand:
 		player.collision_stand.disabled = true
 	if player.collision_crouch:
@@ -16,6 +26,10 @@ func enter() -> void:
 		player.da_crouch.disabled = false
 
 func exit() -> void:
+	if not player:
+		return
+
+	# Reset collisions when leaving crouch
 	if player.collision_stand:
 		player.collision_stand.set_deferred("disabled", false)
 	if player.collision_crouch:
@@ -25,7 +39,10 @@ func exit() -> void:
 	if player.da_crouch:
 		player.da_crouch.set_deferred("disabled", true)
 
-func handle_input(_event : InputEvent) -> PlayerState:
+func handle_input(_event: InputEvent) -> PlayerState:
+	if not player:
+		return null
+
 	if _event.is_action_pressed("dash") and player.can_dash():
 		return dash
 	if _event.is_action_pressed("attack"):
@@ -41,15 +58,21 @@ func handle_input(_event : InputEvent) -> PlayerState:
 	return next_state
 
 func process(_delta: float) -> PlayerState:
+	if not player:
+		return null
+
 	if player.direction.y <= 0.5:
 		return idle
 	return next_state
 
 func physics_process(_delta: float) -> PlayerState:
-	if player.is_on_floor():
-		player.velocity.x = player.direction.x * player.move_speed
-	else:
-		player.velocity.x = player.direction.x * player.air_velocity
+	if not player:
+		return null
+
+	# Apply ground deceleration while crouching
+	player.velocity.x -= player.velocity.x * deceleration_rate * _delta
+
 	if not player.is_on_floor():
 		return fall
+
 	return next_state

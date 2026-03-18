@@ -7,7 +7,6 @@ extends CharacterBody2D
 #region /// Signals
 signal damage_taken
 #endregion
-
 #region /// on ready variables
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_stand: CollisionShape2D = $CollisionStand
@@ -18,6 +17,7 @@ signal damage_taken
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var attack_area: AttackArea = $AttackArea
 @onready var damageable_area: DamageableArea = %DamageableArea
+
 #endregion
 
 #region /// export variables
