@@ -370,7 +370,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Run",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -378,11 +378,6 @@ animations = [{
 }],
 "loop": false,
 "name": &"Take_Damage",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"Walk",
 "speed": 5.0
 }]
 
@@ -411,9 +406,8 @@ knockback_force = 200.0
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2068788832]
 position = Vector2(4, -40)
 sprite_frames = SubResource("SpriteFrames_60j4c")
-animation = &"Attack_2"
-frame = 5
-frame_progress = 1.0
+animation = &"Run"
+autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=703858861]
 z_index = 1
@@ -493,5 +487,5 @@ position = Vector2(-1.5, -18)
 shape = SubResource("RectangleShape2D_myr6v")
 debug_color = Color(0, 0.019607844, 1, 0.41960785)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=814471111]
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="." unique_id=814471111]
 stream = ExtResource("13_duuvx")

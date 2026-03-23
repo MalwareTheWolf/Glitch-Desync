@@ -13,12 +13,13 @@
 [ext_resource type="Script" uid="uid://dlpxh6l27fuvo" path="res://player/scripts/input_hints.gd" id="8_ya7di"]
 [ext_resource type="Texture2D" uid="uid://cvcscv6kbapt2" path="res://General/Sprites/input_icons.png" id="9_8u50t"]
 [ext_resource type="Script" uid="uid://cbkh8eda20lbh" path="res://player/states/death.gd" id="9_o7381"]
-[ext_resource type="Script" uid="uid://5gq2b8e8cqvq" path="res://player/Scene/dash.gd" id="10_xs5gv"]
-[ext_resource type="Script" uid="uid://cuni2eknvd7fx" path="res://player/Scene/ball.gd" id="11_s057m"]
+[ext_resource type="Script" uid="uid://5gq2b8e8cqvq" path="res://player/states/dash.gd" id="10_xs5gv"]
+[ext_resource type="Script" uid="uid://cuni2eknvd7fx" path="res://player/states/ball.gd" id="11_s057m"]
 [ext_resource type="Script" uid="uid://buu3vcea6n7iy" path="res://General/Scripts/attack_area.gd" id="12_eut4h"]
 [ext_resource type="Script" uid="uid://b2q7gmaar6yxa" path="res://player/states/ground_slam.gd" id="12_s057m"]
 [ext_resource type="Script" uid="uid://7f2jhieqh4n4" path="res://player/states/AFK.gd" id="13_qwku7"]
 [ext_resource type="Script" uid="uid://cunkd1wonlvhp" path="res://00_Global/Scripts/damageable_area.gd" id="14_o7381"]
+[ext_resource type="Script" uid="uid://duloxbquahug7" path="res://player/scripts/player_sprite.gd" id="15_sf4bk"]
 [ext_resource type="AudioStream" uid="uid://du6gtwm2l5epc" path="res://00_Global/Audio/hit.wav" id="19_f575y"]
 [ext_resource type="AudioStream" uid="uid://1ma2paybglqb" path="res://00_Global/Audio/jump.wav" id="20_qwku7"]
 [ext_resource type="AudioStream" uid="uid://bukw4uv7uxw8t" path="res://00_Global/Audio/land.wav" id="21_sf4bk"]
@@ -75,6 +76,22 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lp0h7"]
 resource_name = "CrouchWalk"
+
+[sub_resource type="Animation" id="Animation_sf4bk"]
+resource_name = "Dash"
+length = 0.88
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [312, 313, 314, 315, 336, 337, 338, 339, 312]
+}
 
 [sub_resource type="Animation" id="Animation_qwku7"]
 resource_name = "Death"
@@ -212,6 +229,7 @@ _data = {
 &"Attack": SubResource("Animation_cmacy"),
 &"Crouch": SubResource("Animation_8u50t"),
 &"CrouchWalk": SubResource("Animation_lp0h7"),
+&"Dash": SubResource("Animation_sf4bk"),
 &"Death": SubResource("Animation_qwku7"),
 &"Fall": SubResource("Animation_kq2ai"),
 &"Idle": SubResource("Animation_h2vqo"),
@@ -303,12 +321,15 @@ script = ExtResource("12_s057m")
 unique_name_in_owner = true
 script = ExtResource("13_qwku7")
 
+[node name="Walk" type="Node" parent="States" unique_id=1754527418]
+
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1448383656]
 z_index = -1
 position = Vector2(1, -43)
 texture = ExtResource("7_kq2ai")
 hframes = 24
 vframes = 33
+script = ExtResource("15_sf4bk")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1039723297]
 libraries/ = SubResource("AnimationLibrary_6bw35")
