@@ -357,6 +357,7 @@ script = ExtResource("8_ya7di")
 [node name="Sprite2D" type="Sprite2D" parent="InputHints" unique_id=2049398724]
 texture = ExtResource("9_8u50t")
 hframes = 16
+frame = 15
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=994649293]
 unique_name_in_owner = true

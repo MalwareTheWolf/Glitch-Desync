@@ -1,4 +1,4 @@
-extends CharacterBody2D
+class_name EnemyKnight extends CharacterBody2D
 
 enum State { IDLE, RUN, ATTACK, TAKE_DAMAGE, DEATH }
 
