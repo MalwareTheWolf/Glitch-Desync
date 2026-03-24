@@ -5,8 +5,8 @@ extends Control
 
 
 #NODE REFERENCES
-
 @onready var debug_label: Label = $Label
+
 # Displays live debug information.
 
 @onready var infinite_health_button: BaseButton = $VBoxContainer/Infinite_Health
@@ -105,13 +105,13 @@ func _on_infinite_health_pressed() -> void:
 
 
 
-# Unlocks dash ability.
+# Unlocks a ability.
 func _on_unlock_ability_pressed() -> void:
 
 	if player == null:
 		return
 
-	player.dash = true
+	player.morph = true
 
 	print("Dash unlocked")
 

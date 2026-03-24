@@ -9,7 +9,7 @@ func _ready() -> void:
 
 
 
-func tween_color( duration : float = 0.5, color : Color = Color( 0.0, 1.5, 0.95 ) ) -> void:
+func tween_color( duration : float = 0.5, color : Color = Color(0.783, 0.0, 0.0, 1.0) ) -> void:
 	if tween:
 		tween.kill()
 	modulate = color
@@ -25,7 +25,7 @@ func ghost() -> void:
 	effect.get_parent().move_child( effect, 0 )
 	effect.z_index = 1
 	effect.global_position = p.global_position
-	effect.modulate = Color( 0.0, 1.5, 0.95, 0.75 )
+	effect.modulate = Color(0.841, 0.0, 0.0, 0.749)
 	
 	var sprite_copy : Sprite2D = duplicate()
 	effect.add_child( sprite_copy )

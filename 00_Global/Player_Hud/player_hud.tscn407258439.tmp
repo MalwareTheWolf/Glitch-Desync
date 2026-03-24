@@ -119,11 +119,8 @@ script = ExtResource("4_5he8h")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Debug_Menu" unique_id=1162162471]
 layout_mode = 0
-offset_left = 118.0
-offset_top = 1.0
-offset_right = 354.0
-offset_bottom = 312.0
-scale = Vector2(0.5, 0.5)
+offset_right = 236.0
+offset_bottom = 268.0
 
 [node name="Particles" type="Button" parent="Debug_Menu/VBoxContainer" unique_id=1524327880]
 layout_mode = 2
@@ -161,13 +158,10 @@ text = "Infinite Health"
 layout_mode = 2
 text = "No Cooldowns"
 
-[node name="Label" type="Label" parent="Debug_Menu" unique_id=769654545]
-unique_name_in_owner = true
+[node name="debug_label" type="Label" parent="Debug_Menu" unique_id=769654545]
 layout_mode = 0
-offset_left = 2.0
-offset_right = 230.0
-offset_bottom = 182.0
-scale = Vector2(0.5, 0.5)
+offset_right = 40.0
+offset_bottom = 23.0
 autowrap_mode = 2
 
 [node name="WIN" type="Control" parent="." unique_id=442216047]

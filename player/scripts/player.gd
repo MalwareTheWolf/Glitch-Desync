@@ -17,9 +17,6 @@ signal damage_taken
 @onready var sprite: Sprite2D = $Sprite2D
 # Main player sprite.
 
-@onready var attack_sprite: Sprite2D = $AttackSprite2D
-# Sprite used for attack visuals.
-
 @onready var collision_stand: CollisionShape2D = $CollisionStand
 # Collision when standing.
 

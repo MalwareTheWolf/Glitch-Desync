@@ -390,7 +390,7 @@ size = Vector2(17, 35)
 size = Vector2(17, 33)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w6ma0"]
-size = Vector2(43, 21)
+size = Vector2(40, 19)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_myr6v"]
 size = Vector2(19, 36)
@@ -471,7 +471,7 @@ script = ExtResource("10_a54ke")
 metadata/_custom_type_script = "uid://buu3vcea6n7iy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=213132279]
-position = Vector2(31.5, -18.5)
+position = Vector2(30, -19.5)
 shape = SubResource("RectangleShape2D_w6ma0")
 debug_color = Color(1, 0, 0, 0.41960785)
 

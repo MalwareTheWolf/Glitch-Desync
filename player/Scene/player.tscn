@@ -79,7 +79,7 @@ resource_name = "CrouchWalk"
 
 [sub_resource type="Animation" id="Animation_sf4bk"]
 resource_name = "Dash"
-length = 0.88
+length = 0.78
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -87,10 +87,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [312, 313, 314, 315, 336, 337, 338, 339, 312]
+"values": [312, 313, 314, 315, 336, 337, 338, 339]
 }
 
 [sub_resource type="Animation" id="Animation_qwku7"]
@@ -156,6 +156,54 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [144, 168, 169, 170, 171, 172, 173, 192, 216, 218, 219, 220, 221, 240, 241, 242]
+}
+
+[sub_resource type="Animation" id="Animation_4o3a5"]
+resource_name = "Morph_In"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.033333335, 0.13333334, 0.23333333, 0.33333334, 0.43333334, 0.53333336, 0.6333333, 0.73333335, 0.8333333, 0.93333334, 1.0333333, 1.1333333, 1.2333333, 1.3333334, 1.4333333, 1.5333333, 1.6333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [648, 647, 646, 645, 644, 643, 642, 641, 640, 639, 638, 637, 636, 635, 634, 633, 632]
+}
+
+[sub_resource type="Animation" id="Animation_aotku"]
+resource_name = "Morph_Out"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [632, 633, 634, 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648]
+}
+
+[sub_resource type="Animation" id="Animation_cuw7j"]
+resource_name = "Morph_Walk"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.5973838, 0.70127666, 0.8003596, 0.90329045),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [627, 628, 629, 630, 631, 632, 631, 630, 629, 628]
 }
 
 [sub_resource type="Animation" id="Animation_ya7di"]
@@ -234,6 +282,9 @@ _data = {
 &"Fall": SubResource("Animation_kq2ai"),
 &"Idle": SubResource("Animation_h2vqo"),
 &"Jump": SubResource("Animation_era1q"),
+&"Morph_In": SubResource("Animation_4o3a5"),
+&"Morph_Out": SubResource("Animation_aotku"),
+&"Morph_Walk": SubResource("Animation_cuw7j"),
 &"RESET": SubResource("Animation_ya7di"),
 &"Run": SubResource("Animation_eut4h"),
 &"Save": SubResource("Animation_6bw35"),
@@ -261,7 +312,7 @@ fill = 1
 fill_from = Vector2(0.46818182, 0.45454547)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_era1q"]
-size = Vector2(19.33873, 26.18732)
+size = Vector2(19.783432, 26.18732)
 
 [node name="Player" type="CharacterBody2D" unique_id=183006880]
 z_index = 10
@@ -308,6 +359,9 @@ script = ExtResource("9_o7381")
 [node name="Dash" type="Node" parent="States" unique_id=1527649618]
 unique_name_in_owner = true
 script = ExtResource("10_xs5gv")
+duration = 0.5
+speed = 400.0
+effect_delay = 0.09
 
 [node name="Ball" type="Node" parent="States" unique_id=1182924973]
 unique_name_in_owner = true
@@ -389,7 +443,7 @@ script = ExtResource("12_eut4h")
 metadata/_custom_type_script = "uid://buu3vcea6n7iy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1478579972]
-position = Vector2(6.2565002, -4.999998)
+position = Vector2(6.7565002, -4.999998)
 scale = Vector2(2.2487, -0.38186407)
 shape = SubResource("RectangleShape2D_era1q")
 debug_color = Color(1, 0, 0, 0.41960785)
