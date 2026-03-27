@@ -1,6 +1,17 @@
 [gd_scene format=3 uid="uid://rkyvut4ndhjv"]
 
 [ext_resource type="Script" uid="uid://d0wos60571u8y" path="res://00_Global/Scripts/title_screen.gd" id="1_462q2"]
+[ext_resource type="FontFile" uid="uid://l8la2unbwt8u" path="res://Fonts/HelpMe.ttf" id="2_k4sj7"]
+[ext_resource type="Theme" uid="uid://dsv8abwgmks16" path="res://BasicTheme.tres" id="3_nx2nd"]
+
+[sub_resource type="Theme" id="Theme_emawu"]
+default_font = ExtResource("2_k4sj7")
+
+[sub_resource type="LabelSettings" id="LabelSettings_yuxgo"]
+font = ExtResource("2_k4sj7")
+
+[sub_resource type="LabelSettings" id="LabelSettings_usoee"]
+font = ExtResource("2_k4sj7")
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1543294767]
 script = ExtResource("1_462q2")
@@ -75,6 +86,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme = SubResource("Theme_emawu")
 text = "Play"
 
 [node name="NewGameMenu" type="VBoxContainer" parent="Control" unique_id=916641300]
@@ -99,6 +111,7 @@ alignment = 1
 [node name="Label" type="Label" parent="Control/NewGameMenu" unique_id=434727714]
 layout_mode = 2
 text = "A new                  begins..."
+label_settings = SubResource("LabelSettings_yuxgo")
 horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="Control/NewGameMenu/Label" unique_id=1797998072]
@@ -112,17 +125,21 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9764706)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 22
 text = "massacre"
+label_settings = SubResource("LabelSettings_usoee")
 
 [node name="NewSlot01" type="Button" parent="Control/NewGameMenu" unique_id=1302004279]
 layout_mode = 2
+theme = ExtResource("3_nx2nd")
 text = "Begin Slot 01"
 
 [node name="NewSlot02" type="Button" parent="Control/NewGameMenu" unique_id=1009354031]
 layout_mode = 2
+theme = ExtResource("3_nx2nd")
 text = "Begin Slot 02"
 
 [node name="NewSlot03" type="Button" parent="Control/NewGameMenu" unique_id=1890273094]
 layout_mode = 2
+theme = ExtResource("3_nx2nd")
 text = "Begin Slot 03"
 
 [node name="LoadGameMenu" type="VBoxContainer" parent="Control" unique_id=12847581]
@@ -163,12 +180,15 @@ text = "massacre"
 
 [node name="LoadSlot01" type="Button" parent="Control/LoadGameMenu" unique_id=999562540]
 layout_mode = 2
+theme = ExtResource("3_nx2nd")
 text = "Load Slot 01"
 
 [node name="LoadSlot02" type="Button" parent="Control/LoadGameMenu" unique_id=521767646]
 layout_mode = 2
+theme = ExtResource("3_nx2nd")
 text = "Load Slot 02"
 
 [node name="LoadSlot03" type="Button" parent="Control/LoadGameMenu" unique_id=1836331171]
 layout_mode = 2
+theme = ExtResource("3_nx2nd")
 text = "Load Slot 03"

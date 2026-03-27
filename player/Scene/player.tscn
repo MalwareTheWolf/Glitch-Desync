@@ -23,6 +23,8 @@
 [ext_resource type="AudioStream" uid="uid://du6gtwm2l5epc" path="res://00_Global/Audio/hit.wav" id="19_f575y"]
 [ext_resource type="AudioStream" uid="uid://1ma2paybglqb" path="res://00_Global/Audio/jump.wav" id="20_qwku7"]
 [ext_resource type="AudioStream" uid="uid://bukw4uv7uxw8t" path="res://00_Global/Audio/land.wav" id="21_sf4bk"]
+[ext_resource type="LabelSettings" uid="uid://botkf58hbf8jm" path="res://DamageNumbers.tres" id="22_aotku"]
+[ext_resource type="Script" uid="uid://b0pc128i4hj6g" path="res://DamageNumberSpawner.gd" id="24_4o3a5"]
 
 [sub_resource type="Animation" id="Animation_f575y"]
 resource_name = "AFK"
@@ -299,6 +301,10 @@ height = 34.0
 radius = 6.9999876
 height = 13.999975
 
+[sub_resource type="LabelSettings" id="LabelSettings_4o3a5"]
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ya7di"]
 size = Vector2(20, 3)
 
@@ -406,6 +412,7 @@ offset_top = -83.0
 offset_right = 49.0
 offset_bottom = -60.0
 text = "label"
+label_settings = SubResource("LabelSettings_4o3a5")
 horizontal_alignment = 1
 
 [node name="OneWayShapeCast" type="ShapeCast2D" parent="." unique_id=324956999]
@@ -467,6 +474,13 @@ rotation = 3.1395626
 scale = Vector2(1.9561425, 1.007319)
 shape = SubResource("CapsuleShape2D_h2vqo")
 debug_color = Color(0.023529412, 0, 0.9647059, 0.41960785)
+
+[node name="DamageNumberSpawner" type="Node2D" parent="DamageableArea" unique_id=513897454]
+position = Vector2(0, -44)
+script = ExtResource("24_4o3a5")
+label_settings = ExtResource("22_aotku")
+target_path = NodePath("..")
+metadata/_custom_type_script = "uid://b0pc128i4hj6g"
 
 [node name="AudioStreams" type="Node2D" parent="." unique_id=937540924]
 

@@ -49,10 +49,6 @@ import/blender/enabled=false
 
 Player=""
 
-[gui]
-
-theme/custom_font="uid://l8la2unbwt8u"
-
 [input]
 
 left={

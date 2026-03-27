@@ -13,6 +13,8 @@
 [ext_resource type="Script" uid="uid://cunkd1wonlvhp" path="res://00_Global/Scripts/damageable_area.gd" id="11_2a4rr"]
 [ext_resource type="AudioStream" uid="uid://cxrvhkvq03rwv" path="res://00_Global/Audio/aargh.wav" id="12_h0meo"]
 [ext_resource type="AudioStream" uid="uid://cru1tm8vatgix" path="res://00_Global/Audio/death.wav" id="13_duuvx"]
+[ext_resource type="LabelSettings" uid="uid://botkf58hbf8jm" path="res://DamageNumbers.tres" id="14_2a4rr"]
+[ext_resource type="Script" uid="uid://b0pc128i4hj6g" path="res://DamageNumberSpawner.gd" id="14_a54ke"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vqbu3"]
 atlas = ExtResource("2_tk2by")
@@ -447,9 +449,9 @@ debug_color = Color(0.6036141, 0.54231477, 0, 0.41960785)
 
 [node name="StateLabel" type="Label" parent="." unique_id=1378770980]
 offset_left = -22.0
-offset_top = -61.0
+offset_top = -77.0
 offset_right = 26.0
-offset_bottom = -42.0
+offset_bottom = -54.0
 text = "Label"
 
 [node name="HazardArea" type="Area2D" parent="." unique_id=336339049]
@@ -486,6 +488,13 @@ metadata/_custom_type_script = "uid://cunkd1wonlvhp"
 position = Vector2(-1.5, -18)
 shape = SubResource("RectangleShape2D_myr6v")
 debug_color = Color(0, 0.019607844, 1, 0.41960785)
+
+[node name="DamageNumberSpawner" type="Node2D" parent="DamageableArea" unique_id=198309925]
+position = Vector2(0, -43)
+script = ExtResource("14_a54ke")
+label_settings = ExtResource("14_2a4rr")
+target_path = NodePath("..")
+metadata/_custom_type_script = "uid://b0pc128i4hj6g"
 
 [node name="DeathSound" type="AudioStreamPlayer2D" parent="." unique_id=814471111]
 stream = ExtResource("13_duuvx")

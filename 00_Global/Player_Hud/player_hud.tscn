@@ -4,12 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://b5mxlt2k37fll" path="res://00_Global/Player_Hud/EvilHealthBar.png" id="1_ym8xv"]
 [ext_resource type="Texture2D" uid="uid://jbhtwms6kuid" path="res://00_Global/Player_Hud/EvilHealthBarProg.png" id="2_nqvf5"]
 [ext_resource type="Script" uid="uid://d0qcypf5rlfhc" path="res://00_Global/Player_Hud/debug_menu.gd" id="4_5he8h"]
+[ext_resource type="FontFile" uid="uid://l8la2unbwt8u" path="res://Fonts/HelpMe.ttf" id="4_dofns"]
 
 [sub_resource type="Gradient" id="Gradient_ym8xv"]
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_nqvf5"]
 gradient = SubResource("Gradient_ym8xv")
 fill_to = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1ehpl"]
+font = ExtResource("4_dofns")
 
 [node name="PlayerHud" type="CanvasLayer" unique_id=611558025]
 process_mode = 3
@@ -84,6 +88,7 @@ offset_bottom = 9.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "The Massacre Has Ended"
+label_settings = SubResource("LabelSettings_1ehpl")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/GameOver" unique_id=2043610563]
 layout_mode = 1

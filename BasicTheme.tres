@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://dsv8abwgmks16"]
+
+[ext_resource type="FontFile" uid="uid://l8la2unbwt8u" path="res://Fonts/HelpMe.ttf" id="1_uym3a"]
+
+[resource]
+default_font = ExtResource("1_uym3a")
