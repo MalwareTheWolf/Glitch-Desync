@@ -44,7 +44,7 @@ signal damage_taken
 @onready var label: Label = $Label
 # Debug label showing state.
 
-@onready var laser: laser = $Laser
+#@onready var laser: laser = $Laser
 
 #TUNABLE STATS
 
@@ -330,8 +330,8 @@ func _physics_process(delta: float) -> void:
 		if new_state != null:
 			change_state(new_state)
 
-	look_at(get_global_mouse_position())
-	laser.is_casting = Input.is_action_pressed("laser")
+#	look_at(get_global_mouse_position())
+#	laser.is_casting = Input.is_action_pressed("laser")
 
 #MOVEMENT INPUT
 

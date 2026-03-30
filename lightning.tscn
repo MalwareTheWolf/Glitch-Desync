@@ -79,4 +79,5 @@ script = ExtResource("1_888k8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=566704217]
 sprite_frames = SubResource("SpriteFrames_q835i")
-frame_progress = 0.7411434
+autoplay = "default"
+frame_progress = 0.54940766

@@ -12,11 +12,11 @@ func _physics_process(delta: float) -> void:
 		cast_speed * delta
 	)
 
-	var laser_end_position := target_position
-	force_raycast_update()
-	if is_colliding():
-		laser_end_position = to_local(get_collision_point())
-	line_2d.points[1] = laser_end_position
+	#var laser_end_position := target_position
+	#force_raycast_update()
+	#if is_colliding():
+	#	laser_end_position = to_local(get_collision_point())
+#	line_2d.points[1] = laser_end_position
 
 @export var is_casting := false: set = set_is_casting
 
