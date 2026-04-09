@@ -9,36 +9,31 @@ extends Control
 @export var display_name: String = ""
 @export var region_name: String = "wraith_woods"
 
-@export var hide_until_discovered: bool = true
+# Visibility / labels.
+@export var hide_until_discovered: bool = false
 @export var show_label_in_game: bool = false
 
-# Toggle auto-generation
-@export var auto_generate_openings: bool = true
-
-# Manual openings fallback
+# Manual openings.
 @export_group("Manual Openings")
 @export var openings_top: Array[float] = []
 @export var openings_right: Array[float] = []
 @export var openings_bottom: Array[float] = []
 @export var openings_left: Array[float] = []
 
-# Colors
+# Colors.
 @export_group("Colors")
 @export var default_fill_color: Color = Color("000000")
 @export var default_border_color: Color = Color("ffffff")
 @export var current_fill_color: Color = Color("5a1f72")
 @export var current_border_color: Color = Color("ff7cff")
 
-# Internal
+# Internal refs.
 var label: Label
 var transition_blocks: Control
 
 var room_fill_color: Color
 var room_border_color: Color
 var is_current_room: bool = false
-
-const SCALE_FACTOR := 40.0
-var indicator_offset := Vector2.ZERO
 
 
 
@@ -50,7 +45,6 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		if label:
 			label.visible = false
-		update_from_scene()
 		create_transition_blocks()
 		queue_redraw()
 		return
@@ -80,7 +74,6 @@ func ensure_minimum_nodes() -> void:
 
 #PATH HELPERS
 
-# Returns a real res:// path even if linked_scene is stored as uid://
 func get_scene_path() -> String:
 
 	if linked_scene == "":
@@ -97,83 +90,22 @@ func get_scene_path() -> String:
 
 
 
-#SCENE READ
-
-func update_from_scene() -> void:
-
-	if not auto_generate_openings:
-		return
-
-	var scene_path: String = get_scene_path()
-	if scene_path == "" or not ResourceLoader.exists(scene_path):
-		return
-
-	var transitions: Array = []
-	var new_size: Vector2 = size
-
-	var packed := load(scene_path) as PackedScene
-	if packed == null:
-		return
-
-	var inst := packed.instantiate()
-	if inst == null:
-		return
-
-	for c in inst.get_children():
-		if c.get_class() == "LevelBounds":
-			new_size = Vector2(c.width, c.height) / SCALE_FACTOR
-			indicator_offset = c.position
-
-		if c.get_class() == "LevelTransition":
-			transitions.append(c)
-
-	inst.queue_free()
-
-	size = new_size.round()
-	generate_openings_from_transitions(transitions)
-
-
-
-#AUTO OPENINGS
-
-func generate_openings_from_transitions(transitions: Array) -> void:
-
-	openings_top.clear()
-	openings_right.clear()
-	openings_bottom.clear()
-	openings_left.clear()
-
-	for t in transitions:
-		var pos: Vector2 = (t.position - indicator_offset) / SCALE_FACTOR
-
-		match t.location:
-			t.SIDE.LEFT:
-				openings_left.append(pos.y)
-			t.SIDE.RIGHT:
-				openings_right.append(pos.y)
-			t.SIDE.TOP:
-				openings_top.append(pos.x)
-			t.SIDE.BOTTOM:
-				openings_bottom.append(pos.x)
-
-
-
 #REFRESH
 
 func refresh_node() -> void:
-
-	update_from_scene()
 
 	var current_scene := get_tree().current_scene.scene_file_path
 	var scene_path: String = get_scene_path()
 	is_current_room = (current_scene == scene_path)
 
-	var discovered := SaveManager.is_area_discovered(scene_path)
-
 	room_fill_color = default_fill_color
 	room_border_color = default_border_color
 
-	visible = not hide_until_discovered or discovered
+	if hide_until_discovered:
+		var discovered := SaveManager.is_area_discovered(scene_path)
+		visible = discovered
+	else:
+		visible = true
 
 	if label:
 		label.visible = false
@@ -211,25 +143,28 @@ func create_transition_blocks() -> void:
 	for c in transition_blocks.get_children():
 		c.queue_free()
 
+	var side_thickness := 1.0
+	var opening_length := 3.0
+
 	for t in openings_left:
 		var b := add_block()
-		b.size = Vector2(2, 6)
-		b.position = Vector2(-1, t - 3)
+		b.size = Vector2(side_thickness, opening_length)
+		b.position = Vector2(0, t - (opening_length * 0.5))
 
 	for t in openings_right:
 		var b := add_block()
-		b.size = Vector2(2, 6)
-		b.position = Vector2(size.x - 1, t - 3)
+		b.size = Vector2(side_thickness, opening_length)
+		b.position = Vector2(size.x - side_thickness, t - (opening_length * 0.5))
 
 	for t in openings_top:
 		var b := add_block()
-		b.size = Vector2(6, 2)
-		b.position = Vector2(t - 3, -1)
+		b.size = Vector2(opening_length, side_thickness)
+		b.position = Vector2(t - (opening_length * 0.5), 0)
 
 	for t in openings_bottom:
 		var b := add_block()
-		b.size = Vector2(6, 2)
-		b.position = Vector2(t - 3, size.y - 1)
+		b.size = Vector2(opening_length, side_thickness)
+		b.position = Vector2(t - (opening_length * 0.5), size.y - side_thickness)
 
 
 

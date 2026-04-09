@@ -31,6 +31,8 @@ extends CanvasLayer
 @onready var inventory_button: BaseButton = $MainNode/Tabs/Inventory/InventoryButton
 
 # Current menu state.
+@export_enum("Map", "Player", "System", "Spells", "Inventory") var default_page: String = "Player"
+
 var current_page: String = "Player"
 var is_open: bool = false
 var is_turning_page: bool = false
@@ -126,7 +128,7 @@ func play_open_sequence() -> void:
 	tabs.visible = true
 
 	is_open = true
-	show_page("Player")
+	show_page(default_page)
 	set_tab_buttons_enabled(true)
 
 # Closes menu and unpauses the game.

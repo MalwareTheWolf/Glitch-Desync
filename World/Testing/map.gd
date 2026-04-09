@@ -8,6 +8,9 @@ extends Control
 @onready var map_container: Control = $MapPanel/MapContainer
 @onready var player_indicator: Control = $MapPanel/PlayerIndicator
 
+# Manual adjustment for the indicator.
+@export var indicator_offset: Vector2 = Vector2.ZERO
+
 
 
 #LIFECYCLE
@@ -47,16 +50,13 @@ func refresh_page() -> void:
 
 #INDICATOR
 
-# Moves the player indicator to the exact center of the room node.
+# Snaps the indicator to the center of the current room node, then applies manual offset.
 func move_player_indicator_to_room(room_node: MapNode) -> void:
 
-	var center: Vector2 = room_node.position + (room_node.size * 0.5)
-	var indicator_size: Vector2 = player_indicator.size
+	var room_center: Vector2 = room_node.position + (room_node.size * 0.5)
+	var marker_half: Vector2 = player_indicator.size * 0.5
 
-	if indicator_size == Vector2.ZERO:
-		indicator_size = Vector2(8, 8)
-
-	player_indicator.position = center - (indicator_size * 0.5)
+	player_indicator.position = room_center - marker_half + indicator_offset
 	player_indicator.visible = true
 
 
