@@ -401,8 +401,9 @@ size = Vector2(19, 36)
 collision_layer = 35
 collision_mask = 17
 script = ExtResource("1_1p4av")
-damage = 3.0
-attack_cooldown = 1.0
+max_health = 20.0
+damage = 2.0
+attack_cooldown = 1.5
 knockback_force = 200.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2068788832]
