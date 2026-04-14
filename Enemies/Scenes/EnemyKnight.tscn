@@ -398,7 +398,7 @@ size = Vector2(40, 19)
 size = Vector2(19, 36)
 
 [node name="EnemyKnight" type="CharacterBody2D" unique_id=2080624072]
-collision_layer = 35
+collision_layer = 32
 collision_mask = 17
 script = ExtResource("1_1p4av")
 max_health = 20.0
