@@ -116,7 +116,7 @@ func update_unlock_ability_button() -> void:
 	var ability_name: String = ability_list[current_ability_index]
 	var display_name: String = format_ability_name(ability_name)
 
-	if bool(player.get(ability_name)):
+	if player.get(ability_name):
 		unlock_ability_button.text = display_name + " (Unlocked)"
 	else:
 		unlock_ability_button.text = "Unlock " + display_name

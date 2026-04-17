@@ -94,6 +94,7 @@ func create_new_game_save(slot: int = 0) -> void:
 		"y": -80.0,
 		"hp": 20.0,
 		"max_hp": 20.0,
+		"run": false,
 		"dash": false,
 		"double_jump": false,
 		"lightning": false,
@@ -103,13 +104,6 @@ func create_new_game_save(slot: int = 0) -> void:
 		"power_up": false,
 		"ground_slam": false,
 		"morph": false,
-		"spell2": false,
-		"spell3": false,
-		"spell4": false,
-		"spell5": false,
-		"spell6": false,
-		"spell7": false,
-		"spell8": false,
 		"discovered_areas": discovered_areas,
 		"persistent_data": persistent_data
 	}
@@ -141,6 +135,7 @@ func save_game() -> void:
 		"y": player.global_position.y,
 		"hp": player.hp,
 		"max_hp": player.max_hp,
+		"run": player.run,
 		"dash": player.dash,
 		"double_jump": player.double_jump,
 		"lightning": player.lightning,
@@ -150,13 +145,6 @@ func save_game() -> void:
 		"power_up": player.power_up,
 		"ground_slam": player.ground_slam,
 		"morph": player.morph,
-		"spell2": player.spell2,
-		"spell3": player.spell3,
-		"spell4": player.spell4,
-		"spell5": player.spell5,
-		"spell6": player.spell6,
-		"spell7": player.spell7,
-		"spell8": player.spell8,
 		"discovered_areas": discovered_areas,
 		"persistent_data": persistent_data
 	}
@@ -218,14 +206,6 @@ func setup_player() -> void:
 	player.dark_blast = save_data.get("dark_blast", false)
 	player.heavy_attack = save_data.get("heavy_attack", false)
 	player.power_up = save_data.get("power_up", false)
-
-	player.spell2 = save_data.get("spell2", false)
-	player.spell3 = save_data.get("spell3", false)
-	player.spell4 = save_data.get("spell4", false)
-	player.spell5 = save_data.get("spell5", false)
-	player.spell6 = save_data.get("spell6", false)
-	player.spell7 = save_data.get("spell7", false)
-	player.spell8 = save_data.get("spell8", false)
 
 	# Restore position.
 	player.global_position = Vector2(

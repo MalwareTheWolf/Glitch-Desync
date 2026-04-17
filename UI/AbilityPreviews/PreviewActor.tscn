@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://uiywntf8obo5"]
+
+[ext_resource type="Texture2D" uid="uid://b76a6s6kwra2i" path="res://player/sprites/EnemySheet.png" id="1_jgh3w"]
+[ext_resource type="Script" uid="uid://db1bene1p4xgu" path="res://UI/AbilityPreviews/preview_actor.gd" id="1_tq3yv"]
+[ext_resource type="Script" uid="uid://duloxbquahug7" path="res://player/scripts/player_sprite.gd" id="2_tq3yv"]
+
+[sub_resource type="Animation" id="Animation_jgh3w"]
+resource_name = "dash"
+length = 0.78
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [312, 313, 314, 315, 336, 337, 338, 339]
+}
+
+[sub_resource type="Animation" id="Animation_tq3yv"]
+resource_name = "idle"
+length = 0.67
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bukiy"]
+_data = {
+&"dash": SubResource("Animation_jgh3w"),
+&"idle": SubResource("Animation_tq3yv")
+}
+
+[node name="PreviewActor" type="Node2D" unique_id=1573697898]
+script = ExtResource("1_tq3yv")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=515515916]
+z_index = 5
+position = Vector2(1, -43)
+texture = ExtResource("1_jgh3w")
+hframes = 24
+vframes = 33
+script = ExtResource("2_tq3yv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1250320871]
+libraries/ = SubResource("AnimationLibrary_bukiy")
+autoplay = &"idle"

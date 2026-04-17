@@ -30,14 +30,7 @@ const ABILITY_ACTIONS: Dictionary = {
 	"heavy_attack": &"heavy_attack",
 	"power_up": &"power_up",
 	"ground_slam": &"ground_slam",
-	"morph": &"morph",
-	"spell2": &"spell2",
-	"spell3": &"spell3",
-	"spell4": &"spell4",
-	"spell5": &"spell5",
-	"spell6": &"spell6",
-	"spell7": &"spell7",
-	"spell8": &"spell8"
+	"morph": &"morph"
 }
 
 func _ready() -> void:
@@ -85,7 +78,7 @@ func get_visible_actions() -> Array[StringName]:
 		return actions
 
 	for ability_name in ABILITY_ACTIONS.keys():
-		if not bool(player.get(ability_name)):
+		if not player.get(ability_name):
 			continue
 
 		var action_name: StringName = ABILITY_ACTIONS[ability_name]
@@ -102,8 +95,6 @@ func get_action_group(action: StringName) -> String:
 			return "Combat"
 		"action", "pause":
 			return "Interaction"
-		"spell2", "spell3", "spell4", "spell5", "spell6", "spell7", "spell8":
-			return "Abilities"
 		_:
 			return "Other"
 
@@ -240,13 +231,6 @@ func get_action_display_name(action: StringName) -> String:
 		"power_up": return "Power Up"
 		"ground_slam": return "Ground Slam"
 		"morph": return "Morph"
-		"spell2": return "Spell 2"
-		"spell3": return "Spell 3"
-		"spell4": return "Spell 4"
-		"spell5": return "Spell 5"
-		"spell6": return "Spell 6"
-		"spell7": return "Spell 7"
-		"spell8": return "Spell 8"
 		_: return String(action).capitalize()
 
 func find_conflicts(event: InputEvent, ignored_action: StringName = &"", ignored_index: int = -1) -> Array[Dictionary]:

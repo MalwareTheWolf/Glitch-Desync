@@ -49,6 +49,7 @@
 [ext_resource type="Texture2D" uid="uid://qalqbwx8id5u" path="res://Pocket Inventory Series #1 Adventure Book/Pocket Inventory Series #1 Adventure Book v1.4/Silver Book/Sprites/Book Animated/Book Tabs/With icons/Tabs/4.png" id="44_4j7rg"]
 [ext_resource type="Script" uid="uid://sx55uyqj27u3" path="res://World/Testing/AudioPage.gd" id="46_u1wm4"]
 [ext_resource type="Script" uid="uid://dheq2rx63iiu8" path="res://World/Testing/controls.gd" id="47_8lor0"]
+[ext_resource type="Script" uid="uid://cwgxehgqp2fss" path="res://ability_list.gd" id="48_is8g7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q5gmu"]
 atlas = ExtResource("2_xkhrs")
@@ -315,7 +316,6 @@ _data = {
 [node name="BookMenu" type="CanvasLayer" unique_id=245289131]
 process_mode = 3
 script = ExtResource("1_c520y")
-default_page = "Map"
 
 [node name="MainNode" type="Control" parent="." unique_id=1610476167]
 layout_mode = 3
@@ -329,8 +329,8 @@ grow_vertical = 2
 position = Vector2(245.04218, 123.87514)
 scale = Vector2(0.6581183, 0.5996098)
 sprite_frames = SubResource("SpriteFrames_ivfh1")
-animation = &"open"
-frame = 4
+animation = &"tabs_appear"
+frame = 9
 frame_progress = 1.0
 
 [node name="Pages" type="Control" parent="MainNode" unique_id=1194215389]
@@ -399,37 +399,46 @@ offset_bottom = 179.0
 
 [node name="MapNode" type="Control" parent="MainNode/Pages/Map/MapPanel/MapContainer" unique_id=1516838688]
 anchors_preset = 0
-offset_right = 36.0
-offset_bottom = 7.0
+offset_top = 13.0
+offset_right = 29.0
+offset_bottom = 18.0
 script = ExtResource("41_c520y")
+map_scale = 50.0
 linked_scene = "uid://cnlg81cbb56ha"
 display_name = "1"
 hide_until_discovered = true
-openings_right = Array[float]([3.0])
+openings_right = Array[float]([2.0])
 default_border_color = Color(0.82605994, 0.82606006, 0.8260599, 1)
 metadata/_custom_type_script = "uid://b6f6csr7oprof"
 
 [node name="MapNode2" type="Control" parent="MainNode/Pages/Map/MapPanel/MapContainer" unique_id=570741857]
 anchors_preset = 0
-offset_left = 38.0
-offset_right = 74.0
-offset_bottom = 7.0
+offset_left = 30.0
+offset_top = 10.0
+offset_right = 71.0
+offset_bottom = 19.0
 script = ExtResource("41_c520y")
+map_scale = 50.0
 linked_scene = "uid://c8nen6n2gbt20"
 display_name = "2"
 hide_until_discovered = true
+openings_right = Array[float]([3.7600002])
+openings_left = Array[float]([3.6799998])
 default_border_color = Color(0.82605994, 0.82606006, 0.8260599, 1)
 metadata/_custom_type_script = "uid://b6f6csr7oprof"
 
 [node name="MapNode3" type="Control" parent="MainNode/Pages/Map/MapPanel/MapContainer" unique_id=1276950283]
 anchors_preset = 0
-offset_left = 76.0
-offset_right = 112.0
-offset_bottom = 7.0
+offset_left = 72.0
+offset_top = -2.0
+offset_right = 101.0
+offset_bottom = 19.0
 script = ExtResource("41_c520y")
+map_scale = 50.0
 linked_scene = "uid://ra6vmoyl7847"
 display_name = "3"
 hide_until_discovered = true
+openings_left = Array[float]([15.559999])
 default_border_color = Color(0.82605994, 0.82606006, 0.8260599, 1)
 metadata/_custom_type_script = "uid://b6f6csr7oprof"
 
@@ -486,6 +495,7 @@ scale = Vector2(0.6, 0.6)
 texture = ExtResource("41_pumkj")
 
 [node name="System" type="Control" parent="MainNode/Pages" unique_id=778480112]
+visible = false
 anchors_preset = 0
 offset_left = 27.0
 offset_top = 25.0
@@ -644,13 +654,85 @@ layout_mode = 2
 text = "Controls"
 
 [node name="Spells" type="Control" parent="MainNode/Pages" unique_id=1743649646]
-visible = false
 anchors_preset = 0
 offset_left = 27.0
 offset_top = 25.0
 offset_right = 442.0
 offset_bottom = 250.0
 mouse_filter = 2
+script = ExtResource("48_is8g7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainNode/Pages/Spells" unique_id=1079810298]
+z_index = 6
+layout_mode = 0
+offset_left = 32.0
+offset_top = -1.0
+offset_right = 415.0
+offset_bottom = 228.0
+
+[node name="HeaderRow" type="HBoxContainer" parent="MainNode/Pages/Spells/VBoxContainer" unique_id=1969947775]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MainNode/Pages/Spells/VBoxContainer/HeaderRow" unique_id=1058290589]
+layout_mode = 2
+
+[node name="ContentRow" type="HBoxContainer" parent="MainNode/Pages/Spells/VBoxContainer" unique_id=619572946]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeftColumn" type="VBoxContainer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow" unique_id=1859158884]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/LeftColumn" unique_id=2068735112]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AbilityList" type="VBoxContainer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/LeftColumn/ScrollContainer" unique_id=1667290775]
+layout_mode = 2
+
+[node name="RightColumn" type="VBoxContainer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow" unique_id=1240490745]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 9
+
+[node name="MarginContainer" type="MarginContainer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn" unique_id=1005105249]
+layout_mode = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = -27
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="PreviewVBox" type="VBoxContainer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer" unique_id=1045174521]
+layout_mode = 2
+
+[node name="PreviewTitle" type="Label" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox" unique_id=2137790916]
+layout_mode = 2
+
+[node name="PreviewDescription" type="Label" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox" unique_id=605826486]
+layout_mode = 2
+
+[node name="PreviewSceneHolder" type="Control" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox" unique_id=1610972329]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewSceneHolder" unique_id=1144277323]
+layout_mode = 0
+offset_left = -50.0
+offset_top = 7.0
+offset_right = 150.0
+offset_bottom = 157.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewSceneHolder/SubViewportContainer" unique_id=1658880843]
+handle_input_locally = false
+size = Vector2i(200, 150)
+render_target_update_mode = 4
+
+[node name="PreviewRoot" type="Node2D" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewSceneHolder/SubViewportContainer/SubViewport" unique_id=114334602]
+
+[node name="PreviewVideo" type="VideoStreamPlayer" parent="MainNode/Pages/Spells/VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox" unique_id=1155334585]
+layout_mode = 2
 
 [node name="CurrentPage" type="TextureRect" parent="MainNode/Pages/Spells" unique_id=2031193049]
 z_index = 1
@@ -659,6 +741,7 @@ offset_left = -68.0
 offset_top = -49.0
 offset_right = 175.0
 offset_bottom = 166.0
+mouse_filter = 2
 texture = ExtResource("39_uokgq")
 
 [node name="Spells_Selected" type="TextureRect" parent="MainNode/Pages/Spells" unique_id=858497884]
@@ -668,6 +751,7 @@ offset_top = -93.0
 offset_right = 863.99994
 offset_bottom = 547.0
 scale = Vector2(0.6, 0.6)
+mouse_filter = 2
 texture = ExtResource("43_bwkjv")
 
 [node name="Inventory" type="Control" parent="MainNode/Pages" unique_id=91456350]
@@ -700,7 +784,7 @@ texture = ExtResource("44_4j7rg")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainNode" unique_id=1581184465]
 
 [node name="Tabs" type="Control" parent="MainNode" unique_id=407018420]
-z_index = 20
+z_index = 19
 anchors_preset = 0
 offset_left = 440.04218
 offset_top = 37.87513
@@ -756,22 +840,22 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Spells" type="Control" parent="MainNode/Tabs" unique_id=1980123817]
+[node name="Spells" type="Control" parent="MainNode/Tabs" unique_id=1718942382]
 anchors_preset = 0
-offset_left = 6.0
-offset_top = 100.99999
-offset_right = 46.0
-offset_bottom = 141.0
-scale = Vector2(0.5235573, 0.45606428)
+offset_left = 5.9578247
+offset_top = 101.12487
+offset_right = 45.957825
+offset_bottom = 141.12488
+scale = Vector2(0.5234807, 0.45895767)
 mouse_filter = 2
 
-[node name="SpellsButton" type="Button" parent="MainNode/Tabs/Spells" unique_id=1168681294]
+[node name="SpellsButton" type="Button" parent="MainNode/Tabs/Spells" unique_id=1987300962]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-z_index = 20
+z_index = 21
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+action_mode = 0
 
 [node name="LoadorQuit" type="Control" parent="MainNode/Tabs" unique_id=1474678763]
 anchors_preset = 0

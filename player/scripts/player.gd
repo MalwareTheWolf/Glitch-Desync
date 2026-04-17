@@ -79,14 +79,6 @@ var power_up: bool = false
 var ground_slam: bool = false
 var morph: bool = false
 
-var spell2: bool = false
-var spell3: bool = false
-var spell4: bool = false
-var spell5: bool = false
-var spell6: bool = false
-var spell7: bool = false
-var spell8: bool = false
-
 var can_interact: bool = false
 # True when player can interact with objects.
 

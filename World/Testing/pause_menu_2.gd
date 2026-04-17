@@ -8,7 +8,7 @@ extends CanvasLayer
 @onready var tabs: Control = $MainNode/Tabs
 
 # Main pages.
-@onready var map_page: MapPage = $MainNode/Pages/Map
+@onready var map_page: Control = $MainNode/Pages/Map
 @onready var player_page: Control = $MainNode/Pages/Player
 @onready var system_page: Control = $MainNode/Pages/System
 @onready var spells_page: Control = $MainNode/Pages/Spells
@@ -44,14 +44,14 @@ var is_closing: bool = false
 
 func _ready() -> void:
 
-	# Allow UI to process while game is paused.
+	# Allow UI to process while the game is paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	main_node.process_mode = Node.PROCESS_MODE_ALWAYS
 	pages.process_mode = Node.PROCESS_MODE_ALWAYS
 	tabs.process_mode = Node.PROCESS_MODE_ALWAYS
 	book.process_mode = Node.PROCESS_MODE_ALWAYS
 
-	# Pause game when menu opens.
+	# Pause gameplay while the menu is open.
 	get_tree().paused = true
 
 	# Start with only the animated book visible.
@@ -70,9 +70,63 @@ func _ready() -> void:
 #INPUT
 
 func _input(event: InputEvent) -> void:
+
+	# Use a rect fallback so the Spells tab still opens
+	# even if another overlapping control steals the click.
+	if _handle_tab_click_fallback(event):
+		return
+
+	# Close the pause menu with the pause input.
 	if event.is_action_pressed("pause"):
 		get_viewport().set_input_as_handled()
 		close_pause_menu()
+
+
+# Handles left click page switching based on tab button screen rects.
+func _handle_tab_click_fallback(event: InputEvent) -> bool:
+	if not is_open or is_turning_page or is_closing:
+		return false
+
+	if event is not InputEventMouseButton:
+		return false
+
+	var mb := event as InputEventMouseButton
+	if mb.button_index != MOUSE_BUTTON_LEFT or not mb.pressed:
+		return false
+
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+
+	if spells_button and spells_button.visible and not spells_button.disabled:
+		if spells_button.get_global_rect().has_point(mouse_pos):
+			get_viewport().set_input_as_handled()
+			turn_page("Spells")
+			return true
+
+	if map_button and map_button.visible and not map_button.disabled:
+		if map_button.get_global_rect().has_point(mouse_pos):
+			get_viewport().set_input_as_handled()
+			turn_page("Map")
+			return true
+
+	if player_button and player_button.visible and not player_button.disabled:
+		if player_button.get_global_rect().has_point(mouse_pos):
+			get_viewport().set_input_as_handled()
+			turn_page("Player")
+			return true
+
+	if inventory_button and inventory_button.visible and not inventory_button.disabled:
+		if inventory_button.get_global_rect().has_point(mouse_pos):
+			get_viewport().set_input_as_handled()
+			turn_page("Inventory")
+			return true
+
+	if system_button and system_button.visible and not system_button.disabled:
+		if system_button.get_global_rect().has_point(mouse_pos):
+			get_viewport().set_input_as_handled()
+			turn_page("System")
+			return true
+
+	return false
 
 
 
@@ -132,7 +186,7 @@ func play_open_sequence() -> void:
 	set_tab_buttons_enabled(true)
 
 
-# Closes menu and unpauses the game.
+# Closes the menu and unpauses the game.
 func close_pause_menu() -> void:
 
 	if not is_open or is_turning_page or is_closing:
@@ -174,7 +228,8 @@ func show_page(page_name: String) -> void:
 	match page_name:
 		"Map":
 			map_page.visible = true
-			map_page.refresh_page()
+			if map_page.has_method("refresh_page"):
+				map_page.refresh_page()
 
 		"Player":
 			player_page.visible = true
@@ -186,6 +241,8 @@ func show_page(page_name: String) -> void:
 
 		"Spells":
 			spells_page.visible = true
+			if spells_page.has_method("refresh_ability_list"):
+				spells_page.refresh_ability_list()
 
 		"Inventory":
 			inventory_page.visible = true
@@ -246,7 +303,7 @@ func turn_page(new_page: String) -> void:
 	is_turning_page = false
 
 
-# Determines page turn direction.
+# Determines which page turn animation direction to use.
 func should_flip_left(from_page: String, to_page: String) -> bool:
 	var order: Array[String] = ["Player", "Map", "Spells", "Inventory", "System"]
 	return order.find(to_page) < order.find(from_page)

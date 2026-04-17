@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://6kv734qs2eaa"]
 
+[ext_resource type="Script" uid="uid://b5ifdvocunjdv" path="res://General/Ability_Pickup/ability_pickup.gd" id="1_42o8c"]
 [ext_resource type="Texture2D" uid="uid://dx1kcy20udi7d" path="res://00_Global/VFX/Sprites/pipo-mapeffect021_480.png" id="1_kujdo"]
 [ext_resource type="Script" uid="uid://bnj6hhw5gsi03" path="res://00_Global/Scripts/breakable.gd" id="2_5pq80"]
 [ext_resource type="Script" uid="uid://cwvxag1chns3q" path="res://00_Global/VFX/Scripts/Hit_particle_settings.gd" id="3_m8e3b"]
@@ -177,10 +178,11 @@ metadata/_custom_type_script = "uid://cwvxag1chns3q"
 radius = 11.0
 height = 44.0
 
-[node name="WinPickup" type="Node2D" unique_id=604304752]
+[node name="AbilityPickup" type="Node2D" unique_id=604304752]
 z_index = 2
+script = ExtResource("1_42o8c")
 
-[node name="WinSprite" type="AnimatedSprite2D" parent="." unique_id=1566128087]
+[node name="AbilityCrystal" type="AnimatedSprite2D" parent="." unique_id=1566128087]
 scale = Vector2(0.18, 0.18)
 sprite_frames = SubResource("SpriteFrames_dukmu")
 autoplay = "default"
