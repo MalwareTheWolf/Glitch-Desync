@@ -322,13 +322,14 @@ func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta * gravity_multiplier
 	velocity.y = clampf(velocity.y, -1000.0, max_fall_speed)
 
-	move_and_slide()
-
-	# Let state handle physics.
+	# Let state handle physics before movement is applied.
 	if current_state:
-		var new_state = current_state.physics_process(delta)
+		var new_state: PlayerState = current_state.physics_process(delta)
 		if new_state != null:
 			change_state(new_state)
+
+	# Apply movement after state logic updates velocity.
+	move_and_slide()
 
 	# Update built-in laser.
 	update_laser()
