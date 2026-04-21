@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://d4xs032nppk8" path="res://World/Props/Interactable/Doors and Switches/door.tscn" id="5_huecw"]
 [ext_resource type="PackedScene" uid="uid://bjthfj4hqgl57" path="res://World/Props/Interactable/Doors and Switches/switch.tscn" id="6_fk514"]
 [ext_resource type="PackedScene" uid="uid://c1f1nio7v8hc8" path="res://Enemies/Scenes/EnemyKnight.tscn" id="7_fk514"]
-[ext_resource type="Script" uid="uid://hmuvjhch5nnj" path="res://General/player_spawn/player_spawn.gd" id="8_qfdjc"]
 
 [node name="02Test" type="Node2D" unique_id=1830475727]
 
@@ -42,13 +41,6 @@ position = Vector2(-30.897827, 7.32576)
 scale = Vector2(0.61795735, 0.73257893)
 required_enemy = NodePath("../../EnemyKnight")
 
-[node name="Label" type="Label" parent="." unique_id=870881623]
-offset_left = 1073.0
-offset_top = 222.0
-offset_right = 1115.0
-offset_bottom = 250.0
-text = "BOSS"
-
 [node name="LevelTransition3" parent="." unique_id=985139944 instance=ExtResource("4_en5rc")]
 position = Vector2(2049, 338)
 size = 8
@@ -56,11 +48,7 @@ location = 1
 target_level = "uid://ra6vmoyl7847"
 
 [node name="EnemyKnight" parent="." unique_id=2080624072 instance=ExtResource("7_fk514")]
-position = Vector2(637, 312)
+position = Vector2(1079, 330)
 attack_distance = 50.0
 run_distance = 300.0
-
-[node name="PlayerSpawn" type="Node2D" parent="." unique_id=298331981]
-position = Vector2(535, 283)
-script = ExtResource("8_qfdjc")
-metadata/_custom_type_script = "uid://hmuvjhch5nnj"
+max_health = 7.0

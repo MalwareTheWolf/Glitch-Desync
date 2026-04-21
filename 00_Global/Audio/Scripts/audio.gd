@@ -48,7 +48,13 @@ var sfx_volume: float = 1.0
 #region Startup
 func _ready() -> void:
 	if ui:
-		ui_audio_player = ui.get_stream_playback()
+		if ui.stream == null or not (ui.stream is AudioStreamPolyphonic):
+			var poly_stream := AudioStreamPolyphonic.new()
+			poly_stream.polyphony = 16
+			ui.stream = poly_stream
+
+		ui.play()
+		ui_audio_player = ui.get_stream_playback() as AudioStreamPlaybackPolyphonic
 
 	load_audio_settings()
 	apply_all_audio_settings()

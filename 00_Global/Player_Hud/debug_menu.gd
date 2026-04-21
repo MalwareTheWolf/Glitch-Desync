@@ -1,18 +1,11 @@
 extends Control
 
-# Debug menu controller.
-# Handles toggles, cheats, and live debugging info.
-
-
-# NODE REFERENCES
 @onready var debug_label: Label = $Label
 @onready var infinite_health_button: BaseButton = $VBoxContainer/Infinite_Health
 @onready var unlock_ability_button: BaseButton = $VBoxContainer/Unlock_Ability
 @onready var particles_button: BaseButton = $VBoxContainer/Particles
 @onready var kill_player_button: BaseButton = $VBoxContainer/GameOver
 
-
-# RUNTIME
 var player: Player
 var infinite_health: bool = false
 
@@ -32,8 +25,9 @@ var ability_list: Array[String] = [
 var current_ability_index: int = 0
 
 
-# LIFECYCLE
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 	player = get_tree().get_first_node_in_group("Player")
 
 	if infinite_health_button:
@@ -52,7 +46,6 @@ func _ready() -> void:
 	visible = false
 
 
-# PROCESS
 func _process(_delta: float) -> void:
 	if player == null:
 		player = get_tree().get_first_node_in_group("Player")
@@ -65,19 +58,31 @@ func _process(_delta: float) -> void:
 	_update_debug_label()
 
 
-# INPUT
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if not visible:
 		return
 
-	if event.is_action_pressed("ui_right"):
+	if event is InputEventKey and not event.pressed:
+		return
+
+	if event.is_action_pressed("ui_right") or _is_physical_key_pressed(event, KEY_RIGHT):
 		next_ability()
+		get_viewport().set_input_as_handled()
+		return
 
-	elif event.is_action_pressed("ui_left"):
+	if event.is_action_pressed("ui_left") or _is_physical_key_pressed(event, KEY_LEFT):
 		previous_ability()
+		get_viewport().set_input_as_handled()
+		return
 
 
-# DEBUG DISPLAY
+func _is_physical_key_pressed(event: InputEvent, keycode: Key) -> bool:
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		return key_event.pressed and key_event.physical_keycode == keycode
+	return false
+
+
 func _update_debug_label() -> void:
 	if not debug_label or player == null:
 		return
@@ -104,7 +109,6 @@ ABILITY: %s
 	]
 
 
-# BUTTON TEXT
 func update_unlock_ability_button() -> void:
 	if unlock_ability_button == null:
 		return
@@ -139,10 +143,8 @@ func format_ability_name(ability_name: String) -> String:
 	return " ".join(parts)
 
 
-# DEBUG ACTIONS
 func _on_infinite_health_pressed() -> void:
 	infinite_health = !infinite_health
-	print("Infinite Health:", infinite_health)
 
 
 func _on_unlock_ability_pressed() -> void:
@@ -153,7 +155,6 @@ func _on_unlock_ability_pressed() -> void:
 	player.set(ability_name, true)
 
 	update_unlock_ability_button()
-	print(format_ability_name(ability_name), " unlocked")
 
 
 func _on_particles_pressed() -> void:
@@ -164,8 +165,6 @@ func _on_particles_pressed() -> void:
 	VisualEffects.land_dust(player.global_position)
 	VisualEffects.hit_dust(player.global_position)
 
-	print("Spawned test particles")
-
 
 func _on_kill_player_pressed() -> void:
 	if player == null:
@@ -175,5 +174,3 @@ func _on_kill_player_pressed() -> void:
 
 	if player.death:
 		player.change_state(player.death)
-
-	print("Player killed (debug)")

@@ -14,12 +14,9 @@ extends Control
 @onready var preview_vbox: VBoxContainer = get_node_or_null("VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox")
 @onready var preview_title: Label = get_node_or_null("VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewTitle")
 @onready var preview_description: Label = get_node_or_null("VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewDescription")
-
-# IMPORTANT: this now points to PreviewRoot inside the SubViewport
+@onready var preview_scene_control: Control = get_node_or_null("VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewSceneHolder")
 @onready var preview_scene_holder: Node = get_node_or_null("VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewSceneHolder/SubViewportContainer/SubViewport/PreviewRoot")
-
 @onready var preview_video: VideoStreamPlayer = get_node_or_null("VBoxContainer/ContentRow/RightColumn/MarginContainer/PreviewVBox/PreviewVideo")
-
 
 const TITLE_FONT_SIZE: int = 11
 const ITEM_FONT_SIZE: int = 9
@@ -186,8 +183,11 @@ func _configure_layout() -> void:
 		preview_description.add_theme_font_size_override("font_size", DESC_FONT_SIZE)
 		preview_description.custom_minimum_size = Vector2(0.0, 30.0)
 
-	# PreviewSceneHolder still exists as a Control in the scene,
-	# but we are instancing the preview into PreviewRoot inside the SubViewport.
+	if preview_scene_control:
+		preview_scene_control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		preview_scene_control.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		preview_scene_control.custom_minimum_size = Vector2(0.0, PREVIEW_MIN_HEIGHT)
+
 	if preview_video:
 		preview_video.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		preview_video.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -201,8 +201,15 @@ func _configure_preview_defaults() -> void:
 	if preview_description:
 		preview_description.text = "Choose an unlocked ability from the list."
 
+	_set_preview_scene_visible(false)
+
 	if preview_video:
 		preview_video.visible = false
+
+
+func _set_preview_scene_visible(value: bool) -> void:
+	if preview_scene_control:
+		preview_scene_control.visible = value
 
 
 func refresh_ability_list() -> void:
@@ -286,12 +293,15 @@ func _show_preview(def: Dictionary) -> void:
 		preview_video.visible = false
 		preview_video.stream = null
 
+	_set_preview_scene_visible(false)
+
 	var scene_res: PackedScene = def.get("scene", null)
 	var video_res: VideoStream = def.get("video", null)
 
 	if scene_res != null and preview_scene_holder != null:
 		current_preview_instance = scene_res.instantiate()
 		preview_scene_holder.add_child(current_preview_instance)
+		_set_preview_scene_visible(true)
 
 	elif video_res != null and preview_video != null:
 		preview_video.stream = video_res
@@ -313,6 +323,8 @@ func _clear_preview() -> void:
 	if preview_scene_holder:
 		for child in preview_scene_holder.get_children():
 			child.queue_free()
+
+	_set_preview_scene_visible(false)
 
 	if preview_video:
 		preview_video.stop()

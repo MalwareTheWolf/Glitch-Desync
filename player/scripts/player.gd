@@ -287,26 +287,26 @@ func _unhandled_input(event: InputEvent) -> void:
 #PROCESS
 
 func _process(delta: float) -> void:
-
 	if not can_move:
 		return
 
 	last_input_time += delta
 
-	# Enter AFK state if inactive.
-	if last_input_time >= afk_threshold_seconds:
-		var afk_state = $States.get_node_or_null("AFK")
-		if afk_state and current_state != afk_state:
-			change_state(afk_state)
-
 	update_direction()
+
+	# Enter AFK only from Idle.
+	if current_state != null and current_state.name.to_lower() == "idle":
+		if last_input_time >= afk_threshold_seconds:
+			var afk_state: PlayerState = $States.get_node_or_null("AFK")
+			if afk_state != null and current_state != afk_state:
+				change_state(afk_state)
+				return
 
 	# Let state update.
 	if current_state:
-		var new_state = current_state.process(delta)
+		var new_state: PlayerState = current_state.process(delta)
 		if new_state != null:
 			change_state(new_state)
-
 
 
 #PHYSICS

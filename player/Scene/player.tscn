@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://b1sxw2k6plrbn" path="res://player/states/take_damage.gd" id="8_6bw35"]
 [ext_resource type="Script" uid="uid://bc53hd65rw47x" path="res://player/Scene/camera_2d.gd" id="8_lp0h7"]
 [ext_resource type="Script" uid="uid://dlpxh6l27fuvo" path="res://player/scripts/input_hints.gd" id="8_ya7di"]
-[ext_resource type="Texture2D" uid="uid://cvcscv6kbapt2" path="res://General/Sprites/input_icons.png" id="9_8u50t"]
 [ext_resource type="Script" uid="uid://cbkh8eda20lbh" path="res://player/states/death.gd" id="9_o7381"]
 [ext_resource type="Script" uid="uid://5gq2b8e8cqvq" path="res://player/states/dash.gd" id="10_xs5gv"]
 [ext_resource type="Script" uid="uid://cuni2eknvd7fx" path="res://player/states/ball.gd" id="11_s057m"]
@@ -28,6 +27,7 @@
 [ext_resource type="AudioStream" uid="uid://1ma2paybglqb" path="res://00_Global/Audio/jump.wav" id="20_qwku7"]
 [ext_resource type="AudioStream" uid="uid://bukw4uv7uxw8t" path="res://00_Global/Audio/land.wav" id="21_sf4bk"]
 [ext_resource type="LabelSettings" uid="uid://botkf58hbf8jm" path="res://DamageNumbers.tres" id="22_aotku"]
+[ext_resource type="Texture2D" uid="uid://cfgt6ir2sax6h" path="res://tilemap.png" id="22_cp23r"]
 [ext_resource type="Script" uid="uid://b0pc128i4hj6g" path="res://DamageNumberSpawner.gd" id="24_4o3a5"]
 [ext_resource type="Script" uid="uid://cg6me518q1rwe" path="res://Laser.gd" id="26_cuw7j"]
 
@@ -62,7 +62,7 @@ size = Vector2(19.783432, 26.18732)
 size = Vector2(11, 41)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kkr2g"]
-size = Vector2(215, 6)
+size = Vector2(214.99998, 6)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kkr2g"]
 lifetime_randomness = 0.32
@@ -77,7 +77,7 @@ color = Color(1, 0, 0, 1)
 [node name="Player" type="CharacterBody2D" unique_id=183006880]
 z_index = 10
 collision_layer = 16
-collision_mask = 3
+collision_mask = 7
 floor_constant_speed = true
 script = ExtResource("1_oul6g")
 
@@ -90,6 +90,7 @@ script = ExtResource("2_rkbax")
 [node name="Jump" type="Node" parent="States" unique_id=1870161882]
 unique_name_in_owner = true
 script = ExtResource("3_qjkh3")
+jump_velocity = 250.0
 
 [node name="Fall" type="Node" parent="States" unique_id=113319824]
 unique_name_in_owner = true
@@ -121,6 +122,7 @@ script = ExtResource("10_xs5gv")
 duration = 0.5
 speed = 400.0
 effect_delay = 0.09
+enemy_collision_layer = 0
 
 [node name="Ball" type="Node" parent="States" unique_id=1182924973]
 unique_name_in_owner = true
@@ -170,10 +172,10 @@ shape = SubResource("CapsuleShape2D_h2vqo")
 debug_color = Color(0.8209421, 0.0017710191, 0.96571594, 0.41960785)
 
 [node name="Label" type="Label" parent="." unique_id=235609684]
-offset_left = -42.0
-offset_top = -83.0
-offset_right = 49.0
-offset_bottom = -60.0
+offset_left = -44.0
+offset_top = -91.0
+offset_right = 47.0
+offset_bottom = -68.0
 text = "label"
 label_settings = SubResource("LabelSettings_4o3a5")
 horizontal_alignment = 1
@@ -198,11 +200,13 @@ texture = SubResource("GradientTexture2D_8u50t")
 [node name="InputHints" type="Node2D" parent="." unique_id=941693109]
 position = Vector2(0, -56)
 script = ExtResource("8_ya7di")
+icon_sheet = ExtResource("22_cp23r")
 
 [node name="Sprite2D" type="Sprite2D" parent="InputHints" unique_id=2049398724]
-texture = ExtResource("9_8u50t")
-hframes = 16
-frame = 15
+position = Vector2(0, -3)
+texture = ExtResource("22_cp23r")
+hframes = 34
+vframes = 24
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=994649293]
 unique_name_in_owner = true
@@ -278,7 +282,7 @@ stream = ExtResource("21_sf4bk")
 position = Vector2(12, -21)
 
 [node name="laser" type="RayCast2D" parent="LaserOrigin" unique_id=1901257399]
-target_position = Vector2(175.75159, -123.84013)
+target_position = Vector2(144.56306, -159.14307)
 collision_mask = 161
 script = ExtResource("26_cuw7j")
 max_length = 215.0
@@ -289,14 +293,14 @@ damage_interval = 1.0
 metadata/_custom_type_script = "uid://cg6me518q1rwe"
 
 [node name="Line2D" type="Line2D" parent="LaserOrigin/laser" unique_id=1600820054]
-points = PackedVector2Array(0, 0, 175.75159, -123.84013)
+points = PackedVector2Array(0, 0, 144.56306, -159.14307)
 width = 0.5
 end_cap_mode = 2
 
 [node name="AttackArea" type="Area2D" parent="LaserOrigin/laser" unique_id=397814672]
 visible = false
-position = Vector2(87.87579, -61.920067)
-rotation = -0.6138277
+position = Vector2(72.28153, -79.57153)
+rotation = -0.8333683
 collision_layer = 0
 collision_mask = 97
 monitoring = false
@@ -310,7 +314,7 @@ disabled = true
 debug_color = Color(0.9372549, 0, 0, 0.41960785)
 
 [node name="CollisionParticles2D" type="GPUParticles2D" parent="LaserOrigin/laser" unique_id=762718129]
-position = Vector2(175.75159, -123.84013)
+position = Vector2(144.56306, -159.14307)
 emitting = false
 amount = 16
 lifetime = 0.34

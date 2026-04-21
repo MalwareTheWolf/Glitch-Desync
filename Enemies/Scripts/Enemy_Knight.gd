@@ -1,4 +1,5 @@
-class_name EnemyKnight extends CharacterBody2D
+class_name EnemyKnight
+extends CharacterBody2D
 
 enum State { IDLE, RUN, ATTACK, TAKE_DAMAGE, DEATH }
 
@@ -15,10 +16,17 @@ enum State { IDLE, RUN, ATTACK, TAKE_DAMAGE, DEATH }
 @export var run_distance: float = 220.0
 @export var max_health: float = 3.0
 @export var damage: float = 1.0
-@export var attack_duration: float = 0.12
+
+# Slightly longer so the hitbox is not too easy to miss.
+@export var attack_duration: float = 0.22
 @export var attack_cooldown: float = 0.45
 @export var knockback_force: float = 120.0
 @export var hurt_duration: float = 0.2
+
+# Small delay so the attack hitbox comes out after the animation begins.
+@export var attack_startup: float = 0.06
+
+@export var show_state_label: bool = false
 
 var health: float = 0.0
 var current_state: State = State.IDLE
@@ -35,6 +43,9 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 func _ready() -> void:
 	rng.randomize()
 	health = max_health
+
+	if state_label != null:
+		state_label.visible = show_state_label
 
 	player_detector.body_entered.connect(_on_player_entered)
 	player_detector.body_exited.connect(_on_player_exited)
@@ -54,6 +65,7 @@ func _physics_process(delta: float) -> void:
 		if hurt_timer <= 0.0:
 			_end_hurt_state()
 
+	update_player_reference()
 	update_facing()
 	update_state()
 
@@ -78,6 +90,11 @@ func apply_gravity(delta: float) -> void:
 		velocity.y += gravity * delta
 	else:
 		velocity.y = 0.0
+
+
+func update_player_reference() -> void:
+	if player != null and not is_instance_valid(player):
+		player = null
 
 
 func update_facing() -> void:
@@ -105,15 +122,17 @@ func update_state() -> void:
 		current_state = State.ATTACK
 		return
 
-	if player == null or not is_instance_valid(player):
+	if player == null:
 		current_state = State.IDLE
 		return
 
-	var dist: float = global_position.distance_to(player.global_position)
+	var dx: float = abs(player.global_position.x - global_position.x)
+	var dy: float = abs(player.global_position.y - global_position.y)
+	var vertically_close: bool = dy <= 40.0
 
-	if dist <= attack_distance and not attack_on_cooldown:
+	if vertically_close and dx <= attack_distance and not attack_on_cooldown:
 		current_state = State.ATTACK
-	elif dist <= run_distance:
+	elif dx <= run_distance:
 		current_state = State.RUN
 	else:
 		current_state = State.IDLE
@@ -127,12 +146,32 @@ func handle_idle() -> void:
 
 
 func handle_run() -> void:
+	if player == null:
+		velocity.x = 0.0
+		if sprite.animation != "Idle":
+			sprite.play("Idle")
+		return
+
+	var dist_x: float = player.global_position.x - global_position.x
+	var abs_dist_x: float = abs(dist_x)
+
+	if abs_dist_x <= attack_distance and not attack_on_cooldown:
+		velocity.x = 0.0
+		current_state = State.ATTACK
+		handle_attack()
+		return
+
+	facing_dir = 1 if dist_x > 0.0 else -1
 	velocity.x = float(facing_dir) * speed_run
 
 	update_floor_ray()
 
 	if floor_detector != null and not floor_detector.is_colliding():
 		velocity.x = 0.0
+		current_state = State.IDLE
+		if sprite.animation != "Idle":
+			sprite.play("Idle")
+		return
 
 	if sprite.animation != "Run":
 		sprite.play("Run")
@@ -160,14 +199,29 @@ func handle_death() -> void:
 
 
 func start_attack() -> void:
+	if player == null or dead:
+		return
+
 	attack_playing = true
 	attack_on_cooldown = true
+	velocity.x = 0.0
 
 	if attack_area != null:
 		attack_area.damage = damage
+		attack_area.flip(float(facing_dir))
+		attack_area.set_active(false)
 
 	var attack_anim: String = "Attack_" + str(rng.randi_range(1, 3))
 	sprite.play(attack_anim)
+
+	_start_attack_hitbox.call_deferred()
+
+
+func _start_attack_hitbox() -> void:
+	await get_tree().create_timer(attack_startup).timeout
+
+	if dead or not attack_playing:
+		return
 
 	_do_attack_hit()
 
@@ -188,6 +242,10 @@ func update_floor_ray() -> void:
 func _on_animation_finished() -> void:
 	if sprite.animation.begins_with("Attack_"):
 		attack_playing = false
+
+		if attack_area != null:
+			attack_area.set_active(false)
+
 		_start_attack_cooldown()
 	elif sprite.animation == "Death":
 		await get_tree().create_timer(1.0).timeout
@@ -213,7 +271,6 @@ func _on_damage_taken(attack_area_source: AttackArea) -> void:
 		die()
 		return
 
-	# Interrupt current attack cleanly.
 	attack_playing = false
 
 	if attack_area != null:
@@ -270,7 +327,9 @@ func die() -> void:
 
 func update_label() -> void:
 	if state_label != null:
-		state_label.text = State.keys()[current_state] + " | HP: " + str(health)
+		state_label.visible = show_state_label
+		if show_state_label:
+			state_label.text = State.keys()[current_state] + " | HP: " + str(health)
 
 
 func _on_player_entered(body: Node) -> void:

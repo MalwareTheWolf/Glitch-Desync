@@ -1,48 +1,79 @@
 @icon("uid://b044gwmkvmxmt")
-class_name PlayerStateAFK extends PlayerState 
-
-# How long to wait before going AFK (seconds)
-@export var afk_threshold: float = 6.0
-
-# Tracks time without input
-var idle_timer: float = 0.0
-var is_afk: bool = false
+class_name PlayerStateAFK
+extends PlayerState
 
 func init() -> void:
-	idle_timer = 0.0
-	is_afk = false
-
-func handle_input(event: InputEvent) -> PlayerState:
-	# Any input exits AFK immediately
-	if is_afk and event.is_pressed():
-		is_afk = false
-		# Return to previous state
-		if player.previous_state:
-			return player.previous_state
-	# Not AFK yet, just reset timer
-	idle_timer = 0.0
-	return self
-
-func process(delta: float) -> PlayerState:
-	if is_afk:
-		# Remain in AFK state until input
-		return self
-
-	# Count idle time
-	idle_timer += delta
-	if idle_timer >= afk_threshold:
-		is_afk = true
-		# Play AFK animation
-		if player.animation_player:
-			player.animation_player.play("AFK")
-	return self
+	pass
 
 func enter() -> void:
-	# Reset timer when entering state
-	idle_timer = 0.0
-	is_afk = false
+	if not player:
+		return
+
+	player.last_input_time = 0.0
+
+	if player.animation_player:
+		player.animation_player.play("AFK")
 
 func exit() -> void:
-	# Optional: revert animation when leaving AFK
+	if not player:
+		return
+
+	player.last_input_time = 0.0
+
 	if player.animation_player:
-		player.animation_player.play("Idle")  # Replace with your default idle animation
+		player.animation_player.play("Idle")
+
+func handle_input(event: InputEvent) -> PlayerState:
+	if not player:
+		return null
+
+	if not event.is_pressed():
+		return null
+
+	if event.is_action_pressed("dash") and player.can_dash():
+		return dash
+
+	if event.is_action_pressed("attack"):
+		return attack
+
+	if event.is_action_pressed("jump"):
+		return jump
+
+	if event.is_action_pressed("Cast"):
+		return cast
+
+	if event.is_action_pressed("action") and player.can_morph():
+		return ball
+
+	if Input.get_axis("left", "right") != 0.0:
+		if player.run and player.wants_to_run:
+			return run
+		return walk
+
+	if Input.get_axis("up", "down") > 0.5:
+		return crouch
+
+	return idle
+
+func process(_delta: float) -> PlayerState:
+	if not player:
+		return null
+
+	if not player.is_on_floor():
+		return fall
+
+	return null
+
+func physics_process(_delta: float) -> PlayerState:
+	if not player:
+		return null
+
+	if player.is_on_floor():
+		player.velocity.x = 0.0
+	else:
+		player.velocity.x = player.direction.x * player.air_velocity
+
+	if not player.is_on_floor():
+		return fall
+
+	return null

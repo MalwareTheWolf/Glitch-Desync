@@ -270,20 +270,20 @@ func create_opening_data(transitions: Array[LevelTransition]) -> void:
 		var local_pos: Vector2 = (t.global_position - scene_offset) / map_scale
 
 		if t.location == LevelTransition.SIDE.LEFT:
-			var offset_left: float = clampf(local_pos.y - 3.0, 2.0, size.y - 5.0)
-			openings_left.append(offset_left)
+			var opening_y_left: float = clampf(local_pos.y - 3.0, 2.0, size.y - 5.0)
+			openings_left.append(opening_y_left)
 
 		elif t.location == LevelTransition.SIDE.RIGHT:
-			var offset_right: float = clampf(local_pos.y - 3.0, 2.0, size.y - 5.0)
-			openings_right.append(offset_right)
+			var opening_y_right: float = clampf(local_pos.y - 3.0, 2.0, size.y - 5.0)
+			openings_right.append(opening_y_right)
 
 		elif t.location == LevelTransition.SIDE.TOP:
-			var offset_top: float = clampf(local_pos.x, 2.0, size.x - 5.0)
-			openings_top.append(offset_top)
+			var opening_x_top: float = clampf(local_pos.x, 2.0, size.x - 5.0)
+			openings_top.append(opening_x_top)
 
 		elif t.location == LevelTransition.SIDE.BOTTOM:
-			var offset_bottom: float = clampf(local_pos.x, 2.0, size.x - 5.0)
-			openings_bottom.append(offset_bottom)
+			var opening_x_bottom: float = clampf(local_pos.x, 2.0, size.x - 5.0)
+			openings_bottom.append(opening_x_bottom)
 
 
 

@@ -1,174 +1,312 @@
-@icon("res://General/Icon/input_hints.svg")
-class_name InputHints
 extends Node2D
 
-const CONTROLLER_FRAME_MAP: Dictionary = {
-	"playstation": {
-		"buttons": {
-			JOY_BUTTON_A: 1,
-			JOY_BUTTON_B: 3,
-			JOY_BUTTON_X: 2,
-			JOY_BUTTON_Y: 0,
-			JOY_BUTTON_DPAD_UP: 4
-		}
-	},
-	"xbox": {
-		"buttons": {
-			JOY_BUTTON_A: 5,
-			JOY_BUTTON_B: 6,
-			JOY_BUTTON_X: 7,
-			JOY_BUTTON_Y: 8,
-			JOY_BUTTON_DPAD_UP: 4
-		}
-	},
-	"switch": {
-		"buttons": {
-			JOY_BUTTON_A: 18,
-			JOY_BUTTON_B: 17,
-			JOY_BUTTON_X: 19,
-			JOY_BUTTON_Y: 20,
-			JOY_BUTTON_DPAD_UP: 4
-		}
-	}
-}
+@export var icon_sheet: Texture2D
 
-var controller_type: String = "keyboard"
-var current_hint: StringName = &""
+@onready var icon_sprite: Sprite2D = $Sprite2D
 
-@onready var sprite_2d: Sprite2D = $Sprite2D
-@onready var hint_label: Label = get_node_or_null("HintLabel")
+const HFRAMES: int = 34
+const VFRAMES: int = 24
+
+var current_prompt: String = ""
+
 
 func _ready() -> void:
 	visible = false
 
-	if Messages.input_hint_changed.is_connected(_on_hint_changed) == false:
-		Messages.input_hint_changed.connect(_on_hint_changed)
+	if icon_sprite:
+		if icon_sheet:
+			icon_sprite.texture = icon_sheet
+		icon_sprite.hframes = HFRAMES
+		icon_sprite.vframes = VFRAMES
+		icon_sprite.frame = 0
 
-	_update_device_from_input_settings()
+	if Messages.input_hint_changed.is_connected(_on_input_hint_changed) == false:
+		Messages.input_hint_changed.connect(_on_input_hint_changed)
+
+	if InputSettings.bindings_changed.is_connected(_refresh_hint) == false:
+		InputSettings.bindings_changed.connect(_refresh_hint)
+
+	if InputSettings.device_changed.is_connected(_on_device_changed) == false:
+		InputSettings.device_changed.connect(_on_device_changed)
+
 	_refresh_hint()
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton or event is InputEventKey:
-		controller_type = "keyboard"
-		_refresh_hint()
-	elif event is InputEventJoypadButton:
-		_set_controller_type_from_device(event.device)
-		_refresh_hint()
-	elif event is InputEventJoypadMotion and absf((event as InputEventJoypadMotion).axis_value) > 0.5:
-		_set_controller_type_from_device(event.device)
-		_refresh_hint()
 
-func _update_device_from_input_settings() -> void:
-	if InputSettings.current_device == InputSettings.InputDevice.KEYBOARD_MOUSE:
-		controller_type = "keyboard"
-	else:
-		var joypads: PackedInt32Array = Input.get_connected_joypads()
-		if joypads.size() > 0:
-			_set_controller_type_from_device(joypads[0])
-		else:
-			controller_type = "playstation"
+func _exit_tree() -> void:
+	if Messages.input_hint_changed.is_connected(_on_input_hint_changed):
+		Messages.input_hint_changed.disconnect(_on_input_hint_changed)
 
-func _set_controller_type_from_device(device_id: int) -> void:
-	var n: String = Input.get_joy_name(device_id).to_lower()
+	if InputSettings.bindings_changed.is_connected(_refresh_hint):
+		InputSettings.bindings_changed.disconnect(_refresh_hint)
 
-	if "xbox" in n:
-		controller_type = "xbox"
-	elif "nintendo" in n or "switch" in n:
-		controller_type = "switch"
-	else:
-		controller_type = "playstation"
+	if InputSettings.device_changed.is_connected(_on_device_changed):
+		InputSettings.device_changed.disconnect(_on_device_changed)
 
-func _on_hint_changed(hint: String) -> void:
-	current_hint = StringName(hint)
 
-	if hint == "":
-		visible = false
-		return
-
-	visible = true
-	_update_device_from_input_settings()
+func _on_device_changed(_new_device: int) -> void:
 	_refresh_hint()
+
+
+func _on_input_hint_changed(prompt_name: String) -> void:
+	current_prompt = prompt_name
+	_refresh_hint()
+
 
 func _refresh_hint() -> void:
-	if current_hint == &"":
+	if icon_sprite == null:
 		visible = false
 		return
 
-	var event: InputEvent = _get_primary_binding(current_hint)
+	if current_prompt.strip_edges() == "":
+		visible = false
+		return
 
+	var action_name: StringName = _prompt_to_action(current_prompt)
+	if action_name == &"":
+		visible = false
+		return
+
+	var event: InputEvent = InputSettings.get_preferred_binding(action_name)
 	if event == null:
-		_show_text("?")
+		visible = false
 		return
 
-	if event is InputEventKey or event is InputEventMouseButton:
-		_show_text(_short_text(InputSettings.event_to_text(event)))
+	var frame_index: int = _get_frame_for_event(event)
+	if frame_index < 0:
+		visible = false
 		return
+
+	icon_sprite.frame = frame_index
+	visible = true
+
+
+func _prompt_to_action(prompt_name: String) -> StringName:
+	match prompt_name.to_lower():
+		"interact":
+			return &"action"
+		"action":
+			return &"action"
+		"jump":
+			return &"jump"
+		"attack":
+			return &"attack"
+		"dash":
+			return &"dash"
+		"pause":
+			return &"pause"
+		"cast":
+			return &"Cast"
+		"up":
+			return &"up"
+		"down":
+			return &"down"
+		"left":
+			return &"left"
+		"right":
+			return &"right"
+		_:
+			return &""
+
+
+func _frame(col: int, row: int) -> int:
+	return row * HFRAMES + col
+
+
+func _get_frame_for_event(event: InputEvent) -> int:
+	if event is InputEventMouseButton:
+		return _get_mouse_frame((event as InputEventMouseButton).button_index)
 
 	if event is InputEventJoypadButton:
-		_show_controller_button(event as InputEventJoypadButton)
-		return
+		return _get_joy_button_frame((event as InputEventJoypadButton).button_index)
 
 	if event is InputEventJoypadMotion:
-		_show_controller_motion(event as InputEventJoypadMotion)
-		return
+		return _get_joy_motion_frame(event as InputEventJoypadMotion)
 
-	_show_text("?")
+	if event is InputEventKey:
+		return _get_key_frame((event as InputEventKey).physical_keycode)
 
-func _get_primary_binding(action: StringName) -> InputEvent:
-	if not InputMap.has_action(action):
-		return null
+	return -1
 
-	var visible_bindings: Array[InputEvent] = InputSettings.get_bindings(action)
-	if visible_bindings.is_empty():
-		return null
 
-	return visible_bindings[0]
-
-func _show_text(text: String) -> void:
-	sprite_2d.visible = false
-	if hint_label:
-		hint_label.visible = true
-		hint_label.text = text
-
-func _show_controller_button(event: InputEventJoypadButton) -> void:
-	var family_map: Dictionary = CONTROLLER_FRAME_MAP.get(controller_type, {})
-	var button_map: Dictionary = family_map.get("buttons", {})
-
-	if button_map.has(event.button_index):
-		sprite_2d.visible = true
-		if hint_label:
-			hint_label.visible = false
-		sprite_2d.frame = int(button_map[event.button_index])
-	else:
-		_show_text("Pad %d" % event.button_index)
-
-func _show_controller_motion(event: InputEventJoypadMotion) -> void:
-	var dir_text: String = "+" if event.axis_value > 0.0 else "-"
-	_show_text("Axis %d %s" % [event.axis, dir_text])
-
-func _short_text(text: String) -> String:
-	match text:
-		"Mouse Left":
-			return "LMB"
-		"Mouse Right":
-			return "RMB"
-		"Mouse Middle":
-			return "MMB"
-		"Mouse Button 4":
-			return "M4"
-		"Mouse Button 5":
-			return "M5"
-		"Wheel Up":
-			return "Wh+"
-		"Wheel Down":
-			return "Wh-"
-		"Up":
-			return "↑"
-		"Down":
-			return "↓"
-		"Left":
-			return "←"
-		"Right":
-			return "→"
+func _get_mouse_frame(button_index: MouseButton) -> int:
+	match button_index:
+		MOUSE_BUTTON_LEFT:
+			return _frame(18, 17)
+		MOUSE_BUTTON_RIGHT:
+			return _frame(19, 17)
+		MOUSE_BUTTON_MIDDLE:
+			return _frame(20, 17)
+		MOUSE_BUTTON_WHEEL_UP:
+			return _frame(21, 17)
+		MOUSE_BUTTON_WHEEL_DOWN:
+			return _frame(22, 17)
+		MOUSE_BUTTON_XBUTTON1:
+			return _frame(23, 17)
+		MOUSE_BUTTON_XBUTTON2:
+			return _frame(24, 17)
 		_:
-			return text
+			return -1
+
+
+func _get_joy_button_frame(button_index: int) -> int:
+	match button_index:
+		0:
+			return _frame(0, 20) # South / Cross / A
+		1:
+			return _frame(1, 20) # East / Circle / B
+		2:
+			return _frame(2, 20) # West / Square / X
+		3:
+			return _frame(3, 20) # North / Triangle / Y
+		4:
+			return _frame(8, 20) # LB / L1
+		5:
+			return _frame(9, 20) # RB / R1
+		6:
+			return _frame(8, 21) # Back / Select / Menu fallback
+		7:
+			return _frame(9, 21) # Start fallback
+		10:
+			return _frame(13, 19) # stick press fallback
+		11:
+			return _frame(14, 19) # dpad up
+		12:
+			return _frame(15, 19) # dpad down
+		13:
+			return _frame(16, 19) # dpad left
+		14:
+			return _frame(17, 19) # dpad right
+		_:
+			return -1
+
+
+func _get_joy_motion_frame(event: InputEventJoypadMotion) -> int:
+	match event.axis:
+		0:
+			if event.axis_value < 0.0:
+				return _frame(3, 21)
+			return _frame(4, 21)
+		1:
+			if event.axis_value < 0.0:
+				return _frame(1, 21)
+			return _frame(2, 21)
+		2:
+			return _frame(10, 20) # LT / L2 fallback
+		3:
+			return _frame(11, 20) # RT / R2 fallback
+		_:
+			return -1
+
+
+func _get_key_frame(keycode: Key) -> int:
+	match keycode:
+		KEY_ESCAPE:
+			return _frame(30, 0)
+
+		# Number row
+		KEY_1:
+			return _frame(16, 1)
+		KEY_2:
+			return _frame(17, 1)
+		KEY_3:
+			return _frame(18, 1)
+		KEY_4:
+			return _frame(19, 1)
+		KEY_5:
+			return _frame(20, 1)
+		KEY_6:
+			return _frame(21, 1)
+		KEY_7:
+			return _frame(22, 1)
+		KEY_8:
+			return _frame(23, 1)
+		KEY_9:
+			return _frame(24, 1)
+		KEY_0:
+			return _frame(25, 1)
+
+		# QWERTY row
+		KEY_Q:
+			return _frame(17, 2)
+		KEY_W:
+			return _frame(18, 2)
+		KEY_E:
+			return _frame(19, 2)
+		KEY_R:
+			return _frame(20, 2)
+		KEY_T:
+			return _frame(21, 2)
+		KEY_Y:
+			return _frame(22, 2)
+		KEY_U:
+			return _frame(23, 2)
+		KEY_I:
+			return _frame(24, 2)
+		KEY_O:
+			return _frame(25, 2)
+		KEY_P:
+			return _frame(26, 2)
+
+		# ASDF row
+		KEY_A:
+			return _frame(18, 3)
+		KEY_S:
+			return _frame(19, 3)
+		KEY_D:
+			return _frame(20, 3)
+		KEY_F:
+			return _frame(21, 3)
+		KEY_G:
+			return _frame(22, 3)
+		KEY_H:
+			return _frame(23, 3)
+		KEY_J:
+			return _frame(24, 3)
+		KEY_K:
+			return _frame(25, 3)
+		KEY_L:
+			return _frame(26, 3)
+
+		# Bottom row
+		KEY_Z:
+			return _frame(19, 4)
+		KEY_X:
+			return _frame(20, 4)
+		KEY_C:
+			return _frame(21, 4)
+		KEY_V:
+			return _frame(22, 4)
+		KEY_B:
+			return _frame(23, 4)
+		KEY_N:
+			return _frame(24, 4)
+		KEY_M:
+			return _frame(25, 4)
+
+		KEY_TAB:
+			return _frame(14, 2)
+		KEY_BACKSPACE:
+			return _frame(31, 1)
+		KEY_ENTER:
+			return _frame(29, 3)
+
+		KEY_SHIFT:
+			return _frame(14, 4)
+		KEY_CTRL:
+			return _frame(14, 5)
+		KEY_ALT:
+			return _frame(16, 5)
+		KEY_SPACE:
+			return _frame(20, 5)
+
+		KEY_UP:
+			return _frame(31, 4)
+		KEY_LEFT:
+			return _frame(30, 5)
+		KEY_DOWN:
+			return _frame(31, 5)
+		KEY_RIGHT:
+			return _frame(32, 5)
+
+		_:
+			return -1

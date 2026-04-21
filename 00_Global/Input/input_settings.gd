@@ -2,6 +2,9 @@ extends Node
 
 const SETTINGS_PATH := "user://input_settings.cfg"
 
+signal bindings_changed
+signal device_changed(new_device: InputDevice)
+
 enum InputDevice {
 	KEYBOARD_MOUSE,
 	CONTROLLER
@@ -18,10 +21,10 @@ const BASE_ACTIONS: Array[StringName] = [
 	&"jump",
 	&"attack",
 	&"action",
-	&"pause"
+	&"pause",
+	&"Cast"
 ]
 
-# Edit these action names to match your Input Map exactly.
 const ABILITY_ACTIONS: Dictionary = {
 	"dash": &"dash",
 	"lightning": &"lightning",
@@ -37,7 +40,10 @@ func _ready() -> void:
 	cache_defaults()
 	load_bindings()
 
+
 func _input(event: InputEvent) -> void:
+	var previous_device: InputDevice = current_device
+
 	if event is InputEventJoypadButton:
 		current_device = InputDevice.CONTROLLER
 	elif event is InputEventJoypadMotion and absf((event as InputEventJoypadMotion).axis_value) > 0.5:
@@ -45,12 +51,17 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventKey or event is InputEventMouseButton:
 		current_device = InputDevice.KEYBOARD_MOUSE
 
+	if current_device != previous_device:
+		device_changed.emit(current_device)
+
+
 func cache_defaults() -> void:
 	default_bindings.clear()
 
 	for action in _get_all_known_actions():
 		if InputMap.has_action(action):
 			default_bindings[action] = _duplicate_events(InputMap.action_get_events(action))
+
 
 func _get_all_known_actions() -> Array[StringName]:
 	var actions: Array[StringName] = []
@@ -65,6 +76,7 @@ func _get_all_known_actions() -> Array[StringName]:
 			actions.append(action)
 
 	return actions
+
 
 func get_visible_actions() -> Array[StringName]:
 	var actions: Array[StringName] = []
@@ -87,19 +99,22 @@ func get_visible_actions() -> Array[StringName]:
 
 	return actions
 
+
 func get_action_group(action: StringName) -> String:
 	match String(action):
 		"left", "right", "up", "down", "jump", "dash", "morph":
 			return "Movement"
-		"attack", "heavy_attack", "lightning", "chain_lightning", "dark_blast", "power_up", "ground_slam":
+		"attack", "heavy_attack", "lightning", "chain_lightning", "dark_blast", "power_up", "ground_slam", "Cast":
 			return "Combat"
 		"action", "pause":
 			return "Interaction"
 		_:
 			return "Other"
 
+
 func get_current_device_label() -> String:
 	return "Keyboard / Mouse" if current_device == InputDevice.KEYBOARD_MOUSE else "Controller"
+
 
 func save_bindings() -> void:
 	var config := ConfigFile.new()
@@ -122,6 +137,9 @@ func save_bindings() -> void:
 	if err != OK:
 		push_warning("Failed to save input settings. Error code: %s" % err)
 
+	bindings_changed.emit()
+
+
 func load_bindings() -> void:
 	var config := ConfigFile.new()
 	var err := config.load(SETTINGS_PATH)
@@ -142,6 +160,9 @@ func load_bindings() -> void:
 			if event != null:
 				InputMap.action_add_event(action, event)
 
+	bindings_changed.emit()
+
+
 func reset_to_defaults(save: bool = true) -> void:
 	for action in _get_all_known_actions():
 		if not InputMap.has_action(action):
@@ -155,6 +176,9 @@ func reset_to_defaults(save: bool = true) -> void:
 
 	if save:
 		save_bindings()
+	else:
+		bindings_changed.emit()
+
 
 func add_binding(action: StringName, event: InputEvent) -> void:
 	if not InputMap.has_action(action):
@@ -166,6 +190,7 @@ func add_binding(action: StringName, event: InputEvent) -> void:
 
 	InputMap.action_add_event(action, event)
 	save_bindings()
+
 
 func replace_binding(action: StringName, index: int, event: InputEvent) -> void:
 	if not InputMap.has_action(action):
@@ -185,6 +210,7 @@ func replace_binding(action: StringName, index: int, event: InputEvent) -> void:
 
 	save_bindings()
 
+
 func remove_binding(action: StringName, index: int) -> void:
 	if not InputMap.has_action(action):
 		return
@@ -195,6 +221,7 @@ func remove_binding(action: StringName, index: int) -> void:
 
 	InputMap.action_erase_event(action, events[index])
 	save_bindings()
+
 
 func get_bindings(action: StringName) -> Array[InputEvent]:
 	if not InputMap.has_action(action):
@@ -213,6 +240,30 @@ func get_bindings(action: StringName) -> Array[InputEvent]:
 
 	return filtered
 
+
+func get_preferred_binding(action: StringName) -> InputEvent:
+	var device_bindings: Array[InputEvent] = get_bindings(action)
+	if device_bindings.size() > 0:
+		return device_bindings[0]
+
+	if not InputMap.has_action(action):
+		return null
+
+	var all_events: Array[InputEvent] = InputMap.action_get_events(action)
+	if all_events.size() > 0:
+		return all_events[0]
+
+	return null
+
+
+func is_keyboard_mouse_event(event: InputEvent) -> bool:
+	return event is InputEventKey or event is InputEventMouseButton
+
+
+func is_controller_event(event: InputEvent) -> bool:
+	return event is InputEventJoypadButton or event is InputEventJoypadMotion
+
+
 func get_action_display_name(action: StringName) -> String:
 	match String(action):
 		"left": return "Move Left"
@@ -224,6 +275,7 @@ func get_action_display_name(action: StringName) -> String:
 		"dash": return "Dash"
 		"action": return "Interact"
 		"pause": return "Pause"
+		"Cast": return "Cast"
 		"lightning": return "Lightning"
 		"chain_lightning": return "Chain Lightning"
 		"dark_blast": return "Dark Blast"
@@ -232,6 +284,7 @@ func get_action_display_name(action: StringName) -> String:
 		"ground_slam": return "Ground Slam"
 		"morph": return "Morph"
 		_: return String(action).capitalize()
+
 
 func find_conflicts(event: InputEvent, ignored_action: StringName = &"", ignored_index: int = -1) -> Array[Dictionary]:
 	var results: Array[Dictionary] = []
@@ -252,6 +305,7 @@ func find_conflicts(event: InputEvent, ignored_action: StringName = &"", ignored
 				})
 
 	return results
+
 
 func is_event_allowed(event: InputEvent) -> bool:
 	if event is InputEventKey:
@@ -286,6 +340,7 @@ func is_event_allowed(event: InputEvent) -> bool:
 
 	return false
 
+
 func event_to_text(event: InputEvent) -> String:
 	if event is InputEventKey:
 		var key_event := event as InputEventKey
@@ -313,6 +368,7 @@ func event_to_text(event: InputEvent) -> String:
 		return "Pad Axis %d %s" % [motion.axis, sign_text]
 
 	return "Unknown"
+
 
 func serialize_event(event: InputEvent) -> Dictionary:
 	if event is InputEventKey:
@@ -346,6 +402,7 @@ func serialize_event(event: InputEvent) -> Dictionary:
 
 	return {}
 
+
 func deserialize_event(data: Dictionary) -> InputEvent:
 	match data.get("type", ""):
 		"key":
@@ -373,11 +430,13 @@ func deserialize_event(data: Dictionary) -> InputEvent:
 
 	return null
 
+
 func action_has_exact_event(action: StringName, new_event: InputEvent) -> bool:
 	for event in InputMap.action_get_events(action):
 		if events_equal(event, new_event):
 			return true
 	return false
+
 
 func events_equal(a: InputEvent, b: InputEvent) -> bool:
 	if a == null or b == null:
@@ -402,6 +461,7 @@ func events_equal(a: InputEvent, b: InputEvent) -> bool:
 		)
 
 	return false
+
 
 func _duplicate_events(events: Array) -> Array:
 	var out: Array = []

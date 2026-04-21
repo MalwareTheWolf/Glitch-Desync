@@ -1,4 +1,5 @@
-class_name PlayerStateIdle extends PlayerState
+class_name PlayerStateIdle
+extends PlayerState
 
 func init() -> void:
 	pass
@@ -9,15 +10,12 @@ func enter() -> void:
 
 	print("ENTER IDLE")
 
-	# Play Idle animation
 	if player.animation_player:
 		player.animation_player.play("Idle")
 
-	# Reset jump and dash counts
 	player.jump_count = 0
 	player.dash_count = 0
 
-	# Enable/disable collisions correctly
 	if player.collision_stand:
 		player.collision_stand.disabled = false
 	if player.collision_crouch:
@@ -51,10 +49,17 @@ func process(_delta: float) -> PlayerState:
 	if not player:
 		return null
 
-	if player.direction.x != 0:
-		return run
-	elif player.direction.y > 0.5:
+	if not player.is_on_floor():
+		return fall
+
+	if player.direction.y > 0.5:
 		return crouch
+
+	if player.direction.x != 0.0:
+		if player.run and player.wants_to_run:
+			return run
+		return walk
+
 	return null
 
 func physics_process(_delta: float) -> PlayerState:
@@ -62,12 +67,11 @@ func physics_process(_delta: float) -> PlayerState:
 		return null
 
 	if player.is_on_floor():
-		player.velocity.x = 0
+		player.velocity.x = 0.0
 	else:
-		# Air movement
 		player.velocity.x = player.direction.x * player.air_velocity
 
 	if not player.is_on_floor():
 		return fall
 
-	return next_state
+	return null
