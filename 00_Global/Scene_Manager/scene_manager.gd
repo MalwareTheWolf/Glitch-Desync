@@ -1,11 +1,13 @@
 extends CanvasLayer
 
 signal load_scene_started
-signal new_scene_ready(target_name: String, offset: Vector2)
+signal new_scene_ready(target_data: Variant, offset: Vector2, transition_body: Node2D)
 signal load_scene_finished
 signal scene_entered(uid: String)
 
 var current_scene_uid: String = ""
+var carried_body: Node2D = null
+
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -16,9 +18,20 @@ func _ready() -> void:
 	load_scene_finished.emit()
 
 
-func transition_scene(new_scene: String, target_area: String, player_offset: Vector2, _dir: String) -> void:
+func transition_scene(new_scene: String, target_data: Variant, player_offset: Vector2, _dir: String, body: Node2D = null) -> void:
 	load_scene_started.emit()
 	await get_tree().process_frame
+
+	carried_body = null
+
+	# Preserve the transitioning body across scene changes.
+	if body != null and is_instance_valid(body):
+		carried_body = body
+		var root := get_tree().root
+
+		if carried_body.get_parent() != root:
+			carried_body.get_parent().remove_child(carried_body)
+			root.add_child(carried_body)
 
 	var err := get_tree().change_scene_to_file(new_scene)
 	if err != OK:
@@ -31,5 +44,5 @@ func transition_scene(new_scene: String, target_area: String, player_offset: Vec
 	await get_tree().scene_changed
 	await get_tree().process_frame
 
-	new_scene_ready.emit(target_area, player_offset)
+	new_scene_ready.emit(target_data, player_offset, carried_body)
 	load_scene_finished.emit()
