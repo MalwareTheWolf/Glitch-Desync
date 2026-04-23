@@ -1,4 +1,4 @@
-@icon( "res://general/icons/hazard_area.svg" )
+@icon( "uid://bf4tndlsrmg14" )
 class_name HazardArea extends AttackArea
 
 

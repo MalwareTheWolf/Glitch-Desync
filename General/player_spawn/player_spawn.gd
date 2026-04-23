@@ -17,7 +17,7 @@ func _ready() -> void:
 	print("No Player Found")
 	
 	#instantiate
-	var player : Player = load( "res://player/Scene/player.tscn" ).instantiate()
+	var player : Player = load( "uid://cea1jp1i8qfma" ).instantiate()
 	get_tree().root.add_child( player )
 	#position player
 	player.global_position = self.global_position

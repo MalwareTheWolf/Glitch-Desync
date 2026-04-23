@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://cq8rdp30ve6qt"]
+
+[node name="EnergyBeam" type="Node2D" unique_id=473087793]
+
+[node name="BeamWarning" type="Sprite2D" parent="." unique_id=54568562]

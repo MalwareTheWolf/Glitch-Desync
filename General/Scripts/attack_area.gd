@@ -6,10 +6,20 @@ extends Area2D
 # Can be activated for short durations during attacks.
 
 
+#SIGNALS
+
+# Emitted when this hitbox touches another attack area.
+signal attack_area_hit(other_attack_area)
+
+
+
 #TUNABLES
 
 # Amount of damage dealt on hit.
 @export var damage: float = 1
+
+# Whether hit dust should spawn when damage is dealt.
+@export var spawn_hit_dust: bool = true
 
 
 
@@ -32,6 +42,9 @@ func _ready() -> void:
 # Triggered when a physics body enters.
 func _on_body_entered(body: Node2D) -> void:
 
+	if not monitoring:
+		return
+
 	if body is DamageableArea:
 		_apply_damage(body)
 
@@ -39,8 +52,16 @@ func _on_body_entered(body: Node2D) -> void:
 # Triggered when another area enters.
 func _on_area_entered(area: Area2D) -> void:
 
+	if not monitoring:
+		return
+
+	if area == self:
+		return
+
 	if area is DamageableArea:
 		_apply_damage(area)
+	elif area is AttackArea:
+		attack_area_hit.emit(area)
 
 
 
@@ -51,11 +72,12 @@ func _apply_damage(target: DamageableArea) -> void:
 
 	target.take_damage(self)
 
-	# Align effect horizontally with target.
-	var pos := global_position
-	pos.x = target.global_position.x
+	if spawn_hit_dust:
+		# Align effect horizontally with target.
+		var pos := global_position
+		pos.x = target.global_position.x
 
-	VisualEffects.hit_dust(pos)
+		VisualEffects.hit_dust(pos)
 
 
 

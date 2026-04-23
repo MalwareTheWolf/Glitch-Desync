@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://uiywntf8obo5"]
 
-[ext_resource type="Texture2D" uid="uid://b76a6s6kwra2i" path="res://player/sprites/EnemySheet.png" id="1_jgh3w"]
+[ext_resource type="Texture2D" uid="uid://b76a6s6kwra2i" path="res://Entites/player/sprites/EnemySheet.png" id="1_jgh3w"]
 [ext_resource type="Script" uid="uid://db1bene1p4xgu" path="res://UI/AbilityPreviews/preview_actor.gd" id="1_tq3yv"]
-[ext_resource type="Script" uid="uid://duloxbquahug7" path="res://player/scripts/player_sprite.gd" id="2_tq3yv"]
+[ext_resource type="Script" uid="uid://duloxbquahug7" path="res://Entites/player/scripts/player_sprite.gd" id="2_tq3yv"]
 
 [sub_resource type="Animation" id="Animation_jgh3w"]
 resource_name = "dash"

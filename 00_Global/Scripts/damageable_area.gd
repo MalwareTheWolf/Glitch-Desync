@@ -24,6 +24,10 @@ signal damage_taken(attack_area)
 # Called when an attack area hits this damageable area.
 func take_damage(attack_area: AttackArea) -> void:
 
+	# Ignore hits while disabled.
+	if process_mode == Node.PROCESS_MODE_DISABLED:
+		return
+
 	# Notify listeners that damage was received.
 	damage_taken.emit(attack_area)
 

@@ -10,7 +10,7 @@ extends Node
 const CONFIG_FILE_PATH = "user://settings.cfg"
 
 # Default scene loaded for new games.
-const DEFAULT_SCENE_PATH: String = "res://World/00_Void/01.tscn"
+const DEFAULT_SCENE_PATH: String = "uid://cnlg81cbb56ha"
 
 # Available save slots.
 const SLOTS: Array[String] = ["save_01", "save_02", "save_03"]

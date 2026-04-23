@@ -1,0 +1,131 @@
+[gd_scene format=3 uid="uid://cb1jy3pa1b4tk"]
+
+[ext_resource type="Script" uid="uid://c1vbloyug3tfa" path="res://Spells/Scenes/DarkLaser.gd" id="1_l7wcl"]
+[ext_resource type="Texture2D" uid="uid://qm3lrukrmi7d" path="res://Spells/PNGs/glowing_circle.png" id="2_8p2yp"]
+[ext_resource type="Script" uid="uid://buu3vcea6n7iy" path="res://General/Scripts/attack_area.gd" id="3_eg5wq"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h80gx"]
+load_path = "res://.godot/imported/glowing_circle.png-ea3f896820f09842c245d433846f5a4e.ctex"
+
+[sub_resource type="Gradient" id="1"]
+offsets = PackedFloat32Array(0.582915, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="2"]
+gradient = SubResource("1")
+
+[sub_resource type="Curve" id="3"]
+_data = [Vector2(0.518072, 1), 0.0, -3.53434, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="4"]
+width = 2048
+curve = SubResource("3")
+
+[sub_resource type="ParticleProcessMaterial" id="5"]
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.5
+scale_curve = SubResource("4")
+color_ramp = SubResource("2")
+
+[sub_resource type="Gradient" id="Gradient_3f48o"]
+offsets = PackedFloat32Array(0, 0.719557, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4t126"]
+gradient = SubResource("Gradient_3f48o")
+
+[sub_resource type="Curve" id="6"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.503614, 0.957505), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="7"]
+curve = SubResource("6")
+
+[sub_resource type="ParticleProcessMaterial" id="8"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(680, 20, 1)
+direction = Vector3(-1, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+tangential_accel_min = 100.0
+tangential_accel_max = 100.0
+scale_min = 0.3
+scale_max = 0.3
+scale_curve = SubResource("7")
+color_ramp = SubResource("GradientTexture1D_4t126")
+
+[sub_resource type="ParticleProcessMaterial" id="9"]
+particle_flag_disable_z = true
+spread = 50.0
+initial_velocity_min = 300.0
+initial_velocity_max = 300.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.5
+scale_curve = SubResource("4")
+color_ramp = SubResource("2")
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sovgm"]
+radius = 5.0
+height = 356.0
+
+[node name="LaserBeam2D" type="RayCast2D" unique_id=124158676]
+target_position = Vector2(1400, 0)
+script = ExtResource("1_l7wcl")
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1895497453]
+unique_name_in_owner = true
+points = PackedVector2Array(40, 0, 1400, 0)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 8.0
+
+[node name="CastingParticles2D" type="GPUParticles2D" parent="." unique_id=1137739891]
+unique_name_in_owner = true
+show_behind_parent = true
+position = Vector2(40, 0)
+emitting = false
+texture = SubResource("CompressedTexture2D_h80gx")
+lifetime = 0.3
+visibility_rect = Rect2(0, -18.722, 29.6756, 38.4841)
+process_material = SubResource("5")
+
+[node name="BeamParticles2D" type="GPUParticles2D" parent="." unique_id=1547443756]
+unique_name_in_owner = true
+position = Vector2(720, 0)
+emitting = false
+amount = 50
+texture = ExtResource("2_8p2yp")
+preprocess = 1.0
+randomness = 1.0
+visibility_rect = Rect2(-2500, -2500, 5000, 5000)
+process_material = SubResource("8")
+
+[node name="CollisionParticles2D" type="GPUParticles2D" parent="." unique_id=1786363830]
+unique_name_in_owner = true
+show_behind_parent = true
+position = Vector2(1400, 0)
+emitting = false
+amount = 16
+texture = ExtResource("2_8p2yp")
+lifetime = 0.3
+visibility_rect = Rect2(-2500, -2500, 5000, 5000)
+process_material = SubResource("9")
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=98501712]
+collision_layer = 5
+collision_mask = 421
+script = ExtResource("3_eg5wq")
+metadata/_custom_type_script = "uid://buu3vcea6n7iy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=2044538781]
+position = Vector2(178, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_sovgm")
+debug_color = Color(1, 0, 0, 0.41960785)
