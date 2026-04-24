@@ -1,0 +1,213 @@
+[gd_scene format=3 uid="uid://bhrtjw1l27lmg"]
+
+[ext_resource type="Script" uid="uid://cg406qyuuxgrt" path="res://tutorial_prompt_trigger.gd" id="1_whm6c"]
+[ext_resource type="Script" uid="uid://rjwr70ppjnpm" path="res://action_icon_1.gd" id="2_o2udj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_10krv"]
+radius = 276.84293
+
+[sub_resource type="Animation" id="Animation_y5jo1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UnpressedIcon:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PressedIcon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_whm6c"]
+resource_name = "hold"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UnpressedIcon:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PressedIcon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_o2udj"]
+resource_name = "idle"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UnpressedIcon:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PressedIcon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_tg64p"]
+resource_name = "tap"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UnpressedIcon:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.20105188, 0.40114176),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PressedIcon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.20105188, 0.40114176),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5l565"]
+_data = {
+&"RESET": SubResource("Animation_y5jo1"),
+&"hold": SubResource("Animation_whm6c"),
+&"idle": SubResource("Animation_o2udj"),
+&"tap": SubResource("Animation_tg64p")
+}
+
+[node name="TutorialPromptTrigger" type="Area2D" unique_id=1209031352]
+collision_mask = 17
+script = ExtResource("1_whm6c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1804260177]
+shape = SubResource("CircleShape2D_10krv")
+debug_color = Color(0, 0.6, 0.69803923, 0.047058824)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=174982200]
+
+[node name="PromptUI" type="CanvasLayer" parent="." unique_id=864572686]
+
+[node name="Control" type="Control" parent="PromptUI" unique_id=1576235001]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="PromptUI/Control" unique_id=2081993293]
+layout_mode = 0
+offset_top = -1.0
+offset_bottom = -1.0
+
+[node name="ActionIcon1" type="Control" parent="PromptUI/Control/Panel" unique_id=468539524]
+anchors_preset = 0
+offset_left = 176.0
+offset_top = 132.0
+offset_right = 176.0
+offset_bottom = 132.0
+size_flags_horizontal = 0
+script = ExtResource("2_o2udj")
+
+[node name="UnpressedIcon" type="TextureRect" parent="PromptUI/Control/Panel/ActionIcon1" unique_id=1352923440]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="PressedIcon" type="TextureRect" parent="PromptUI/Control/Panel/ActionIcon1" unique_id=2046144243]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+expand_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PromptUI/Control/Panel/ActionIcon1" unique_id=1607059254]
+libraries/ = SubResource("AnimationLibrary_5l565")
+
+[node name="ConnectorLabel" type="Label" parent="PromptUI/Control/Panel" unique_id=1606066533]
+layout_mode = 0
+offset_left = 241.0
+offset_top = 129.0
+offset_right = 242.0
+offset_bottom = 152.0
+
+[node name="ActionIcon2" type="Control" parent="PromptUI/Control/Panel" unique_id=2141547578]
+anchors_preset = 0
+offset_left = 325.0
+offset_top = 135.0
+offset_right = 325.0
+offset_bottom = 135.0
+size_flags_horizontal = 8
+script = ExtResource("2_o2udj")
+
+[node name="UnpressedIcon" type="TextureRect" parent="PromptUI/Control/Panel/ActionIcon2" unique_id=1738776856]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="PressedIcon" type="TextureRect" parent="PromptUI/Control/Panel/ActionIcon2" unique_id=1488416499]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PromptUI/Control/Panel/ActionIcon2" unique_id=1809620994]
+libraries/ = SubResource("AnimationLibrary_5l565")
+
+[node name="DescriptionLabel" type="Label" parent="PromptUI/Control/Panel" unique_id=1659103753]
+layout_mode = 0
+offset_left = 245.0
+offset_top = 121.0
+offset_right = 246.0
+offset_bottom = 144.0
+size_flags_vertical = 1

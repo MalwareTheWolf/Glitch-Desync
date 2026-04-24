@@ -401,13 +401,13 @@ offset_bottom = 179.0
 anchors_preset = 0
 offset_top = 13.0
 offset_right = 29.0
-offset_bottom = 27.0
+offset_bottom = 22.0
 script = ExtResource("42_ilwhb")
 map_scale = 50.0
 linked_scene = "uid://cnlg81cbb56ha"
 display_name = "1"
 hide_until_discovered = true
-openings_right = Array[float]([9.0])
+openings_right = Array[float]([2.6799998])
 default_border_color = Color(0.82605994, 0.82606006, 0.8260599, 1)
 metadata/_custom_type_script = "uid://b6f6csr7oprof"
 

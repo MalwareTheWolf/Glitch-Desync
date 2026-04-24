@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 # Main player controller.
-# Handles movement, state machine, combat, abilities, and UI updates.
+# Handles movement, state machine, combat, abilities, UI updates, and footsteps.
 
 
 #SIGNALS
@@ -34,8 +34,10 @@ signal damage_taken
 # Area that receives damage.
 @onready var label: Label = $Label
 # Debug label showing state.
-@onready var laser: DarkLaser = $LaserOrigin/LaserBeam2D
+@onready var laser: DarkLaser = $LaserOrigin/DarkLaser
 # Built-in laser used for aiming and channeling.
+@onready var footstep_player: AudioStreamPlayer2D = %FootstepPlayer
+# Plays walking footstep sounds.
 
 
 
@@ -59,6 +61,45 @@ signal damage_taken
 # Default duration for movement lock.
 @export var double_tap_threshold: float = 0.25
 # Max time between taps to trigger run.
+
+
+
+#FOOTSTEPS
+
+@export var ground_tilemap: TileMapLayer
+# TileMapLayer used to detect ground surface custom data.
+
+@export var footstep_interval: float = 0.35
+# Time between footstep sounds.
+
+@export var footstep_min_speed: float = 5.0
+# Minimum horizontal speed needed to play footsteps.
+
+var footstep_timer: float = 0.0
+# Tracks time until next footstep.
+
+var footstep_sounds := {
+	"dirt": [
+		preload("uid://bdpyga8tprkb2"),
+		preload("uid://b8sv040wd47a")
+#	],
+#	"grass": [
+#		preload("res://Audio/Footsteps/Steps_grass-012.wav"),
+#		preload("res://Audio/Footsteps/Steps_grass-013.wav")
+#	],
+#	"stone": [
+#		preload("res://Audio/Footsteps/Steps_stone-012.wav"),
+#		preload("res://Audio/Footsteps/Steps_stone-013.wav")
+#	],
+#	"wood": [
+#		preload("res://Audio/Footsteps/Steps_wood-012.wav"),
+#		preload("res://Audio/Footsteps/Steps_wood-013.wav")
+#d	],
+#	"default": [
+#		preload("res://Audio/Footsteps/Steps_dirt-012.wav")
+	]
+}
+# Footstep sounds sorted by tile surface type.
 
 
 
@@ -338,9 +379,86 @@ func _physics_process(delta: float) -> void:
 	# Apply movement after state logic updates velocity.
 	move_and_slide()
 
+	# Update footsteps after movement is applied.
+	handle_footsteps(delta)
+
 	# Update built-in laser.
 	_update_laser_transform()
 	_sync_laser_state()
+
+
+
+#FOOTSTEPS
+
+# Handles footstep timing while walking on the ground.
+func handle_footsteps(delta: float) -> void:
+
+	if not is_on_floor():
+		footstep_timer = 0.0
+		return
+
+	if abs(velocity.x) < footstep_min_speed:
+		footstep_timer = 0.0
+		return
+
+	footstep_timer -= delta
+
+	if footstep_timer <= 0.0:
+		play_footstep()
+		footstep_timer = footstep_interval
+
+
+
+# Detects the surface type under the player using ShapeCast.
+func get_surface_type() -> String:
+
+	if ground_tilemap == null:
+		print("ground_tilemap is null")
+		return "default"
+
+	var check_pos: Vector2 = global_position
+
+	if one_way_shape_cast and one_way_shape_cast.is_colliding():
+		check_pos = one_way_shape_cast.get_collision_point(0) + Vector2(0, 2)
+	else:
+		check_pos = global_position + Vector2(0, 20)
+
+	var map_pos: Vector2i = ground_tilemap.local_to_map(ground_tilemap.to_local(check_pos))
+	var tile_data: TileData = ground_tilemap.get_cell_tile_data(map_pos)
+
+	print("check_pos:", check_pos, " map_pos:", map_pos, " tile_data:", tile_data)
+
+	if tile_data:
+		var surface = tile_data.get_custom_data("surface")
+		print("raw surface:", surface)
+
+		if surface != null and str(surface) != "":
+			return str(surface).to_lower()
+
+	return "default"
+
+
+
+# Plays a footstep sound for the current surface.
+func play_footstep() -> void:
+
+	if footstep_player == null:
+		print("No FootstepPlayer")
+		return
+
+	var surface: String = get_surface_type()
+	print("Surface:", surface)
+
+	var sounds: Array = footstep_sounds.get(surface, [])
+
+	if sounds.is_empty():
+		print("No sounds for:", surface)
+		return
+
+	footstep_player.stream = sounds.pick_random()
+	footstep_player.bus = "SFX"
+	footstep_player.pitch_scale = randf_range(0.95, 1.05)
+	footstep_player.play()
 
 
 

@@ -4,8 +4,13 @@
 [ext_resource type="Script" uid="uid://c66y0kemubeet" path="res://General/Scripts/level_bounds.gd" id="3_4tv7a"]
 [ext_resource type="PackedScene" uid="uid://bwbk2dppx5kup" path="res://General/Level_Transition/level_transition.tscn" id="4_61kuw"]
 [ext_resource type="PackedScene" uid="uid://5k6e6duydusj" path="res://General/player_spawn/player_spawn.tscn" id="4_bc6l6"]
+[ext_resource type="Texture2D" uid="uid://f2as7a1o1vgv" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-bg.png" id="7_3q642"]
+[ext_resource type="Texture2D" uid="uid://caypydoy6ho4p" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-far-trees.png" id="8_cd4vs"]
 [ext_resource type="Script" uid="uid://c0n65xuyoaqvo" path="res://00_Global/Audio/Scripts/music_auto_trigger.gd" id="8_i5uu7"]
 [ext_resource type="Script" uid="uid://btmdv5p07ffl5" path="res://General/Scripts/hazard_area.gd" id="8_k1vj7"]
+[ext_resource type="Texture2D" uid="uid://bj5elt7ve0tx3" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-mid-trees.png" id="9_jdukw"]
+[ext_resource type="Texture2D" uid="uid://da7dwamuflbjc" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-close-trees.png" id="10_4jhnd"]
+[ext_resource type="PackedScene" uid="uid://bhrtjw1l27lmg" path="res://tutorial_prompt_trigger.tscn" id="11_cd4vs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mu2n2"]
 size = Vector2(261, 14)
@@ -20,10 +25,10 @@ size = Vector2(42, 10)
 
 [node name="LevelBounds" type="Node2D" parent="." unique_id=1159378538]
 z_index = 256
-position = Vector2(1, -717)
+position = Vector2(-3, -346)
 script = ExtResource("3_4tv7a")
 width = 1440
-height = 718
+height = 430
 metadata/_custom_type_script = "uid://c66y0kemubeet"
 
 [node name="Ground_Walls" type="TileMapLayer" parent="." unique_id=961946094]
@@ -41,7 +46,6 @@ tile_set = ExtResource("1_pcrhc")
 position = Vector2(1442, -62)
 size = 8
 location = 1
-door_id = null
 target_level = "uid://c8nen6n2gbt20"
 
 [node name="PlayerSpawn" parent="." unique_id=1914222064 instance=ExtResource("4_bc6l6")]
@@ -72,3 +76,61 @@ debug_color = Color(1, 0, 0, 0.41960785)
 position = Vector2(90, -284)
 shape = SubResource("RectangleShape2D_y3rm2")
 debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="Node" type="Node2D" parent="." unique_id=1571052797]
+position = Vector2(357, -353)
+
+[node name="Parallax2D" type="Parallax2D" parent="Node" unique_id=1717605337]
+z_index = -11
+scroll_scale = Vector2(0, 0)
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D" unique_id=2014309267]
+position = Vector2(-1.335144e-05, 26.999998)
+scale = Vector2(1.2333332, 1.3088236)
+texture = ExtResource("7_3q642")
+
+[node name="Parallax2D2" type="Parallax2D" parent="Node" unique_id=1423484946]
+z_index = -11
+scroll_scale = Vector2(0.4, 0.4)
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D2" unique_id=54430336]
+position = Vector2(0, 26.999998)
+scale = Vector2(1, 1.3088235)
+texture = ExtResource("8_cd4vs")
+
+[node name="Parallax2D3" type="Parallax2D" parent="Node" unique_id=685992049]
+z_index = -11
+scroll_scale = Vector2(0.8, 0.8)
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D3" unique_id=1416390581]
+position = Vector2(0, 26.999998)
+scale = Vector2(1, 1.3088235)
+texture = ExtResource("9_jdukw")
+
+[node name="Parallax2D4" type="Parallax2D" parent="Node" unique_id=1825645341]
+z_index = -11
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D4" unique_id=381061521]
+position = Vector2(0, 26.999998)
+scale = Vector2(1, 1.3088235)
+texture = ExtResource("10_4jhnd")
+
+[node name="TutorialPromptTrigger" parent="." unique_id=1209031352 instance=ExtResource("11_cd4vs")]
+position = Vector2(476, -167)
+prompt_id = "interact"
+action_1 = "down"
+mode_1 = 2
+action_2 = "down"
+mode_2 = 1

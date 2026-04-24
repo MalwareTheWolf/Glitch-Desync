@@ -28,7 +28,8 @@ extends RayCast2D
 @export var is_channeling: bool = false
 
 var tween: Tween = null
-var player: Player
+var player: CharacterBody2D = null
+# Player using the beam.
 # Player using the beam.
 var facing_sign: float = 1.0
 # 1 = right, -1 = left.

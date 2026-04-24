@@ -315,13 +315,13 @@ outline_color = Color(0, 0, 0, 1)
 size = Vector2(20, 3)
 
 [sub_resource type="Gradient" id="Gradient_ya7di"]
-offsets = PackedFloat32Array(0, 0.85542166)
+offsets = PackedFloat32Array(0, 0.62650603)
 colors = PackedColorArray(1, 0, 0, 1, 0.011087579, 0.011087578, 0.01108758, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_8u50t"]
 gradient = SubResource("Gradient_ya7di")
 fill = 1
-fill_from = Vector2(0.46818182, 0.45454547)
+fill_from = Vector2(0.50869566, 0.49565217)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_era1q"]
 size = Vector2(19.783432, 26.18732)
@@ -452,7 +452,7 @@ collision_mask = 15
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1101385868]
 position = Vector2(1, -35)
-zoom = Vector2(0.7, 0.7)
+zoom = Vector2(0.8, 0.8)
 script = ExtResource("8_lp0h7")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1290377337]
@@ -544,10 +544,13 @@ stream = ExtResource("20_qwku7")
 unique_name_in_owner = true
 stream = ExtResource("21_sf4bk")
 
+[node name="FootstepPlayer" type="AudioStreamPlayer2D" parent="AudioStreams" unique_id=591587273]
+unique_name_in_owner = true
+
 [node name="LaserOrigin" type="Node2D" parent="." unique_id=1521641682]
 position = Vector2(12, -21)
 
-[node name="LaserBeam2D" parent="LaserOrigin" unique_id=124158676 instance=ExtResource("29_8r65v")]
+[node name="DarkLaser" parent="LaserOrigin" unique_id=124158676 instance=ExtResource("29_8r65v")]
 target_position = Vector2(350, 0)
 max_length = 350.0
 start_distance = 0.0
