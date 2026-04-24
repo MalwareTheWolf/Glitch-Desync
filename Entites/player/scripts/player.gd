@@ -577,20 +577,18 @@ func can_morph() -> bool:
 
 #MOVEMENT CONTROL
 
-# Disables player movement.
 func lock_movement() -> void:
 	can_move = false
 	velocity = Vector2.ZERO
 
-# Re-enables movement.
 func unlock_movement() -> void:
 	can_move = true
 
-# Locks movement temporarily.
-func lock_movement_with_timer(time: float = movement_lock_time) -> void:
-	lock_movement()
-	await get_tree().create_timer(time).timeout
-	unlock_movement()
+func set_control_enabled(value: bool) -> void:
+	can_move = value
+
+	if not can_move:
+		velocity = Vector2.ZERO
 
 
 

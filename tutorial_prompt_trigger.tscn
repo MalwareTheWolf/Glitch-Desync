@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://rjwr70ppjnpm" path="res://action_icon_1.gd" id="2_o2udj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_10krv"]
-radius = 276.84293
+radius = 109.11462
 
 [sub_resource type="Animation" id="Animation_y5jo1"]
 length = 0.001
@@ -152,10 +152,10 @@ offset_bottom = -1.0
 
 [node name="ActionIcon1" type="Control" parent="PromptUI/Control/Panel" unique_id=468539524]
 anchors_preset = 0
-offset_left = 176.0
-offset_top = 132.0
-offset_right = 176.0
-offset_bottom = 132.0
+offset_left = 217.0
+offset_top = 139.0
+offset_right = 217.0
+offset_bottom = 139.0
 size_flags_horizontal = 0
 script = ExtResource("2_o2udj")
 
@@ -176,17 +176,17 @@ libraries/ = SubResource("AnimationLibrary_5l565")
 
 [node name="ConnectorLabel" type="Label" parent="PromptUI/Control/Panel" unique_id=1606066533]
 layout_mode = 0
-offset_left = 241.0
+offset_left = 251.0
 offset_top = 129.0
-offset_right = 242.0
+offset_right = 252.0
 offset_bottom = 152.0
 
 [node name="ActionIcon2" type="Control" parent="PromptUI/Control/Panel" unique_id=2141547578]
 anchors_preset = 0
-offset_left = 325.0
-offset_top = 135.0
-offset_right = 325.0
-offset_bottom = 135.0
+offset_left = 281.0
+offset_top = 140.0
+offset_right = 281.0
+offset_bottom = 140.0
 size_flags_horizontal = 8
 script = ExtResource("2_o2udj")
 
@@ -206,8 +206,8 @@ libraries/ = SubResource("AnimationLibrary_5l565")
 
 [node name="DescriptionLabel" type="Label" parent="PromptUI/Control/Panel" unique_id=1659103753]
 layout_mode = 0
-offset_left = 245.0
-offset_top = 121.0
-offset_right = 246.0
-offset_bottom = 144.0
+offset_left = 237.0
+offset_top = 90.0
+offset_right = 238.0
+offset_bottom = 113.0
 size_flags_vertical = 1

@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://dilrr7557hhlq"]
+
+[ext_resource type="Texture2D" uid="uid://bedgy636wnaoe" path="res://World/Props/Massacre Sprite Sheet.png" id="1_2nkjo"]
+
+[sub_resource type="Animation" id="Animation_7bee7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [7]
+}
+
+[sub_resource type="Animation" id="Animation_4mkmh"]
+resource_name = "attack"
+
+[sub_resource type="Animation" id="Animation_5gkqj"]
+resource_name = "idle"
+length = 0.56
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_gv7tn"]
+resource_name = "run"
+length = 0.37
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1ypqr"]
+_data = {
+&"RESET": SubResource("Animation_7bee7"),
+&"attack": SubResource("Animation_4mkmh"),
+&"idle": SubResource("Animation_5gkqj"),
+&"run": SubResource("Animation_gv7tn")
+}
+
+[node name="SkullWolf" type="Node2D" unique_id=1783231622]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=615422246]
+texture = ExtResource("1_2nkjo")
+hframes = 7
+vframes = 4
+frame = 7
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1061307465]
+libraries/ = SubResource("AnimationLibrary_1ypqr")
+autoplay = &"idle"

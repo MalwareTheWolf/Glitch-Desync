@@ -6,6 +6,7 @@ enum PromptMode {
 	HOLD
 }
 
+# Keeps prompts from showing again during the same playthrough.
 static var shown_prompts := {}
 
 @export var prompt_id: String = "test_prompt"
@@ -20,7 +21,11 @@ static var shown_prompts := {}
 @export var connector_text: String = "+"
 
 @export var required_player_var: String = ""
-@export var debug_prompt: bool = true
+
+# Time the game briefly resumes between button 1 and button 2.
+@export var unfreeze_between_buttons_time: float = 0.2
+
+@export var debug_prompt: bool = false
 
 @onready var ui = $PromptUI
 @onready var icon1 = $PromptUI/Control/Panel/ActionIcon1
@@ -29,93 +34,141 @@ static var shown_prompts := {}
 @onready var label = $PromptUI/Control/Panel/DescriptionLabel
 
 var prompt_active: bool = false
+var waiting_for_first_action: bool = false
+var waiting_for_second_action: bool = false
 
 
 func _ready() -> void:
+	# Allows this trigger to keep receiving input while the tree is paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	ui.process_mode = Node.PROCESS_MODE_ALWAYS
 
 	ui.visible = false
-
 	body_entered.connect(_on_enter)
-
-	if debug_prompt:
-		print("[PromptTrigger] READY")
-		print("[PromptTrigger] prompt_id:", prompt_id)
-		print("[PromptTrigger] action_1:", action_1)
-		print("[PromptTrigger] action_2:", action_2)
 
 
 func _input(event: InputEvent) -> void:
 	if not prompt_active:
 		return
 
-	if event.is_action_pressed(action_1):
-		if debug_prompt:
-			print("[PromptTrigger] pressed action_1:", action_1)
-		_finish_prompt()
+	# First button step.
+	if waiting_for_first_action and event.is_action_pressed(action_1):
+		_on_first_action_pressed()
 		return
 
-	if action_2.strip_edges() != "" and event.is_action_pressed(action_2):
-		if debug_prompt:
-			print("[PromptTrigger] pressed action_2:", action_2)
-		_finish_prompt()
+	# Second button step.
+	if waiting_for_second_action and action_2.strip_edges() != "" and event.is_action_pressed(action_2):
+		_on_second_action_pressed()
 		return
 
 
 func _on_enter(body: Node) -> void:
-	if debug_prompt:
-		print("[PromptTrigger] Something entered:", body.name)
-		print("[PromptTrigger] Body groups:", body.get_groups())
-
 	if not body.is_in_group("Player"):
-		if debug_prompt:
-			print("[PromptTrigger] ❌ Not Player")
 		return
 
+	# Optional ability/unlock requirement.
 	if required_player_var.strip_edges() != "":
 		if not body.get(required_player_var):
-			if debug_prompt:
-				print("[PromptTrigger] ❌ Missing ability/player var:", required_player_var)
 			return
 
+	# Do not show this prompt again during this playthrough.
 	if shown_prompts.get(prompt_id, false):
-		if debug_prompt:
-			print("[PromptTrigger] ❌ Already shown:", prompt_id)
 		return
 
 	shown_prompts[prompt_id] = true
+	_start_prompt()
 
-	if debug_prompt:
-		print("[PromptTrigger] ✅ Showing prompt:", prompt_id)
 
+func _start_prompt() -> void:
 	label.text = description_text
 
 	icon1.visible = true
 	icon1.set_button(action_1, mode_1)
 
-	if action_2.strip_edges() != "":
-		icon2.visible = true
-		connector.visible = true
-		connector.text = connector_text
-		icon2.set_button(action_2, mode_2)
+	var has_second_action := action_2.strip_edges() != ""
+
+	if has_second_action:
+		# Hide the second input at first.
+		# It will appear and animate after the first button is pressed.
+		icon2.visible = false
+		connector.visible = false
 	else:
 		icon2.visible = false
 		connector.visible = false
 
 	ui.visible = true
 	prompt_active = true
+	waiting_for_first_action = true
+	waiting_for_second_action = false
 
 	get_tree().paused = true
 
 	if debug_prompt:
-		print("[PromptTrigger] Game paused. Waiting for:", action_1, action_2)
+		print("[PromptTrigger] Showing prompt:", prompt_id)
+		print("[PromptTrigger] Waiting for first action:", action_1)
+
+
+func _on_first_action_pressed() -> void:
+	waiting_for_first_action = false
+
+	if debug_prompt:
+		print("[PromptTrigger] First action pressed:", action_1)
+
+	# One-button prompt: finish immediately.
+	if action_2.strip_edges() == "":
+		_finish_prompt()
+		return
+
+	# Two-button prompt:
+	# briefly unpause, then re-pause and reveal/animate the second button.
+	_run_between_button_pause()
+
+
+func _run_between_button_pause() -> void:
+	prompt_active = false
+	get_tree().paused = false
+
+	await get_tree().create_timer(unfreeze_between_buttons_time).timeout
+
+	get_tree().paused = true
+	prompt_active = true
+	waiting_for_second_action = true
+
+	_show_second_button()
+
+	if debug_prompt:
+		print("[PromptTrigger] Waiting for second action:", action_2)
+
+
+func _show_second_button() -> void:
+	connector.visible = true
+	connector.text = connector_text
+
+	icon2.visible = true
+	icon2.set_button(action_2, mode_2)
+
+	# Small pop animation so the second button feels intentionally revealed.
+	icon2.scale = Vector2(0.65, 0.65)
+
+	var tween := create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(icon2, "scale", Vector2.ONE, 0.15)
+
+
+func _on_second_action_pressed() -> void:
+	if debug_prompt:
+		print("[PromptTrigger] Second action pressed:", action_2)
+
+	_finish_prompt()
 
 
 func _finish_prompt() -> void:
 	prompt_active = false
+	waiting_for_first_action = false
+	waiting_for_second_action = false
+
 	ui.visible = false
 	get_tree().paused = false
 
 	if debug_prompt:
-		print("[PromptTrigger] ✅ Prompt finished. Game unpaused.")
+		print("[PromptTrigger] Prompt finished:", prompt_id)

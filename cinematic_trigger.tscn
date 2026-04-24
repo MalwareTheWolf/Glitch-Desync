@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://vnhdso56a1b8"]
+
+[ext_resource type="Script" uid="uid://bxxvgptferfh5" path="res://cinematic_trigger.gd" id="1_i81u2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c0skl"]
+resource_local_to_scene = true
+radius = 351.32037
+
+[node name="CinematicTrigger" type="Area2D" unique_id=153867829]
+collision_mask = 17
+script = ExtResource("1_i81u2")
+camera_focus_time = 1.0
+camera_return_time = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1321430435]
+shape = SubResource("CircleShape2D_c0skl")
+debug_color = Color(0, 1, 0, 0.41960785)
+
+[node name="EndMarker" type="Marker2D" parent="." unique_id=1576124191]
+position = Vector2(480, 0)
