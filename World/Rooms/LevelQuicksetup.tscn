@@ -1,13 +1,66 @@
 [gd_scene format=3 uid="uid://dj0y58q70xb58"]
 
 [ext_resource type="Script" uid="uid://c66y0kemubeet" path="res://General/Scripts/level_bounds.gd" id="1_6g4ja"]
+[ext_resource type="Texture2D" uid="uid://f2as7a1o1vgv" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-bg.png" id="1_rlyv0"]
+[ext_resource type="Texture2D" uid="uid://caypydoy6ho4p" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-far-trees.png" id="2_jwtlr"]
 [ext_resource type="PackedScene" uid="uid://bwbk2dppx5kup" path="res://General/Level_Transition/level_transition.tscn" id="2_wdgw5"]
+[ext_resource type="Texture2D" uid="uid://bj5elt7ve0tx3" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-mid-trees.png" id="3_5477b"]
+[ext_resource type="Texture2D" uid="uid://da7dwamuflbjc" path="res://World/Tilesets/Backgrounds/parallax-demon-woods-close-trees.png" id="4_qnr4l"]
 
 [node name="Node2D" type="Node2D" unique_id=899070019]
+
+[node name="Node" type="Node2D" parent="." unique_id=957036778]
+position = Vector2(-3, 41)
+
+[node name="Parallax2D" type="Parallax2D" parent="Node" unique_id=569617119]
+z_index = -11
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D" unique_id=635787300]
+position = Vector2(-1.335144e-05, 134)
+scale = Vector2(1.2333332, 2.2867646)
+texture = ExtResource("1_rlyv0")
+
+[node name="Parallax2D2" type="Parallax2D" parent="Node" unique_id=1986864554]
+z_index = -11
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D2" unique_id=1934459570]
+position = Vector2(0, 135)
+scale = Vector2(1, 2.3014708)
+texture = ExtResource("2_jwtlr")
+
+[node name="Parallax2D3" type="Parallax2D" parent="Node" unique_id=737292973]
+z_index = -11
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D3" unique_id=332815380]
+position = Vector2(0, 135)
+scale = Vector2(1, 2.3014708)
+texture = ExtResource("3_5477b")
+
+[node name="Parallax2D4" type="Parallax2D" parent="Node" unique_id=440940538]
+z_index = -11
+scroll_offset = Vector2(299, 137)
+repeat_size = Vector2(592, 0)
+repeat_times = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Parallax2D4" unique_id=679366878]
+position = Vector2(0, 134.99997)
+scale = Vector2(1, 2.2941175)
+texture = ExtResource("4_qnr4l")
 
 [node name="LevelBounds" type="Node2D" parent="." unique_id=1810127407]
 z_index = 256
 script = ExtResource("1_6g4ja")
+width = 2048
+height = 622
 metadata/_custom_type_script = "uid://c66y0kemubeet"
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=305346208]
@@ -15,17 +68,11 @@ metadata/_custom_type_script = "uid://c66y0kemubeet"
 [node name="Floors_Walls" type="TileMapLayer" parent="." unique_id=1835461500]
 
 [node name="LevelTransition" parent="." unique_id=1049241325 instance=ExtResource("2_wdgw5")]
-position = Vector2(-3, 271)
+position = Vector2(1, 622)
+size = 19
 target_level = "uid://d04orqdkvpd2t"
 
 [node name="LevelTransition2" parent="." unique_id=195372818 instance=ExtResource("2_wdgw5")]
-position = Vector2(481, 271)
+position = Vector2(2048, 619)
+size = 19
 location = 1
-
-[node name="LevelTransition3" parent="." unique_id=1338936906 instance=ExtResource("2_wdgw5")]
-position = Vector2(195, -1)
-location = 2
-
-[node name="LevelTransition4" parent="." unique_id=1606296706 instance=ExtResource("2_wdgw5")]
-position = Vector2(200, 272)
-location = 3
