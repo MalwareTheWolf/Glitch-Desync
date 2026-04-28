@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://debbwsrav1q1o"
+path="res://.godot/imported/Broken Faith - τá┤τóÄτÜäΣ┐íΣ╗░.mp3-34b4f508419d4ed81a221771499cfc9e.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Broken Faith - τá┤τóÄτÜäΣ┐íΣ╗░.mp3"
+dest_files=["res://.godot/imported/Broken Faith - τá┤τóÄτÜäΣ┐íΣ╗░.mp3-34b4f508419d4ed81a221771499cfc9e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

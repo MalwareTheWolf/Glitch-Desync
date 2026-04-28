@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bhgrru0jvvcbh"
+path="res://.godot/imported/Awakening of Light ΓÇô σàëΣ╣ïΦª║ΘåÆ.mp3-ca4802f77693b4423084530f502d9361.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Awakening of Light ΓÇô σàëΣ╣ïΦª║ΘåÆ.mp3"
+dest_files=["res://.godot/imported/Awakening of Light ΓÇô σàëΣ╣ïΦª║ΘåÆ.mp3-ca4802f77693b4423084530f502d9361.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

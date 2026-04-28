@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://byedqjtd8m7vk"
+path="res://.godot/imported/Light of Rebirth - σ╛⌐τöªΣ╣ïσàë.mp3-1ecfd6c562ebcfce4e33f7c84cec684c.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Light of Rebirth - σ╛⌐τöªΣ╣ïσàë.mp3"
+dest_files=["res://.godot/imported/Light of Rebirth - σ╛⌐τöªΣ╣ïσàë.mp3-1ecfd6c562ebcfce4e33f7c84cec684c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

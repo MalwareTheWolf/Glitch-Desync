@@ -1,0 +1,18 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://caoq5fxndp7cn"
+valid=false
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/__MACOSX/mp3/._Broken Faith - τá┤τóÄτÜäΣ┐íΣ╗░.mp3"
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

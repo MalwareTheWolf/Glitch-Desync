@@ -1,0 +1,18 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bqk3lnjvjjx4h"
+valid=false
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/__MACOSX/mp3/._Legends Will Rise - σé│Φ¬¬σ░çΦ╡╖.mp3"
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

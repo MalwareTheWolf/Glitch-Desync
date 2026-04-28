@@ -1,0 +1,12 @@
+【CREDIT（署名範例 / Credit Examples）】
+
+免費包必填；商用包選填
+creator pack required; commercial pack optional
+
+單曲署名（Per-track）
+請把 <Track Title> 換成實際曲名
+Replace <Track Title> with the actual track name.
+
+音樂：<Track Title> by NoseTip Games｜鼻尖獨立遊戲開發工作室（Suno AI）— https://www.youtube.com/@NoseTipGames
+
+Music: <Track Title> by NoseTip Games｜鼻尖獨立遊戲開發工作室 (Suno AI) — https://www.youtube.com/@NoseTipGames

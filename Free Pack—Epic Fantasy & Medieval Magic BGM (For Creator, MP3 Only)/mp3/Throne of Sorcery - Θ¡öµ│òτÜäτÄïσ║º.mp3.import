@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b6ss5xjtrs3xe"
+path="res://.godot/imported/Throne of Sorcery - Θ¡öµ│òτÜäτÄïσ║º.mp3-dec09f905b418395a0d0b7a26aaf6def.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Throne of Sorcery - Θ¡öµ│òτÜäτÄïσ║º.mp3"
+dest_files=["res://.godot/imported/Throne of Sorcery - Θ¡öµ│òτÜäτÄïσ║º.mp3-dec09f905b418395a0d0b7a26aaf6def.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

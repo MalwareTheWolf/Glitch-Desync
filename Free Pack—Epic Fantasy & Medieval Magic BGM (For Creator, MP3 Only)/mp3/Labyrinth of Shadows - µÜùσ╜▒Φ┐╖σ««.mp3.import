@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://78ct38y7h5bl"
+path="res://.godot/imported/Labyrinth of Shadows - µÜùσ╜▒Φ┐╖σ««.mp3-3afc100f978085c69564f3720707eea5.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Labyrinth of Shadows - µÜùσ╜▒Φ┐╖σ««.mp3"
+dest_files=["res://.godot/imported/Labyrinth of Shadows - µÜùσ╜▒Φ┐╖σ««.mp3-3afc100f978085c69564f3720707eea5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

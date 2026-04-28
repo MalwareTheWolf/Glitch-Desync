@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://byyr5mcx1ngdk"
+path="res://.godot/imported/Celestial Rite ΓÇô σñ⌐τòîσäÇσ╝Å.mp3-36f4ae8e6a5a7eaf6bf90b2306566bf1.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Celestial Rite ΓÇô σñ⌐τòîσäÇσ╝Å.mp3"
+dest_files=["res://.godot/imported/Celestial Rite ΓÇô σñ⌐τòîσäÇσ╝Å.mp3-36f4ae8e6a5a7eaf6bf90b2306566bf1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

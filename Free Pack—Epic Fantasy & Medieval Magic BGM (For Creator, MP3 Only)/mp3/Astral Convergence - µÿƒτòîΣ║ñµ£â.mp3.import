@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d16jm15lnynuj"
+path="res://.godot/imported/Astral Convergence - µÿƒτòîΣ║ñµ£â.mp3-0fd43d2834984c96b92e2bbb41333833.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Astral Convergence - µÿƒτòîΣ║ñµ£â.mp3"
+dest_files=["res://.godot/imported/Astral Convergence - µÿƒτòîΣ║ñµ£â.mp3-0fd43d2834984c96b92e2bbb41333833.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

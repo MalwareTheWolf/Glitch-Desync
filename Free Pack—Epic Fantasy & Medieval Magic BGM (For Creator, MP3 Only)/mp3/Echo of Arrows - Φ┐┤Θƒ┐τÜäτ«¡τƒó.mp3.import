@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bjmktuhp51o6h"
+path="res://.godot/imported/Echo of Arrows - Φ┐┤Θƒ┐τÜäτ«¡τƒó.mp3-cd53d5dc8106aaffd76b836abf3a483a.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Echo of Arrows - Φ┐┤Θƒ┐τÜäτ«¡τƒó.mp3"
+dest_files=["res://.godot/imported/Echo of Arrows - Φ┐┤Θƒ┐τÜäτ«¡τƒó.mp3-cd53d5dc8106aaffd76b836abf3a483a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

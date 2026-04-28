@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c138blrogapa5"
+path="res://.godot/imported/Storm of Steel - Θï╝ΘÉ╡µÜ┤Θ¢¬.mp3-de58361d58f2c81a7abe2d90f310b731.mp3str"
+
+[deps]
+
+source_file="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Storm of Steel - Θï╝ΘÉ╡µÜ┤Θ¢¬.mp3"
+dest_files=["res://.godot/imported/Storm of Steel - Θï╝ΘÉ╡µÜ┤Θ¢¬.mp3-de58361d58f2c81a7abe2d90f310b731.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
