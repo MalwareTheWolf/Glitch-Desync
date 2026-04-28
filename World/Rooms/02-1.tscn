@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bhrtjw1l27lmg" path="res://tutorial_prompt_trigger.tscn" id="11_cqthd"]
 [ext_resource type="Script" uid="uid://hmuvjhch5nnj" path="res://General/player_spawn/player_spawn.gd" id="12_cqthd"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_wgapb"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_cqthd"]
 resource_local_to_scene = true
 radius = 421.20065
 
@@ -50,7 +50,7 @@ target_side = 1
 position = Vector2(2049, 338)
 size = 11
 location = 1
-target_level = "uid://ra6vmoyl7847"
+target_level = "uid://dq0e88j4mvas7"
 
 [node name="Node" type="Node2D" parent="." unique_id=7918641]
 position = Vector2(-3, 41)
@@ -107,7 +107,7 @@ position = Vector2(536, 180)
 actor = NodePath("../SkullWolf")
 
 [node name="CollisionShape2D" parent="CinematicTrigger" index="0" unique_id=1321430435]
-shape = SubResource("CircleShape2D_wgapb")
+shape = SubResource("CircleShape2D_cqthd")
 
 [node name="EndMarker" parent="CinematicTrigger" index="1" unique_id=1576124191]
 position = Vector2(322, 123)
