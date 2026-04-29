@@ -9,6 +9,17 @@
 [ext_resource type="PackedScene" uid="uid://bwbk2dppx5kup" path="res://General/Level_Transition/level_transition.tscn" id="6_d8yqy"]
 [ext_resource type="TileSet" uid="uid://c168e1m37miya" path="res://World/Tilesets/Outside/Void.tres" id="6_esbfd"]
 [ext_resource type="PackedScene" uid="uid://c1f1nio7v8hc8" path="res://Entites/Enemies/Scenes/EnemyKnight.tscn" id="9_lhlca"]
+[ext_resource type="PackedScene" uid="uid://vnhdso56a1b8" path="res://cinematic_trigger.tscn" id="10_b5wqy"]
+[ext_resource type="AudioStream" uid="uid://by6gyn1s13glt" path="res://00_Global/Audio/minecraft-dog-pain-3.wav" id="11_qxlkg"]
+[ext_resource type="PackedScene" uid="uid://bho05jrdmslj7" path="res://joanna.tscn" id="12_adpeh"]
+[ext_resource type="PackedScene" uid="uid://dilrr7557hhlq" path="res://skull_wolf.tscn" id="13_y0loi"]
+[ext_resource type="PackedScene" uid="uid://bhrtjw1l27lmg" path="res://tutorial_prompt_trigger.tscn" id="14_adpeh"]
+[ext_resource type="PackedScene" uid="uid://d4xs032nppk8" path="res://World/Props/Interactable/Doors and Switches/door.tscn" id="15_y0loi"]
+[ext_resource type="PackedScene" uid="uid://bjthfj4hqgl57" path="res://World/Props/Interactable/Doors and Switches/switch.tscn" id="16_bgbd2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lfui1"]
+resource_local_to_scene = true
+radius = 351.32037
 
 [node name="Node2D" type="Node2D" unique_id=899070019]
 
@@ -101,3 +112,39 @@ max_health = 2.0
 position = Vector2(1045, 561)
 speed_run = 80.0
 max_health = 2.0
+
+[node name="CinematicTrigger" parent="." unique_id=153867829 node_paths=PackedStringArray("actor", "secondary_actor") instance=ExtResource("10_b5wqy")]
+position = Vector2(385, 486)
+cutscene_mode = 2
+actor = NodePath("../SkullWolf")
+secondary_actor = NodePath("../Joanna")
+camera_target = 1
+exit_actor = 1
+flip_actor_before_death = true
+flip_secondary_before_attack = true
+death_audio = ExtResource("11_qxlkg")
+
+[node name="CollisionShape2D" parent="CinematicTrigger" index="0" unique_id=1321430435]
+shape = SubResource("CircleShape2D_lfui1")
+
+[node name="EndMarker" parent="CinematicTrigger" index="1" unique_id=1576124191]
+position = Vector2(1669, -14)
+
+[node name="Joanna" parent="." unique_id=1367672001 instance=ExtResource("12_adpeh")]
+position = Vector2(1406, 472)
+
+[node name="SkullWolf" parent="." unique_id=1783231622 instance=ExtResource("13_y0loi")]
+position = Vector2(1364, 465)
+
+[node name="TutorialPromptTrigger" parent="." unique_id=1209031352 instance=ExtResource("14_adpeh")]
+position = Vector2(286, 536)
+action_1 = "attack"
+
+[node name="Door" parent="." unique_id=1220534659 instance=ExtResource("15_y0loi")]
+position = Vector2(1835, 495)
+
+[node name="Switch" parent="Door" unique_id=1440813296 node_paths=PackedStringArray("required_enemy") instance=ExtResource("16_bgbd2")]
+position = Vector2(-638, 66)
+required_enemy = NodePath("../../EnemyKnight3")
+
+[editable path="CinematicTrigger"]

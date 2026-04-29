@@ -448,13 +448,6 @@ debug_color = Color(0.6036141, 0.54231477, 0, 0.41960785)
 
 [node name="EngageTimer" type="Timer" parent="." unique_id=742009395]
 
-[node name="StateLabel" type="Label" parent="." unique_id=1378770980]
-offset_left = -22.0
-offset_top = -77.0
-offset_right = 26.0
-offset_bottom = -54.0
-text = "Label"
-
 [node name="HazardArea" type="Area2D" parent="." unique_id=336339049]
 z_index = 1
 collision_layer = 4
