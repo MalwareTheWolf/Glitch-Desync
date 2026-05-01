@@ -9,6 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://bwbk2dppx5kup" path="res://General/Level_Transition/level_transition.tscn" id="7_781dj"]
 [ext_resource type="PackedScene" uid="uid://bho05jrdmslj7" path="res://joanna.tscn" id="8_wpewr"]
 [ext_resource type="Script" uid="uid://hmuvjhch5nnj" path="res://General/player_spawn/player_spawn.gd" id="9_wg3lm"]
+[ext_resource type="PackedScene" uid="uid://bng741we76cgv" path="res://dialog_trigger.tscn" id="10_wg3lm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rluih"]
+resource_local_to_scene = true
+radius = 254.68608
 
 [node name="Node2D" type="Node2D" unique_id=899070019]
 
@@ -99,3 +104,13 @@ thrust_active_time = 1.0
 position = Vector2(22, 495)
 script = ExtResource("9_wg3lm")
 metadata/_custom_type_script = "uid://hmuvjhch5nnj"
+
+[node name="DialogTrigger" parent="." unique_id=41376508 instance=ExtResource("10_wg3lm")]
+position = Vector2(766, 486)
+dialog_id = "boss_intro"
+
+[node name="CollisionShape2D" parent="DialogTrigger" index="0" unique_id=858313639]
+position = Vector2(266, 23)
+shape = SubResource("CircleShape2D_rluih")
+
+[editable path="DialogTrigger"]

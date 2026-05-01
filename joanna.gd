@@ -27,7 +27,16 @@ enum BossState {
 @export_group("Stats")
 @export var max_hp: float = 600.0
 @export var phase_two_hp_threshold: float = 0.5
+@export_group("Attack Spacing")
+@export var min_time_between_attacks: float = 1.4
+@export var combo_recovery_time: float = 0.35
 
+@export_group("Half HP Rules")
+@export var holy_unlock_hp_threshold: float = 0.5
+
+@export_group("Heal Interrupt")
+@export var heal_knockback_force: float = 180.0
+@export var heal_cancel_recovery: float = 0.4
 @export_group("Healing")
 @export var small_heal_hp_threshold: float = 0.65
 @export var small_heal_amount: float = 60.0
@@ -77,10 +86,26 @@ enum BossState {
 
 @export_group("Boss Intro")
 @export var intro_duration: float = 1.0
+@export var required_dialog_id: String = "boss_intro"
+@export var require_dialog_before_start: bool = true
 
 @export_group("Scenes")
 @export var holy_projectile_scene: PackedScene
 @export var slam_wave_scene: PackedScene
+
+@export_group("Jump Control")
+@export var allow_gap_jump: bool = false
+@export var jump_attack_chance: int = 15
+@export var jump_cooldown: float = 3.0
+
+@export_group("Dash Control")
+@export var dash_overshoot_distance: float = 90.0
+@export var dash_wall_check_distance: float = 18.0
+@export var dash_max_time: float = 0.75
+
+@export_group("Holy Attack Rules")
+@export var holy_attacks_hp_threshold: float = 0.5
+@export var mid_range_attack_chance: int = 45
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -98,29 +123,27 @@ enum BossState {
 var current_hp: float = 0.0
 var state: BossState = BossState.IDLE
 var last_debug_state: BossState = BossState.IDLE
-
+var can_jump_attack: bool = true
 var player: Node2D = null
-
+var player_inside_detector: bool = false
 var active: bool = false
 var intro_playing: bool = false
 var dead: bool = false
 var attacking: bool = false
 var can_attack: bool = true
 var phase_two: bool = false
-
 var facing_dir: int = 1
 var circle_dir: int = 1
-
 var small_heals_used: int = 0
 var big_heals_used: int = 0
 var buffs_used: int = 0
-
 var buffed: bool = false
 var was_running: bool = false
 var heal_interrupted: bool = false
-
 var last_attack_name: String = ""
-
+var has_reached_half_hp_once: bool = false
+var heal_locked: bool = false
+var attack_spacing_locked: bool = false
 var animation_offsets: Dictionary[String, Vector2] = {
 	"holy_slash": Vector2(15.0, -30.0)
 }
@@ -141,6 +164,8 @@ func _ready() -> void:
 	health_changed.emit(current_hp, max_hp)
 	sprite.play("idle")
 
+	player_detector.body_exited.connect(_on_player_detector_body_exited)
+
 	debug_print("READY. Boss loaded. HP: %s" % current_hp)
 
 
@@ -160,8 +185,13 @@ func _physics_process(delta: float) -> void:
 	if not active and player != null:
 		var distance_to_player: float = global_position.distance_to(player.global_position)
 
-		if distance_to_player <= fallback_detection_range:
+		if player_inside_detector and can_start_boss_fight():
 			start_boss_fight()
+			return
+
+		if distance_to_player <= fallback_detection_range and can_start_boss_fight():
+			start_boss_fight()
+			return
 
 	if not active or intro_playing:
 		velocity.x = 0.0
@@ -178,6 +208,16 @@ func _physics_process(delta: float) -> void:
 
 	boss_ai()
 	move_and_slide()
+
+
+func can_start_boss_fight() -> bool:
+	if not require_dialog_before_start:
+		return true
+
+	if required_dialog_id.strip_edges() == "":
+		return true
+
+	return SaveManager.has_flag("dialog_" + required_dialog_id)
 
 
 func find_player() -> Node2D:
@@ -202,6 +242,12 @@ func boss_ai() -> void:
 	var y_difference: float = player.global_position.y - global_position.y
 	var new_dir: int = int(sign(player.global_position.x - global_position.x))
 
+	face_player()
+
+	if not has_reached_half_hp_once and current_hp <= max_hp * holy_unlock_hp_threshold:
+		has_reached_half_hp_once = true
+		debug_print("Holy attacks unlocked permanently.")
+
 	if new_dir != 0 and new_dir != facing_dir and state != BossState.TURN:
 		play_turn(new_dir)
 		return
@@ -211,7 +257,6 @@ func boss_ai() -> void:
 		return
 
 	var heal_type: String = choose_heal_type()
-
 	if heal_type != "":
 		do_heal(heal_type)
 		return
@@ -224,20 +269,13 @@ func boss_ai() -> void:
 		chase_player(distance)
 		return
 
-	if should_jump_to_player(y_difference):
-		jump_to_player()
-		return
-
-	if distance > slash_range:
-		if can_attack:
-			execute_combo(["dash"])
-		else:
-			chase_player(distance)
+	if attack_spacing_locked:
+		circle_player()
 		return
 
 	if can_attack:
-		if phase_two:
-			execute_combo(pick_phase_two_combo())
+		if has_reached_half_hp_once:
+			execute_combo(pick_unlocked_combo())
 		else:
 			execute_combo(pick_phase_one_combo())
 		return
@@ -247,6 +285,9 @@ func boss_ai() -> void:
 
 func start_boss_fight() -> void:
 	if active:
+		return
+
+	if not can_start_boss_fight():
 		return
 
 	active = true
@@ -274,7 +315,10 @@ func _on_player_detector_body_entered(body: Node2D) -> void:
 
 	if body.is_in_group("player") or body.is_in_group("Player"):
 		player = body
-		start_boss_fight()
+		player_inside_detector = true
+
+		if can_start_boss_fight():
+			start_boss_fight()
 
 
 func _on_attack_timer_timeout() -> void:
@@ -326,16 +370,19 @@ func should_jump_to_player(y_difference: float) -> bool:
 	if not is_on_floor():
 		return false
 
+	# Jump if player is clearly above Joanna.
 	if y_difference < -jump_y_difference:
 		return true
 
-	if floor_detector != null and not floor_detector.is_colliding():
+	# Gap jump is optional because RayCast2D setup can cause spam jumping.
+	if allow_gap_jump and floor_detector != null and not floor_detector.is_colliding():
 		return true
 
 	return false
 
 
 func jump_to_player() -> void:
+	can_jump_attack = false
 	state = BossState.JUMP
 	was_running = false
 
@@ -355,6 +402,9 @@ func jump_to_player() -> void:
 		await do_aerial_attack()
 		attacking = false
 		state = BossState.IDLE
+
+	await get_tree().create_timer(jump_cooldown).timeout
+	can_jump_attack = true
 
 
 func play_turn(new_dir: int) -> void:
@@ -399,24 +449,26 @@ func pick_attack_without_repeat(attacks: Array[String]) -> String:
 	last_attack_name = chosen
 	return chosen
 
-
-func pick_phase_one_combo() -> Array[String]:
-	var possible: Array[String] = ["slash", "thrust", "dash"]
+func pick_phase_one_mid_combo() -> Array[String]:
+	var possible: Array[String] = ["dash", "thrust"]
 	var chosen: String = pick_attack_without_repeat(possible)
 
-	match chosen:
-		"slash":
-			return ["slash", "thrust"]
-		"thrust":
-			return ["thrust"]
-		"dash":
-			return ["dash"]
+	return [chosen]
 
-	return ["slash"]
+func pick_phase_one_combo() -> Array[String]:
+	var possible: Array[String] = ["air_above_attack", "air_attack", "combo_1"]
+	var chosen: String = pick_attack_without_repeat(possible)
+
+	return [chosen]
 
 
 func pick_phase_two_combo() -> Array[String]:
-	var possible: Array[String] = ["slash", "thrust", "dash", "holy", "jump_attack"]
+	var possible: Array[String] = ["slash", "thrust", "dash"]
+
+	if can_use_holy_attacks():
+		possible.append("holy")
+		possible.append("jump_attack")
+
 	var chosen: String = pick_attack_without_repeat(possible)
 
 	match chosen:
@@ -433,11 +485,49 @@ func pick_phase_two_combo() -> Array[String]:
 
 	return ["slash"]
 
+func pick_phase_two_mid_combo() -> Array[String]:
+	var possible: Array[String] = ["dash", "thrust"]
+
+	if can_use_holy_attacks():
+		possible.append("holy")
+
+	var chosen: String = pick_attack_without_repeat(possible)
+
+	match chosen:
+		"dash":
+			return ["dash", "slash"]
+		"holy":
+			return ["holy"]
+		"thrust":
+			return ["thrust"]
+
+	return ["dash"]
+
+func pick_unlocked_combo() -> Array[String]:
+	var possible: Array[String] = [
+		"air_above_attack",
+		"air_attack",
+		"combo_1",
+		"holy_dash",
+		"holy_projectile"
+	]
+
+	var chosen: String = pick_attack_without_repeat(possible)
+
+	match chosen:
+		"holy_dash":
+			return ["holy_dash", "combo_1"]
+		"holy_projectile":
+			return ["holy_projectile"]
+		_:
+			return [chosen]
+
 func execute_combo(combo: Array[String]) -> void:
-	if attacking or dead:
+	if attacking or dead or attack_spacing_locked:
 		return
 
 	can_attack = false
+	attack_spacing_locked = true
 	attack_timer.start()
 	attacking = true
 	was_running = false
@@ -448,23 +538,29 @@ func execute_combo(combo: Array[String]) -> void:
 		if dead or player == null:
 			break
 
+		face_player()
+
 		match attack_name:
-			"slash":
-				await do_slash_attack()
-			"thrust":
-				await do_thrust_attack()
-			"dash":
-				await do_dash_attack()
-			"holy":
+			"air_above_attack":
+				await do_air_above_attack()
+			"air_attack":
+				await do_air_attack()
+			"combo_1":
+				await do_combo_1()
+			"holy_dash":
+				await do_holy_dash_attack()
+			"holy_projectile":
 				await do_holy_attack()
-			"jump_attack":
-				await do_aerial_attack()
 
 		disable_all_hitboxes()
-		await get_tree().create_timer(0.12).timeout
+		await get_tree().create_timer(combo_recovery_time).timeout
 
 	attacking = false
 	state = BossState.IDLE
+
+	await get_tree().create_timer(min_time_between_attacks).timeout
+	attack_spacing_locked = false
+
 	debug_print("Combo finished")
 
 
@@ -504,15 +600,22 @@ func do_thrust_attack() -> void:
 	disable_all_hitboxes()
 
 
-func do_dash_attack() -> void:
+func do_holy_dash_attack() -> void:
+	if not has_reached_half_hp_once:
+		await do_combo_1()
+		return
+
 	state = BossState.ATTACK
 	face_player()
 
 	var dir: int = facing_dir
-	var target_x: float = player.global_position.x + float(dir) * 120.0
+	var desired_x: float = player.global_position.x + float(dir) * dash_overshoot_distance
+	var dash_time: float = 0.0
 
+	stop_velocity()
 	sprite.play("holy_dash_attack")
 
+	# Startup stays still.
 	await get_tree().create_timer(dash_startup).timeout
 
 	disable_all_hitboxes()
@@ -520,19 +623,35 @@ func do_dash_attack() -> void:
 	dash_hitbox.flip(float(dir))
 	dash_hitbox.set_active(true)
 
-	while abs(global_position.x - target_x) > 10.0 and not dead:
+	while abs(global_position.x - desired_x) > 10.0 and not dead:
+		if is_wall_in_dash_direction(dir):
+			debug_print("Dash hit wall.")
+			break
+
 		velocity.x = float(dir) * dash_speed
 		move_and_slide()
+
+		dash_time += get_physics_process_delta_time()
+		if dash_time >= dash_max_time:
+			break
+
 		await get_tree().physics_frame
 
 	velocity.x = 0.0
 	dash_hitbox.set_active(false)
+
+	if not is_wall_in_dash_direction(dir):
+		global_position.x = desired_x
 
 	await sprite.animation_finished
 	disable_all_hitboxes()
 
 
 func do_holy_attack() -> void:
+	if not has_reached_half_hp_once:
+		await do_combo_1()
+		return
+
 	state = BossState.ATTACK
 	stop_velocity()
 	face_player()
@@ -545,19 +664,96 @@ func do_holy_attack() -> void:
 	await sprite.animation_finished
 
 
-func do_aerial_attack() -> void:
+func do_air_above_attack() -> void:
 	state = BossState.ATTACK
 	face_player()
 
-	sprite.play("air_attack")
+	var target_position: Vector2 = player.global_position + Vector2(0.0, -80.0)
 
-	await get_tree().create_timer(0.45).timeout
-	spawn_slam_wave()
+	sprite.play("air_above_attack")
+
+	global_position = target_position
+	velocity = Vector2.ZERO
+
+	await get_tree().create_timer(0.25).timeout
+
+	face_player()
+	velocity.y = 260.0
+
+	disable_all_hitboxes()
+	slash_hitbox.damage = slash_damage
+	slash_hitbox.flip(float(facing_dir))
+	slash_hitbox.activate(0.22)
 
 	await sprite.animation_finished
+	disable_all_hitboxes()
+	velocity = Vector2.ZERO
+
+func do_air_attack() -> void:
+	state = BossState.ATTACK
+	face_player()
+
+	var dir: int = facing_dir
+
+	sprite.play("air_attack")
+
+	velocity.x = float(dir) * run_speed * 1.5
+	velocity.y = jump_velocity * 0.55
+
+	await get_tree().create_timer(0.22).timeout
+
+	disable_all_hitboxes()
+	thrust_hitbox.damage = thrust_damage
+	thrust_hitbox.flip(float(dir))
+	thrust_hitbox.activate(0.25)
+
+	await sprite.animation_finished
+	disable_all_hitboxes()
+	velocity.x = 0.0
+
+func do_combo_1() -> void:
+	state = BossState.ATTACK
+	stop_velocity()
+	face_player()
+
+	sprite.play("combo_1")
+
+	await get_tree().create_timer(0.18).timeout
+
+	disable_all_hitboxes()
+	thrust_hitbox.damage = thrust_damage
+	thrust_hitbox.flip(float(facing_dir))
+	thrust_hitbox.activate(0.16)
+
+	await get_tree().create_timer(0.22).timeout
+
+	face_player()
+	disable_all_hitboxes()
+	thrust_hitbox.damage = thrust_damage
+	thrust_hitbox.flip(float(facing_dir))
+	thrust_hitbox.activate(0.16)
+
+	await get_tree().create_timer(0.22).timeout
+
+	face_player()
+	disable_all_hitboxes()
+	slash_hitbox.damage = slash_damage
+	slash_hitbox.flip(float(facing_dir))
+	slash_hitbox.activate(0.18)
+
+	await sprite.animation_finished
+	disable_all_hitboxes()
+
+
 
 
 func choose_heal_type() -> String:
+	if heal_locked:
+		return ""
+
+	if attacking:
+		return ""
+
 	if not can_attack:
 		return ""
 
@@ -573,8 +769,12 @@ func choose_heal_type() -> String:
 
 
 func do_heal(heal_type: String) -> void:
+	if heal_locked:
+		return
+
 	attacking = true
 	can_attack = false
+	heal_locked = true
 	attack_timer.start()
 	state = BossState.HEAL
 	stop_velocity()
@@ -599,17 +799,37 @@ func do_heal(heal_type: String) -> void:
 
 	if heal_interrupted:
 		debug_print("Heal interrupted. No HP restored.")
+		await get_tree().create_timer(heal_cancel_recovery).timeout
 		attacking = false
 		state = BossState.IDLE
+		heal_locked = false
 		return
+
+func spawn_holy_projectile() -> void:
+	if holy_projectile_scene == null:
+		debug_print("holy_projectile_scene is not assigned.")
+		return
+
+	var projectile: Node = holy_projectile_scene.instantiate()
+	get_tree().current_scene.add_child(projectile)
+
+	if projectile is Node2D:
+		var projectile_2d: Node2D = projectile as Node2D
+		projectile_2d.global_position = global_position + Vector2(30.0 * float(facing_dir), -20.0)
+
+	projectile.set("direction", (player.global_position - global_position).normalized())
+	projectile.set("damage", holy_damage)
 
 	current_hp = min(current_hp + amount, max_hp)
 	health_changed.emit(current_hp, max_hp)
 
+	debug_print("Heal completed. Restored: %s" % amount)
+
 	attacking = false
 	state = BossState.IDLE
+	heal_locked = false
 
-	debug_print("Heal completed. Restored: %s" % amount)
+	await get_tree().create_timer(min_time_between_attacks).timeout
 
 
 func should_buff() -> bool:
@@ -695,23 +915,6 @@ func enter_phase_two() -> void:
 	attacking = false
 	state = BossState.IDLE
 
-
-func spawn_holy_projectile() -> void:
-	if holy_projectile_scene == null:
-		debug_print("holy_projectile_scene is not assigned.")
-		return
-
-	var projectile: Node = holy_projectile_scene.instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	if projectile is Node2D:
-		var projectile_2d: Node2D = projectile as Node2D
-		projectile_2d.global_position = global_position + Vector2(30.0 * float(facing_dir), -20.0)
-
-	projectile.set("direction", (player.global_position - global_position).normalized())
-	projectile.set("damage", holy_damage)
-
-
 func spawn_slam_wave() -> void:
 	if slam_wave_scene == null:
 		debug_print("slam_wave_scene is not assigned.")
@@ -733,8 +936,8 @@ func _on_damage_taken(attack_area: AttackArea) -> void:
 
 	if state == BossState.HEAL:
 		heal_interrupted = true
+		cancel_heal_with_knockback(attack_area)
 
-	debug_print("Damage taken: %s" % attack_area.damage)
 	take_damage(attack_area.damage)
 
 
@@ -813,7 +1016,7 @@ func face_direction(dir: int) -> void:
 
 	facing_dir = dir
 
-	# Joanna faces left by default, so flip when facing right.
+	# Joanna faces left by default.
 	sprite.flip_h = dir > 0
 
 	thrust_hitbox.flip(float(dir))
@@ -845,6 +1048,25 @@ func play_run_start_dust() -> void:
 	dust.position.x = -12.0 * float(facing_dir)
 	dust.play("run_dust")
 
+func is_wall_in_dash_direction(dir: int) -> bool:
+	if dir == 0:
+		return false
+
+	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+
+	var from: Vector2 = global_position
+	var to: Vector2 = global_position + Vector2(float(dir) * dash_wall_check_distance, 0.0)
+
+	var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(from, to)
+	query.exclude = [self]
+	query.collision_mask = collision_mask
+
+	var result: Dictionary = space_state.intersect_ray(query)
+
+	return not result.is_empty()
+
+func can_use_holy_attacks() -> bool:
+	return current_hp <= max_hp * holy_attacks_hp_threshold
 
 func update_state_label() -> void:
 	if state_label == null:
@@ -877,6 +1099,9 @@ func debug_state_change() -> void:
 		])
 		last_debug_state = state
 
+func _on_player_detector_body_exited(body: Node2D) -> void:
+	if body.is_in_group("player") or body.is_in_group("Player"):
+		player_inside_detector = false
 
 func debug_print(message: String) -> void:
 	if debug_enabled:

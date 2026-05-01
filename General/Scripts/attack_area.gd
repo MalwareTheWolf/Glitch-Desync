@@ -3,31 +3,21 @@ class_name AttackArea
 extends Area2D
 
 # Hitbox used to deal damage to DamageableArea objects.
-# Can be activated for short durations during attacks.
+# Can be activated briefly during attacks.
 
+signal attack_area_hit(other_attack_area: AttackArea)
 
-#SIGNALS
-
-# Emitted when this hitbox touches another attack area.
-signal attack_area_hit(other_attack_area)
-
-
-
-#TUNABLES
-
-# Amount of damage dealt on hit.
-@export var damage: float = 1
-
-# Whether hit dust should spawn when damage is dealt.
+@export var damage: float = 1.0
 @export var spawn_hit_dust: bool = true
 
+# Stores the hitbox's original local position.
+# This lets flip() move the hitbox to the correct side of the character.
+var starting_position: Vector2 = Vector2.ZERO
 
-
-#LIFECYCLE
 
 func _ready() -> void:
+	starting_position = position
 
-	# Detect both bodies and areas for flexibility.
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
 
@@ -36,12 +26,7 @@ func _ready() -> void:
 	monitoring = false
 
 
-
-#COLLISION
-
-# Triggered when a physics body enters.
 func _on_body_entered(body: Node2D) -> void:
-
 	if not monitoring:
 		return
 
@@ -49,9 +34,7 @@ func _on_body_entered(body: Node2D) -> void:
 		_apply_damage(body)
 
 
-# Triggered when another area enters.
 func _on_area_entered(area: Area2D) -> void:
-
 	if not monitoring:
 		return
 
@@ -64,44 +47,34 @@ func _on_area_entered(area: Area2D) -> void:
 		attack_area_hit.emit(area)
 
 
-
-#DAMAGE
-
-# Applies damage to the target and spawns hit effect.
 func _apply_damage(target: DamageableArea) -> void:
-
 	target.take_damage(self)
 
 	if spawn_hit_dust:
-		# Align effect horizontally with target.
-		var pos := global_position
+		var pos: Vector2 = global_position
 		pos.x = target.global_position.x
-
 		VisualEffects.hit_dust(pos)
 
 
-
-#ACTIVATION
-
-# Enables hitbox for a short duration.
 func activate(duration: float = 0.1) -> void:
-
 	set_active(true)
 	await get_tree().create_timer(duration).timeout
 	set_active(false)
 
 
-# Toggles hitbox state.
 func set_active(value: bool = true) -> void:
-
 	monitoring = value
 	visible = value
 
 
-
-#ORIENTATION
-
-# Flips hitbox based on facing direction.
 func flip(direction_x: float) -> void:
+	var dir: float = sign(direction_x)
 
-	scale.x = sign(direction_x) if direction_x != 0 else scale.x
+	if dir == 0.0:
+		return
+
+	# Move the hitbox to the correct side instead of relying on negative scale.
+	position.x = abs(starting_position.x) * dir
+
+	# Keep scale positive so collision/debug visuals stay predictable.
+	scale.x = abs(scale.x)

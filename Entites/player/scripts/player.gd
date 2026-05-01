@@ -589,6 +589,16 @@ func set_control_enabled(value: bool) -> void:
 
 	if not can_move:
 		velocity = Vector2.ZERO
+		direction = Vector2.ZERO
+		wants_to_run = false
+
+		# Force idle state
+		if idle != null:
+			change_state(idle)
+
+		# Force idle animation (safety)
+		if animation_player and animation_player.has_animation("Idle"):
+			animation_player.play("Idle")
 
 
 

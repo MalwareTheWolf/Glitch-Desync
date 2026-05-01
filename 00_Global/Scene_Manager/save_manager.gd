@@ -252,7 +252,23 @@ func _on_scene_entered(scene_uid: String) -> void:
 func is_area_discovered(scene_uid: String) -> bool:
 	return discovered_areas.has(scene_uid)
 
+#ONE-TIME FLAGS
 
+func has_flag(flag_id: String) -> bool:
+	if flag_id.strip_edges() == "":
+		return false
+
+	return persistent_data.get(flag_id, false)
+
+
+func set_flag(flag_id: String, value: bool = true, save_after: bool = true) -> void:
+	if flag_id.strip_edges() == "":
+		return
+
+	persistent_data[flag_id] = value
+
+	if save_after:
+		save_game()
 
 #CONFIGURATION
 

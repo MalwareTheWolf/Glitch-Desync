@@ -11,6 +11,7 @@ enum ActorChoice {
 	SECONDARY_ACTOR
 }
 
+@export var cutscene_id: String = "cutscene_test"
 @export var cutscene_mode: CutsceneMode = CutsceneMode.RUN_AWAY
 
 @export var actor: Node2D
@@ -45,6 +46,9 @@ enum ActorChoice {
 @export var disappear_at_end: bool = true
 @export var trigger_once: bool = true
 
+@export var skip_action: String = "jump"
+@export var allow_skip: bool = true
+
 @export var run_audio: AudioStream
 @export var death_audio: AudioStream
 @export var play_audio_when_run_starts: bool = true
@@ -57,6 +61,9 @@ var camera: Camera2D
 var audio_player: AudioStreamPlayer2D
 
 var has_triggered: bool = false
+var cutscene_active: bool = false
+var skip_requested: bool = false
+
 var moving_node: Node2D
 var moving_speed: float = 0.0
 var actor_running: bool = false
@@ -64,11 +71,25 @@ var actor_reached_end: bool = false
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	set_process_input(true)
+
 	body_entered.connect(_on_body_entered)
 
 	audio_player = AudioStreamPlayer2D.new()
 	add_child(audio_player)
 	audio_player.bus = audio_bus
+
+
+func _input(event: InputEvent) -> void:
+	if not cutscene_active:
+		return
+
+	if not allow_skip:
+		return
+
+	if event.is_action_pressed(skip_action):
+		skip_requested = true
 
 
 func _physics_process(delta: float) -> void:
@@ -96,7 +117,13 @@ func _on_body_entered(body: Node) -> void:
 	if not body.is_in_group("Player"):
 		return
 
+	var flag_id := "cutscene_" + cutscene_id
+
+	if SaveManager.has_flag(flag_id):
+		return
+
 	has_triggered = true
+	SaveManager.set_flag(flag_id, true)
 
 	match cutscene_mode:
 		CutsceneMode.AUDIO_ONLY:
@@ -125,17 +152,44 @@ func _setup_player_and_camera() -> bool:
 	return true
 
 
-func start_run_away_sequence() -> void:
+func _begin_cutscene() -> bool:
 	if not _setup_player_and_camera():
-		return
+		return false
 
+	cutscene_active = true
+	skip_requested = false
+
+	player.set_control_enabled(false)
+
+	return true
+
+
+func _end_cutscene() -> void:
+	actor_running = false
+	cutscene_active = false
+	skip_requested = false
+
+	if player:
+		player.set_control_enabled(true)
+
+	if trigger_once:
+		monitoring = false
+
+
+func start_run_away_sequence() -> void:
 	if actor == null:
 		push_warning("RUN_AWAY needs Actor.")
 		return
 
-	player.set_control_enabled(false)
+	if not _begin_cutscene():
+		return
 
 	await _move_camera_to(actor.global_position, camera_focus_time)
+
+	if skip_requested:
+		await _skip_finish()
+		return
+
 	await _play_idle_then_run(actor)
 
 	actor_reached_end = false
@@ -147,7 +201,7 @@ func start_run_away_sequence() -> void:
 		play_audio(run_audio, actor.global_position)
 
 	await _follow_node_for_time(actor, actor_follow_time)
-	await get_tree().create_timer(camera_hold_after_follow_time).timeout
+	await _wait_seconds(camera_hold_after_follow_time)
 	await _wait_for_actor_to_reach_end()
 
 	if disappear_at_end and actor:
@@ -155,18 +209,15 @@ func start_run_away_sequence() -> void:
 
 	await _move_camera_to(player.global_position, camera_return_time)
 
-	player.set_control_enabled(true)
-
-	if trigger_once:
-		monitoring = false
+	_end_cutscene()
 
 
 func start_attack_and_exit_sequence() -> void:
-	if not _setup_player_and_camera():
-		return
-
 	if actor == null or secondary_actor == null:
 		push_warning("ATTACK_AND_EXIT needs Actor and Secondary Actor.")
+		return
+
+	if not _begin_cutscene():
 		return
 
 	var focus_node := _get_actor_choice(camera_target)
@@ -174,11 +225,14 @@ func start_attack_and_exit_sequence() -> void:
 
 	if focus_node == null or exiting_node == null:
 		push_warning("Invalid camera target or exit actor.")
+		_end_cutscene()
 		return
 
-	player.set_control_enabled(false)
-
 	await _move_camera_to(focus_node.global_position, camera_focus_time)
+
+	if skip_requested:
+		await _skip_finish()
+		return
 
 	if flip_secondary_before_attack:
 		_flip_sprite(secondary_actor)
@@ -190,10 +244,18 @@ func start_attack_and_exit_sequence() -> void:
 
 	await _play_animation(secondary_actor, attack_animation_name)
 
+	if skip_requested:
+		await _skip_finish()
+		return
+
 	if flip_secondary_after_attack:
 		_flip_sprite(secondary_actor)
 
 	await _play_animation(actor, death_animation_name)
+
+	if skip_requested:
+		await _skip_finish()
+		return
 
 	play_audio(death_audio, actor.global_position)
 
@@ -207,7 +269,7 @@ func start_attack_and_exit_sequence() -> void:
 	actor_running = true
 
 	await _follow_node_for_time(exiting_node, actor_follow_time)
-	await get_tree().create_timer(camera_hold_after_follow_time).timeout
+	await _wait_seconds(camera_hold_after_follow_time)
 	await _wait_for_actor_to_reach_end()
 
 	if disappear_at_end and exiting_node:
@@ -215,10 +277,22 @@ func start_attack_and_exit_sequence() -> void:
 
 	await _move_camera_to(player.global_position, camera_return_time)
 
-	player.set_control_enabled(true)
+	_end_cutscene()
 
-	if trigger_once:
-		monitoring = false
+
+func _skip_finish() -> void:
+	actor_running = false
+
+	if actor:
+		_set_sprite_y_offset(actor, 0.0)
+
+	if secondary_actor:
+		_set_sprite_y_offset(secondary_actor, 0.0)
+
+	if camera and player:
+		camera.global_position = player.global_position
+
+	_end_cutscene()
 
 
 func _get_actor_choice(choice: ActorChoice) -> Node2D:
@@ -234,7 +308,10 @@ func _get_actor_choice(choice: ActorChoice) -> Node2D:
 func _play_idle_then_run(target: Node2D) -> void:
 	_play_animation_no_wait(target, idle_animation_name)
 
-	await get_tree().create_timer(idle_time_before_run).timeout
+	await _wait_seconds(idle_time_before_run)
+
+	if skip_requested:
+		return
 
 	_play_animation_no_wait(target, run_animation_name)
 
@@ -246,13 +323,23 @@ func _play_animation(target: Node2D, animation_name: String) -> void:
 	var anim_player := target.get_node_or_null("AnimationPlayer") as AnimationPlayer
 	if anim_player and anim_player.has_animation(animation_name):
 		anim_player.play(animation_name)
-		await anim_player.animation_finished
+
+		while anim_player.is_playing():
+			if skip_requested:
+				return
+			await get_tree().process_frame
+
 		return
 
 	var animated_sprite := target.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if animated_sprite and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(animation_name):
 		animated_sprite.play(animation_name)
-		await animated_sprite.animation_finished
+
+		while animated_sprite.is_playing():
+			if skip_requested:
+				return
+			await get_tree().process_frame
+
 		return
 
 
@@ -272,22 +359,47 @@ func _play_animation_no_wait(target: Node2D, animation_name: String) -> void:
 
 
 func _move_camera_to(target_position: Vector2, duration: float) -> void:
+	if camera == null:
+		return
+
 	var tween := create_tween()
 	tween.tween_property(camera, "global_position", target_position, duration)
-	await tween.finished
+
+	while tween.is_running():
+		if skip_requested:
+			tween.kill()
+			return
+		await get_tree().process_frame
 
 
 func _follow_node_for_time(target: Node2D, duration: float) -> void:
 	var timer := 0.0
 
 	while timer < duration and target != null:
+		if skip_requested:
+			return
+
 		camera.global_position = target.global_position
+		timer += get_process_delta_time()
+		await get_tree().process_frame
+
+
+func _wait_seconds(duration: float) -> void:
+	var timer := 0.0
+
+	while timer < duration:
+		if skip_requested:
+			return
+
 		timer += get_process_delta_time()
 		await get_tree().process_frame
 
 
 func _wait_for_actor_to_reach_end() -> void:
 	while not actor_reached_end:
+		if skip_requested:
+			return
+
 		await get_tree().process_frame
 
 

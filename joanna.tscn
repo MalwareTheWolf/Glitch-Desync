@@ -1406,15 +1406,48 @@ radius = 905.0138
 
 [node name="Joanna" type="CharacterBody2D" unique_id=1367672001]
 script = ExtResource("1_lgjad")
-max_hp = 60.0
+debug_enabled = null
+fallback_detection_range = null
+max_hp = 70.0
+phase_two_hp_threshold = 35.0
+small_heal_hp_threshold = 50.0
+small_heal_amount = 10.0
+big_heal_hp_threshold = 20.0
+big_heal_amount = 20.0
+big_heal_max_uses = 2
+walk_speed = null
+run_speed = null
+dash_speed = null
+jump_velocity = null
+gravity = null
+stop_distance = null
+run_distance = null
+ideal_circle_distance = null
+circle_speed = null
+jump_y_difference = null
 max_buffs = 3
 buff_speed_multiplier = 2.0
 buff_damage_multiplier = 1.1
+slash_damage = 5.0
+thrust_damage = 5.0
+dash_damage = 5.0
+holy_damage = 5.0
+intro_duration = null
+required_dialog_id = null
+require_dialog_before_start = null
+allow_gap_jump = null
+jump_attack_chance = null
+jump_cooldown = null
+dash_overshoot_distance = null
+dash_wall_check_distance = null
+dash_max_time = null
+holy_attacks_hp_threshold = null
+mid_range_attack_chance = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1343130427]
 position = Vector2(5, 1)
 sprite_frames = SubResource("SpriteFrames_p0r1n")
-animation = &"turn_right1"
+animation = &"take_damage"
 autoplay = "idle"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AnimatedSprite2D" unique_id=115018215]

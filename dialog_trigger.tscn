@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://bng741we76cgv"]
+
+[ext_resource type="Script" uid="uid://8564jvk60d3x" path="res://dialog_trigger.gd" id="1_gee2p"]
+[ext_resource type="Texture2D" uid="uid://dishys8v26fx6" path="res://Portraits_v1/Portraits/Joanna/JoannaPortrait1(NOBG)3.png" id="2_nr6oa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ckdx4"]
+resource_local_to_scene = true
+radius = 38.832977
+
+[node name="DialogTrigger" type="Area2D" unique_id=41376508]
+collision_layer = 0
+collision_mask = 16
+script = ExtResource("1_gee2p")
+speaker_name = "Joanna"
+dialog_lines = Array[String](["Disgusting Monsters..."])
+pause_game = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=858313639]
+shape = SubResource("CircleShape2D_ckdx4")
+debug_color = Color(1, 0, 1, 0.41960785)
+
+[node name="DialogUI" type="CanvasLayer" parent="." unique_id=315260360]
+
+[node name="Control" type="Control" parent="DialogUI" unique_id=811121580]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="DialogUI/Control" unique_id=65192861]
+layout_mode = 0
+offset_top = 181.0
+offset_right = 482.0
+offset_bottom = 271.0
+
+[node name="TextureRect" type="TextureRect" parent="DialogUI/Control/Panel" unique_id=1862359132]
+layout_mode = 0
+offset_left = -23.0
+offset_top = -23.0
+offset_right = 105.0
+offset_bottom = 105.0
+texture = ExtResource("2_nr6oa")
+
+[node name="SpeakerLabel" type="Label" parent="DialogUI/Control/Panel" unique_id=1469826778]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 6.0
+offset_right = 122.0
+offset_bottom = 29.0
+
+[node name="BodyLabel" type="Label" parent="DialogUI/Control/Panel" unique_id=1831662883]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 30.0
+offset_right = 165.0
+offset_bottom = 53.0

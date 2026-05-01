@@ -24,7 +24,7 @@ size = Vector2(20, 213)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y3rm2"]
 size = Vector2(42, 10)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qtaxo"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_l8ccu"]
 resource_local_to_scene = true
 radius = 326.0138
 
@@ -142,10 +142,11 @@ position = Vector2(716, -95)
 position = Vector2(481, -165)
 actor = NodePath("../SkullWolf")
 actor_follow_time = 0.5
+invert_exit_flip = false
 run_audio = ExtResource("13_l8ccu")
 
 [node name="CollisionShape2D" parent="CinematicTrigger" index="0" unique_id=1321430435]
-shape = SubResource("CircleShape2D_qtaxo")
+shape = SubResource("CircleShape2D_l8ccu")
 
 [node name="EndMarker" parent="CinematicTrigger" index="1" unique_id=1576124191]
 position = Vector2(751, 70)
