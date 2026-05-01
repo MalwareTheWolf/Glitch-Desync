@@ -295,6 +295,22 @@ tracks/0/keys = {
 "values": [435, 436, 437, 438, 439, 440, 441]
 }
 
+[sub_resource type="Animation" id="Animation_kdmqo"]
+resource_name = "take_damage"
+length = 0.46
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [576, 577, 578, 579, 580]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8r65v"]
 _data = {
 &"AFK": SubResource("Animation_njwgr"),
@@ -313,7 +329,8 @@ _data = {
 &"RESET": SubResource("Animation_te2kh"),
 &"Run": SubResource("Animation_rwo31"),
 &"Walk": SubResource("Animation_8r65v"),
-&"ground_slam": SubResource("Animation_g4swk")
+&"ground_slam": SubResource("Animation_g4swk"),
+&"take_damage": SubResource("Animation_kdmqo")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kq2ai"]
@@ -497,6 +514,7 @@ position = Vector2(21, -21)
 collision_layer = 0
 collision_mask = 96
 script = ExtResource("12_eut4h")
+damage = 30.0
 metadata/_custom_type_script = "uid://buu3vcea6n7iy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1478579972]

@@ -253,28 +253,51 @@
 [ext_resource type="Texture2D" uid="uid://dv2c4g82ocrbd" path="res://JoannaD'ArcIII_v1.9.5/Sprites/JumpAndFall/Full/JumpAndFall6.png" id="250_ndtda"]
 [ext_resource type="Texture2D" uid="uid://dh84sh4jrewj7" path="res://JoannaD'ArcIII_v1.9.5/Sprites/JumpAndFall/Full/JumpAndFall7.png" id="251_30kre"]
 [ext_resource type="Texture2D" uid="uid://b6kbu5madv05v" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running1.png" id="252_byjsg"]
+[ext_resource type="Texture2D" uid="uid://cbjikaniim1oh" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest1.png" id="253_aen5d"]
 [ext_resource type="Texture2D" uid="uid://cwdhyto7bpqjk" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running2.png" id="253_yiwlx"]
+[ext_resource type="Texture2D" uid="uid://co1648dikp4aa" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest2.png" id="254_6nedo"]
 [ext_resource type="Texture2D" uid="uid://dqi3w50t4760d" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running3.png" id="254_bd0u8"]
+[ext_resource type="Texture2D" uid="uid://ccc4wb7f2ybk2" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest3.png" id="255_j21ga"]
 [ext_resource type="Texture2D" uid="uid://564x5fjspo6o" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running4.png" id="255_qmb4d"]
 [ext_resource type="Texture2D" uid="uid://i7lwjll56ul" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running5.png" id="256_pge42"]
+[ext_resource type="Texture2D" uid="uid://dsmrn3rd58mqw" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest4.png" id="256_ua0mp"]
+[ext_resource type="Texture2D" uid="uid://bavvn23nrppj6" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest5.png" id="257_0sglq"]
 [ext_resource type="Texture2D" uid="uid://cceudnmhn5k52" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running6.png" id="257_43ita"]
 [ext_resource type="Texture2D" uid="uid://csth4pwnlhtjq" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running7.png" id="258_greia"]
+[ext_resource type="Texture2D" uid="uid://b8gxrsqumtunl" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest6.png" id="258_p37ek"]
 [ext_resource type="Texture2D" uid="uid://dd2v7tavfm7pq" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/Running/Running8.png" id="259_6eyuj"]
+[ext_resource type="Texture2D" uid="uid://cuc0wa2xmokc0" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest7.png" id="259_qqfn0"]
 [ext_resource type="Texture2D" uid="uid://df5fgbvh8822u" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Hurt/FX/Hurt1.png" id="260_8204d"]
+[ext_resource type="Texture2D" uid="uid://dipehetr8gj32" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest8.png" id="260_a6a7n"]
 [ext_resource type="Texture2D" uid="uid://b1n0ph1w830eq" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Hurt/FX/Hurt2.png" id="261_7reku"]
+[ext_resource type="Texture2D" uid="uid://ndj5n0hhes8b" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest9.png" id="261_eahxs"]
 [ext_resource type="Texture2D" uid="uid://nwj1w845c30v" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Hurt/FX/Hurt3.png" id="262_d7463"]
+[ext_resource type="Texture2D" uid="uid://dq43vl44m0xpr" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest10.png" id="262_mohue"]
+[ext_resource type="Texture2D" uid="uid://civr722qvy77u" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest11.png" id="263_l1j3u"]
 [ext_resource type="Texture2D" uid="uid://bb5dfdxeal8fh" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Hurt/FX/Hurt4.png" id="263_padmv"]
 [ext_resource type="Texture2D" uid="uid://c53lc7licwugx" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Hurt/FX/Hurt5.png" id="264_8vcf4"]
+[ext_resource type="Texture2D" uid="uid://dht3rdmfk4b07" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest12.png" id="264_xicup"]
 [ext_resource type="Texture2D" uid="uid://cks4c57rgb4n2" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Hurt/FX/Hurt6.png" id="265_ekbem"]
+[ext_resource type="Texture2D" uid="uid://byf8qnu21vn2x" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest13.png" id="265_olkdi"]
 [ext_resource type="Texture2D" uid="uid://bjhcmr2xu8tf5" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk1.png" id="266_fbigf"]
+[ext_resource type="Texture2D" uid="uid://b3l5s1hhrh5rk" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest14.png" id="266_v7a5e"]
+[ext_resource type="Texture2D" uid="uid://byfvwcrb1ghh4" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest15.png" id="267_ml04k"]
 [ext_resource type="Texture2D" uid="uid://g5vswad8owb7" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk2.png" id="267_pnitu"]
 [ext_resource type="Texture2D" uid="uid://cngggprqbssns" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk3.png" id="268_m8frf"]
+[ext_resource type="Texture2D" uid="uid://cd1gmwmb8kgqo" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest16.png" id="268_m0485"]
 [ext_resource type="Texture2D" uid="uid://dpxqk6vp0d0s" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk4.png" id="269_08ils"]
+[ext_resource type="Texture2D" uid="uid://dlhv7svq4h3cx" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest17.png" id="269_pfeuc"]
+[ext_resource type="Texture2D" uid="uid://qd4lbmw8msku" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest18.png" id="270_uresh"]
 [ext_resource type="Texture2D" uid="uid://b6v2cnljsmclb" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk5.png" id="270_y40b8"]
+[ext_resource type="Texture2D" uid="uid://cv5mcc22cm7gk" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest19.png" id="271_hcc2f"]
 [ext_resource type="Texture2D" uid="uid://bpmw5iiweilno" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk6.png" id="271_ynote"]
 [ext_resource type="Texture2D" uid="uid://do8cshjut6r1s" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk7.png" id="272_7p23r"]
+[ext_resource type="Texture2D" uid="uid://banwhv4l31rwg" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest20.png" id="272_a1skp"]
+[ext_resource type="Texture2D" uid="uid://di7q52xyvfev3" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest21.png" id="273_pe6ry"]
 [ext_resource type="Texture2D" uid="uid://bwvfhls27whrt" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk8.png" id="273_ps66p"]
+[ext_resource type="Texture2D" uid="uid://cbiasqkgpibsx" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest22.png" id="274_2hayl"]
 [ext_resource type="Texture2D" uid="uid://co81255fnftoe" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk9.png" id="274_bostu"]
+[ext_resource type="Texture2D" uid="uid://bxj7tj82wrxv0" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Rest/Full/Rest23.png" id="275_3ledm"]
 [ext_resource type="Texture2D" uid="uid://bgay3xye61wfe" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk10.png" id="275_ie1os"]
 [ext_resource type="Texture2D" uid="uid://8ayxspgmbi1o" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk11.png" id="276_2rxo1"]
 [ext_resource type="Texture2D" uid="uid://dan4ynntabofc" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Attacks/FrontHeavyAtk/FrontHeavyAtk12.png" id="277_3olyu"]
@@ -319,8 +342,12 @@
 [ext_resource type="Texture2D" uid="uid://bxjfxtlem75we" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/FX/BeginRun/RunDust4.png" id="316_ta4ip"]
 [ext_resource type="Texture2D" uid="uid://53vynndr6fvc" path="res://JoannaD'ArcIII_v1.9.5/Sprites/Run/FX/BeginRun/RunDust5.png" id="317_1k6dh"]
 [ext_resource type="Script" uid="uid://buu3vcea6n7iy" path="res://General/Scripts/attack_area.gd" id="318_mpesp"]
+[ext_resource type="Script" uid="uid://cddrtorsej510" path="res://attack_controller.gd" id="319_1aitd"]
+[ext_resource type="Script" uid="uid://cq4welmkrano6" path="res://healing_controller.gd" id="319_b6cel"]
 [ext_resource type="Script" uid="uid://cunkd1wonlvhp" path="res://00_Global/Scripts/damageable_area.gd" id="319_sfy04"]
+[ext_resource type="Script" uid="uid://b6jhdh8ofctol" path="res://movement_controller.gd" id="321_blfpx"]
 [ext_resource type="AudioStream" uid="uid://ewwuigqbpfag" path="res://Free Pack—Epic Fantasy & Medieval Magic BGM (For Creator, MP3 Only)/mp3/Crimson Bastion.mp3" id="321_icreq"]
+[ext_resource type="Script" uid="uid://ngekla6l7hhw" path="res://debug_controller.gd" id="322_b0w05"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_p0r1n"]
 animations = [{
@@ -532,7 +559,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("64_hfump")
 }],
-"loop": true,
+"loop": false,
 "name": &"dash",
 "speed": 5.0
 }, {
@@ -656,7 +683,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("99_afhsk")
 }],
-"loop": true,
+"loop": false,
 "name": &"fall",
 "speed": 5.0
 }, {
@@ -1153,6 +1180,92 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("253_aen5d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("254_6nedo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("255_j21ga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("256_ua0mp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("257_0sglq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("258_p37ek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("259_qqfn0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("260_a6a7n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("261_eahxs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("262_mohue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("263_l1j3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("264_xicup")
+}, {
+"duration": 1.0,
+"texture": ExtResource("265_olkdi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("266_v7a5e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("267_ml04k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("268_m0485")
+}, {
+"duration": 1.0,
+"texture": ExtResource("269_pfeuc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("270_uresh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("271_hcc2f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("272_a1skp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("273_pe6ry")
+}, {
+"duration": 1.0,
+"texture": ExtResource("274_2hayl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("275_3ledm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("256_ua0mp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("255_j21ga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("254_6nedo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("253_aen5d")
+}],
+"loop": false,
+"name": &"rest",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("252_byjsg")
 }, {
 "duration": 1.0,
@@ -1393,9 +1506,13 @@ radius = 11.0
 height = 48.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ilg5o"]
+size = Vector2(28, 3)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lgjad"]
-size = Vector2(74, 20)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_icreq"]
+height = 46.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1aitd"]
+radius = 18.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_usy72"]
 radius = 11.0
@@ -1405,50 +1522,16 @@ height = 48.0
 radius = 905.0138
 
 [node name="Joanna" type="CharacterBody2D" unique_id=1367672001]
+collision_mask = 17
 script = ExtResource("1_lgjad")
-debug_enabled = null
-fallback_detection_range = null
-max_hp = 70.0
-phase_two_hp_threshold = 35.0
-small_heal_hp_threshold = 50.0
-small_heal_amount = 10.0
-big_heal_hp_threshold = 20.0
-big_heal_amount = 20.0
-big_heal_max_uses = 2
-walk_speed = null
-run_speed = null
-dash_speed = null
-jump_velocity = null
-gravity = null
-stop_distance = null
-run_distance = null
-ideal_circle_distance = null
-circle_speed = null
-jump_y_difference = null
-max_buffs = 3
-buff_speed_multiplier = 2.0
-buff_damage_multiplier = 1.1
-slash_damage = 5.0
-thrust_damage = 5.0
-dash_damage = 5.0
-holy_damage = 5.0
-intro_duration = null
-required_dialog_id = null
-require_dialog_before_start = null
-allow_gap_jump = null
-jump_attack_chance = null
-jump_cooldown = null
-dash_overshoot_distance = null
-dash_wall_check_distance = null
-dash_max_time = null
-holy_attacks_hp_threshold = null
-mid_range_attack_chance = null
+run_distance = 70.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1343130427]
-position = Vector2(5, 1)
 sprite_frames = SubResource("SpriteFrames_p0r1n")
-animation = &"take_damage"
+animation = &"thrust_attack"
 autoplay = "idle"
+frame = 8
+frame_progress = 0.15053189
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AnimatedSprite2D" unique_id=115018215]
 position = Vector2(-2, 5)
@@ -1461,14 +1544,27 @@ frame_progress = 1.0
 z_index = 1
 shape = SubResource("CapsuleShape2D_bise7")
 
+[node name="HealingController" type="Node" parent="." unique_id=44829012]
+script = ExtResource("319_b6cel")
+
+[node name="AttackController" type="Node" parent="." unique_id=1777108672]
+script = ExtResource("319_1aitd")
+
+[node name="MovementController" type="Node" parent="." unique_id=729910335]
+script = ExtResource("321_blfpx")
+
+[node name="DebugController" type="Node" parent="." unique_id=1023851638]
+script = ExtResource("322_b0w05")
+
 [node name="thrust" type="Area2D" parent="." unique_id=812004469]
+position = Vector2(33, 8)
+scale = Vector2(1.019119, 1)
 collision_layer = 0
 collision_mask = 16
 script = ExtResource("318_mpesp")
 metadata/_custom_type_script = "uid://buu3vcea6n7iy"
 
 [node name="thrust" type="CollisionShape2D" parent="thrust" unique_id=951025810]
-position = Vector2(34, -11)
 shape = SubResource("RectangleShape2D_ilg5o")
 debug_color = Color(1, 0, 0, 0.41960785)
 
@@ -1482,14 +1578,38 @@ metadata/_custom_type_script = "uid://buu3vcea6n7iy"
 polygon = PackedVector2Array(0, 0, 85, 13, 78, -18, 61, -36, 23, -49, -22, -44)
 
 [node name="holy_dash" type="Area2D" parent="." unique_id=962805832]
+position = Vector2(8, 11)
 collision_layer = 0
 collision_mask = 16
 script = ExtResource("318_mpesp")
 metadata/_custom_type_script = "uid://buu3vcea6n7iy"
 
 [node name="holy_dash" type="CollisionShape2D" parent="holy_dash" unique_id=1436673044]
-shape = SubResource("RectangleShape2D_lgjad")
+position = Vector2(-8, -10)
+shape = SubResource("CapsuleShape2D_icreq")
 debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="combo_boxes" type="Area2D" parent="." unique_id=1864627088]
+position = Vector2(25, 9)
+collision_layer = 0
+collision_mask = 16
+script = ExtResource("318_mpesp")
+metadata/_custom_type_script = "uid://buu3vcea6n7iy"
+
+[node name="combo_area" type="CollisionShape2D" parent="combo_boxes" unique_id=1361286575]
+position = Vector2(3, -1)
+shape = SubResource("CircleShape2D_1aitd")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="air_above_attack" type="Area2D" parent="." unique_id=1519887807]
+position = Vector2(8, 10)
+collision_layer = 0
+collision_mask = 16
+script = ExtResource("318_mpesp")
+metadata/_custom_type_script = "uid://buu3vcea6n7iy"
+
+[node name="above_area" type="CollisionPolygon2D" parent="air_above_attack" unique_id=1112748248]
+polygon = PackedVector2Array(-3, 23, -19, 18, -31, 1, -32, -19, -26, -32, 0, 0, 7, 13)
 
 [node name="DamageableArea" type="Area2D" parent="." unique_id=619096789]
 collision_layer = 32
@@ -1511,6 +1631,7 @@ collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetector" unique_id=2042891245]
 z_index = -1
+position = Vector2(2, 0)
 shape = SubResource("CircleShape2D_ilg5o")
 debug_color = Color(0.6036141, 0.54231477, 0, 0.41960785)
 

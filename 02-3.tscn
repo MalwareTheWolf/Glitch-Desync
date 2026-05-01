@@ -16,8 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://bhrtjw1l27lmg" path="res://tutorial_prompt_trigger.tscn" id="14_adpeh"]
 [ext_resource type="PackedScene" uid="uid://d4xs032nppk8" path="res://World/Props/Interactable/Doors and Switches/door.tscn" id="15_y0loi"]
 [ext_resource type="PackedScene" uid="uid://bjthfj4hqgl57" path="res://World/Props/Interactable/Doors and Switches/switch.tscn" id="16_bgbd2"]
+[ext_resource type="Script" uid="uid://hmuvjhch5nnj" path="res://General/player_spawn/player_spawn.gd" id="17_y0loi"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_lfui1"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_bgbd2"]
 resource_local_to_scene = true
 radius = 351.32037
 
@@ -125,10 +126,10 @@ flip_secondary_before_attack = true
 death_audio = ExtResource("11_qxlkg")
 
 [node name="CollisionShape2D" parent="CinematicTrigger" index="0" unique_id=1321430435]
-shape = SubResource("CircleShape2D_lfui1")
+shape = SubResource("CircleShape2D_bgbd2")
 
 [node name="EndMarker" parent="CinematicTrigger" index="1" unique_id=1576124191]
-position = Vector2(1669, -14)
+position = Vector2(1543, -14)
 
 [node name="Joanna" parent="." unique_id=1367672001 instance=ExtResource("12_adpeh")]
 position = Vector2(1406, 472)
@@ -141,10 +142,15 @@ position = Vector2(286, 536)
 action_1 = "attack"
 
 [node name="Door" parent="." unique_id=1220534659 instance=ExtResource("15_y0loi")]
-position = Vector2(1835, 495)
+position = Vector2(1980, 495)
 
 [node name="Switch" parent="Door" unique_id=1440813296 node_paths=PackedStringArray("required_enemy") instance=ExtResource("16_bgbd2")]
-position = Vector2(-638, 66)
+position = Vector2(-783, 66)
 required_enemy = NodePath("../../EnemyKnight3")
+
+[node name="PlayerSpawn" type="Node2D" parent="." unique_id=2114724204]
+position = Vector2(48, 540)
+script = ExtResource("17_y0loi")
+metadata/_custom_type_script = "uid://hmuvjhch5nnj"
 
 [editable path="CinematicTrigger"]
